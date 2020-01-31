@@ -4,4 +4,10 @@
   </div>
 </template>
 
-<style></style>
+<style scoped lang="sass">
+div
+  background-color: red
+  height: 100px
+  width: 100px
+  color: white
+</style>
