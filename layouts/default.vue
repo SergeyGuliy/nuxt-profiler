@@ -24,6 +24,5 @@ export default {
 <style scoped lang="sass">
 div
   background-color: red
-  height: 100px
   color: white
 </style>
