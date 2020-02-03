@@ -15,9 +15,21 @@
 import { fetchAllArticles } from '~/functions/articles'
 export default {
   name: 'MyArticles',
-  async asyncData() {
+  async asyncData({ store }) {
+    const allArticles = await fetchAllArticles()
+    const myArticlesIDS = store.getters.user.lists.articles
+    const myArticles = []
+    for (const i of myArticlesIDS) {
+      try {
+        const rep = allArticles[i]
+        rep.id = i
+        myArticles.push(rep)
+      } catch (e) {
+        continue
+      }
+    }
     return {
-      articles: await fetchAllArticles()
+      articles: myArticles
     }
   }
 }

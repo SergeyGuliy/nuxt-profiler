@@ -53,7 +53,9 @@ export default {
         creatorName: this.$store.getters.user.profile,
         creatorId: this.$store.getters.user.id
       }
-      await createRepository(data)
+      const id = await createRepository(data)
+      this.$store.commit('pushRepository', id)
+      await this.$store.dispatch('updateUserInfo')
       this.$router.push(
         `/${this.$store.getters.user.profile}/my_rerepositories`
       )

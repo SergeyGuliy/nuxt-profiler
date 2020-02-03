@@ -9,7 +9,7 @@
       <nuxt-link to="/repositories">REPOSITORIES</nuxt-link>
       <span v-if="!$store.getters.user">
         <nuxt-link to="/login">Login</nuxt-link>
-        <nuxt-link to="registration">Registratiom</nuxt-link>
+        <nuxt-link to="/registration">Registratiom</nuxt-link>
       </span>
       <span v-else>
         <nuxt-link

@@ -11,12 +11,27 @@
 </template>
 
 <script>
-import { fetchAllRepositories } from '~/functions/repositories'
+import {
+  fetchAllRepositories,
+  fetchPublicRepositoriesIDS
+} from '~/functions/repositories'
 export default {
   name: 'Index',
   async asyncData() {
+    const allRepositories = await fetchAllRepositories()
+    const publicRepositoriesIDS = await fetchPublicRepositoriesIDS()
+    const publicRepositories = []
+    for (const i of publicRepositoriesIDS) {
+      try {
+        const rep = allRepositories[i]
+        rep.id = i
+        publicRepositories.push(rep)
+      } catch (e) {
+        continue
+      }
+    }
     return {
-      repositories: await fetchAllRepositories()
+      repositories: publicRepositories
     }
   }
 }

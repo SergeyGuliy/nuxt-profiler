@@ -13,6 +13,16 @@ export const actions = {
           .ref(`/1_users/${uid}/`)
           .once('value')
       ).val()
+      if (userInfo.lists.friends === '') {
+        userInfo.lists.friends = []
+      }
+      if (userInfo.lists.articles === '') {
+        userInfo.lists.articles = []
+      }
+      if (userInfo.lists.repositories === '') {
+        userInfo.lists.repositories = []
+      }
+      console.log(userInfo)
       commit('setUser', userInfo)
     } catch (e) {
       console.log(e)
@@ -57,8 +67,8 @@ export const actions = {
           },
           lists: {
             friends: ['empty'],
-            repositories: ['empty'],
-            articles: ['empty']
+            articles: ['empty'],
+            repositories: ['empty']
           }
         })
       await dispatch('fetchUserInfo')
@@ -84,17 +94,15 @@ export const actions = {
       console.log(e)
     }
   },
-  async getArticle({ dispatch }) {
+  async updateUserInfo({ dispatch, getters }) {
     try {
       const uid = await dispatch('getUID')
-      return (
-        await firebase
-          .database()
-          .ref(`/1_users/${uid}/lists/articles/0`)
-          .once('value')
-      ).val()
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}`)
+        .update(getters.user)
     } catch (e) {
-      console.log(e)
+      console.log('Failed to update user info')
     }
   }
 }
@@ -109,6 +117,24 @@ export const mutations = {
   },
   cleanUser(state) {
     state.user = ''
+  },
+  pushArticle(state, id) {
+    state.user.lists.articles.push(id)
+  },
+  pushRepository(state, id) {
+    state.user.lists.repositories.push(id)
+  },
+  deleteArticle(state, id) {
+    const IdToDelete = state.user.lists.articles.findIndex(
+      (idSearch) => idSearch === id
+    )
+    state.user.lists.articles.splice(IdToDelete, 1)
+  },
+  deleteRepository(state, id) {
+    const IdToDelete = state.user.lists.repositories.findIndex(
+      (idSearch) => idSearch === id
+    )
+    state.user.lists.repositories.splice(IdToDelete, 1)
   }
 }
 

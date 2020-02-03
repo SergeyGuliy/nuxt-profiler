@@ -1,15 +1,14 @@
 import firebase from 'firebase'
 
 async function fetchAllRepositories() {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/3_repositories/`)
         .once('value')
     ).val() || {}
-  console.log(data)
-  return data
+  )
 }
 async function createRepository(data) {
   const push = await firebase
@@ -33,37 +32,34 @@ async function createRepository(data) {
   return push.key
 }
 async function fetchRepositoryByID(id) {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/3_repositories/${id}/`)
         .once('value')
     ).val() || {}
-  console.log(data)
-  return data
+  )
 }
 async function fetchPublicRepositoriesIDS() {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/systeData/public/repositories`)
         .once('value')
     ).val() || []
-  console.log(data)
-  return data
+  )
 }
 async function fetchPrivateRepositoriesIDS(userID) {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/1_users/${userID}/repositories`)
         .once('value')
     ).val() || []
-  console.log(data)
-  return data
+  )
 }
 export {
   fetchAllRepositories,

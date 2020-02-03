@@ -8,7 +8,6 @@ async function fetchAllArticles() {
         .ref(`/2_articles/`)
         .once('value')
     ).val() || {}
-  console.log(data)
   return data
 }
 async function createArticle(data) {
@@ -33,37 +32,34 @@ async function createArticle(data) {
   return push.key
 }
 async function fetchArticleByID(id) {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/2_articles/${id}/`)
         .once('value')
     ).val() || {}
-  console.log(data)
-  return data
+  )
 }
 async function fetchPublicArticlesIDS() {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/systemData/public/articles`)
         .once('value')
     ).val() || []
-  console.log(data)
-  return data
+  )
 }
 async function fetchPrivateArticlesIDS(userID) {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/1_users/${userID}/articles`)
         .once('value')
     ).val() || []
-  console.log(data)
-  return data
+  )
 }
 export {
   fetchAllArticles,

@@ -51,7 +51,9 @@ export default {
         creatorName: this.$store.getters.user.profile,
         creatorId: this.$store.getters.user.id
       }
-      console.log(await createArticle(data))
+      const id = await createArticle(data)
+      this.$store.commit('pushArticle', id)
+      await this.$store.dispatch('updateUserInfo')
       this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
     }
   }

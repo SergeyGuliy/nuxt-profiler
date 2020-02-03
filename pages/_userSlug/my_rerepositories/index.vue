@@ -3,9 +3,9 @@
     <h1>THIS IS MY REPOS LIST OF USER {{ $route.params.userSlug }}</h1>
     <nuxt-link append to="create">CREATE</nuxt-link>
     <ol>
-      <li v-for="(item, index) in repositories">
-        <span @click="$router.push(`/articles/${index}`)">{{ index }}</span>
-        <span>{{ item.name }}</span>
+      <li v-for="rep of repositories">
+        <span @click="$router.push(`/articles/${rep.id}`)">{{ rep.id }}</span>
+        <span>{{ rep.name }}</span>
       </li>
     </ol>
   </div>
@@ -15,10 +15,26 @@
 import { fetchAllRepositories } from '~/functions/repositories'
 export default {
   name: 'MyRepositories',
-  async asyncData() {
-    return {
-      repositories: await fetchAllRepositories()
+  async asyncData({ store }) {
+    const allRepositories = await fetchAllRepositories()
+    console.log(store.getters.user)
+    const myRepositoriesIDS = store.getters.user.lists.repositories
+    const myRepositories = []
+    for (const i of myRepositoriesIDS) {
+      try {
+        const rep = allRepositories[i]
+        rep.id = i
+        myRepositories.push(rep)
+      } catch (e) {
+        continue
+      }
     }
+    return {
+      repositories: myRepositories
+    }
+  },
+  async fetch({ store }) {
+    await store.dispatch('fetchUserInfo')
   }
 }
 </script>
