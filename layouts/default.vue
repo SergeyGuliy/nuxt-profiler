@@ -21,8 +21,4 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-div
-  background-color: red
-  color: white
-</style>
+<style scoped lang="sass"></style>

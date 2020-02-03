@@ -35,14 +35,14 @@
         >
         <nuxt-link
           :to="{
-            name: 'userSlug-my-articles',
+            name: 'userSlug-my_articles',
             params: { userSlug: $store.getters.user.profile }
           }"
           >my articles</nuxt-link
         >
         <nuxt-link
           :to="{
-            name: 'userSlug-my-repositories',
+            name: 'userSlug-my_rerepositories',
             params: { userSlug: $store.getters.user.profile }
           }"
           >my repos</nuxt-link

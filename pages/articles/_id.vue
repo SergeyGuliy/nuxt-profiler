@@ -3,8 +3,14 @@
 </template>
 
 <script>
+import { fetchArticleByID } from '~/functions/articles'
 export default {
-  name: 'Id'
+  name: 'Id',
+  async asyncData(route) {
+    return {
+      data: await fetchArticleByID(route.params.id)
+    }
+  }
 }
 </script>
 
