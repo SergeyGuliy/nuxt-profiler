@@ -1,12 +1,10 @@
 import firebase from 'firebase'
 
 export const actions = {
-  async getUID() {
-    return (await firebase.auth().currentUser).uid
-  },
-  async fetchUserInfo({ commit, dispatch }) {
+  async fetchUserInfo({ commit }) {
     try {
-      const uid = await dispatch('getUID')
+      console.log(await (await firebase.auth().currentUser).uid)
+      const uid = await (await firebase.auth().currentUser).uid
       const userInfo = (
         await firebase
           .database()
@@ -22,8 +20,8 @@ export const actions = {
       if (userInfo.lists.repositories === '') {
         userInfo.lists.repositories = []
       }
-      console.log(userInfo)
       commit('setUser', userInfo)
+      commit('setUID', uid)
     } catch (e) {
       console.log(e)
     }
@@ -33,7 +31,7 @@ export const actions = {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password)
-      const uid = await dispatch('getUID')
+      const uid = (await firebase.auth().currentUser).uid
       await firebase
         .database()
         .ref(`/1_users/${uid}`)
@@ -71,7 +69,6 @@ export const actions = {
             repositories: ['empty']
           }
         })
-      await dispatch('fetchUserInfo')
     } catch (e) {
       console.log(e)
     }
@@ -81,7 +78,6 @@ export const actions = {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
-      await dispatch('fetchUserInfo')
     } catch (e) {
       console.log(e)
     }
@@ -90,13 +86,14 @@ export const actions = {
     try {
       await firebase.auth().signOut()
       commit('cleanUser')
+      commit('cleanUID')
     } catch (e) {
       console.log(e)
     }
   },
   async updateUserInfo({ dispatch, getters }) {
     try {
-      const uid = await dispatch('getUID')
+      const uid = (await firebase.auth().currentUser).uid
       await firebase
         .database()
         .ref(`/1_users/${uid}`)
@@ -108,7 +105,8 @@ export const actions = {
 }
 
 export const getters = {
-  user: (s) => s.user
+  user: (s) => s.user,
+  uid: (s) => s.uid
 }
 
 export const mutations = {
@@ -117,6 +115,12 @@ export const mutations = {
   },
   cleanUser(state) {
     state.user = ''
+  },
+  setUID(state, uid) {
+    state.uid = uid
+  },
+  cleanUID(state) {
+    state.uid = ''
   },
   pushArticle(state, id) {
     state.user.lists.articles.push(id)
@@ -139,5 +143,6 @@ export const mutations = {
 }
 
 export const state = () => ({
-  user: ''
+  user: '',
+  uid: ''
 })
