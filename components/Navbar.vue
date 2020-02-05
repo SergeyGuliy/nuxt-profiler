@@ -42,7 +42,7 @@
   <!--        >-->
   <!--        <nuxt-link-->
   <!--          :to="{-->
-  <!--            name: 'userSlug-my_rerepositories',-->
+  <!--            name: 'userSlug-my_repositories',-->
   <!--            params: { userSlug: $store.getters.user.profile }-->
   <!--          }"-->
   <!--          >my repos</nuxt-link-->
@@ -58,23 +58,85 @@
   <!--      </span>-->
   <!--    </div>-->
   <!--  </div>-->
-  <v-app-bar app clipped-left color="red" dense>
-    <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-    <v-btn fab height="45" width="45" text
-      ><v-icon class="mx-2">mdi-home</v-icon></v-btn
+  <v-app-bar app clipped-left dense>
+    <v-app-bar-nav-icon @click="$emit('sidebar-toogle')" />
+    <v-btn icon text exact-active-class="outlined" to="/"
+      ><v-icon>mdi-home</v-icon></v-btn
     >
-    <v-btn fab height="45" width="45" text
-      ><v-icon class="mx-2">mdi-arrow-left</v-icon></v-btn
-    >
-    <v-toolbar-title class="mr-12 align-center">
-      <span class="title">Nuxt Profiler</span>
+    <v-btn @click="$router.back()" icon><v-icon>mdi-arrow-left</v-icon></v-btn>
+    <v-toolbar-title class=" align-center">
+      <v-btn text exact-active-class="outlined" to="/users">
+        <span>USERS</span>
+      </v-btn>
+
+      <v-btn text exact-active-class="outlined" to="/repositories">
+        <span>REPOSITORIES</span>
+      </v-btn>
+
+      <v-btn text exact-active-class="outlined" to="/articles">
+        <span>ARTICLES</span>
+      </v-btn>
     </v-toolbar-title>
     <v-spacer />
-    <v-row align="center" style="max-width: 650px">
-      <v-btn fab height="45" width="45" text
-        ><v-icon class="mx-2 right">mdi-logout</v-icon></v-btn
-      >
-    </v-row>
+    <v-menu bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn v-on="on" icon>
+          <v-btn icon><v-icon>mdi-translate</v-icon></v-btn>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>English</v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>Russian</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn v-on="on" icon>
+          <v-btn icon><v-icon>mdi-invert-colors</v-icon></v-btn>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>Dark</v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>Light</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-btn icon><v-icon>mdi-logout</v-icon></v-btn>
+    <template v-slot:extension v-if="$store.getters.user.id">
+      <v-tabs align-with-title>
+        <v-tab
+          @click="$router.push(`/${$store.getters.user.profile}/edit_profile`)"
+          >Admin panel</v-tab
+        >
+        <v-tab
+          @click="$router.push(`/${$store.getters.user.profile}/my_friends`)"
+          >Friends</v-tab
+        >
+        <v-tab
+          @click="$router.push(`/${$store.getters.user.profile}/my_articles`)"
+          >My articles</v-tab
+        >
+        <v-tab
+          @click="
+            $router.push(`/${$store.getters.user.profile}/my_repositories`)
+          "
+          >My repositories</v-tab
+        >
+        <v-tab
+          @click="$router.push(`/${$store.getters.user.profile}/admin_panel`)"
+          >Admin panel</v-tab
+        >
+      </v-tabs>
+    </template>
   </v-app-bar>
 </template>
 

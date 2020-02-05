@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app clipped>
+  <v-navigation-drawer v-model="status" app clipped>
     <v-list dense>
       <v-list-item v-for="item in items" :key="item.text" link>
         <v-list-item-action>
@@ -66,7 +66,8 @@ export default {
       { picture: 58, text: 'Nokia' },
       { picture: 78, text: 'MKBHD' }
     ]
-  })
+  }),
+  props: ['status']
 }
 </script>
 

@@ -1,15 +1,30 @@
 <template>
   <v-app id="inspire">
-    <Navbar />
-    <nuxt />
+    <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
+    <Sidebar :status="sidebarStatus" />
+    <v-content>
+      <v-container class="fill-height">
+        <v-row justify="center" align="center">
+          <v-col class="shrink">
+            <nuxt />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
 <script>
 import firebase from 'firebase'
 import Navbar from '../components/Navbar'
+import Sidebar from '../components/Sidebar'
 export default {
-  components: { Navbar },
+  components: { Navbar, Sidebar },
+  data() {
+    return {
+      sidebarStatus: false
+    }
+  },
   async mounted() {
     await firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
