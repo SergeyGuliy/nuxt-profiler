@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <v-app id="inspire">
     <Navbar />
     <nuxt />
-  </div>
+  </v-app>
 </template>
 
 <script>

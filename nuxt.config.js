@@ -23,7 +23,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['@/assets/styles.sass'],
+  css: [],
   /*
    ** Plugins to load before mounting the App
    */
@@ -33,8 +33,17 @@ export default {
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify'
   ],
+  vuetify: {
+    font: {
+      family: 'Roboto'
+    },
+    icons: {
+      iconfont: 'mdi'
+    },
+  },
   /*
    ** Nuxt.js modules
    */
@@ -44,6 +53,7 @@ export default {
     '@nuxtjs/axios',
     'cookie-universal-nuxt'
   ],
+
   /*
    ** Build configuration
    */
