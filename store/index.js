@@ -117,6 +117,9 @@ export const mutations = {
   pushRepository(state, id) {
     state.user.lists.repositories.push(id)
   },
+  pushFriend(state, id) {
+    state.user.lists.friends.push(id)
+  },
   deleteArticle(state, id) {
     const IdToDelete = state.user.lists.articles.findIndex(
       (idSearch) => idSearch === id
@@ -128,6 +131,12 @@ export const mutations = {
       (idSearch) => idSearch === id
     )
     state.user.lists.repositories.splice(IdToDelete, 1)
+  },
+  deleteFriend(state, id) {
+    const IdToDelete = state.user.lists.friends.findIndex(
+      (idSearch) => idSearch === id
+    )
+    state.user.lists.friends.splice(IdToDelete, 1)
   }
 }
 

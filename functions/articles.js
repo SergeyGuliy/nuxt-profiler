@@ -1,14 +1,14 @@
 import firebase from 'firebase'
 
 async function fetchAllArticles() {
-  const data =
+  return (
     (
       await firebase
         .database()
         .ref(`/2_articles/`)
         .once('value')
     ).val() || {}
-  return data
+  )
 }
 async function createArticle(data) {
   const push = await firebase

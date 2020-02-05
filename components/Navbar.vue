@@ -28,7 +28,7 @@
         >
         <nuxt-link
           :to="{
-            name: 'userSlug-my-admin-panel',
+            name: 'userSlug-admin-panel',
             params: { userSlug: $store.getters.user.profile }
           }"
           >admin-panel</nuxt-link
@@ -46,6 +46,13 @@
             params: { userSlug: $store.getters.user.profile }
           }"
           >my repos</nuxt-link
+        >
+        <nuxt-link
+          :to="{
+            name: 'userSlug-my_friends',
+            params: { userSlug: $store.getters.user.profile }
+          }"
+          >my friends</nuxt-link
         >
         <a @click.prevent="logOut">LogOut</a>
       </span>
