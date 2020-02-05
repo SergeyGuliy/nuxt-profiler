@@ -1,27 +1,24 @@
 import firebase from 'firebase'
+import 'firebase/auth'
 
 export const actions = {
-  async fetchUserInfo({ commit }) {
+  async nuxtServerInit({ dispatch }, { app }) {
     try {
-      console.log(await (await firebase.auth().currentUser).uid)
-      const uid = await (await firebase.auth().currentUser).uid
+      const cookie = app.$cookies.get('access_token')
+      await dispatch('fetchUserInfo', cookie)
+    } catch (e) {
+      console.log('error')
+    }
+  },
+  async fetchUserInfo({ commit }, uid) {
+    try {
       const userInfo = (
         await firebase
           .database()
           .ref(`/1_users/${uid}/`)
           .once('value')
       ).val()
-      if (userInfo.lists.friends === '') {
-        userInfo.lists.friends = []
-      }
-      if (userInfo.lists.articles === '') {
-        userInfo.lists.articles = []
-      }
-      if (userInfo.lists.repositories === '') {
-        userInfo.lists.repositories = []
-      }
       commit('setUser', userInfo)
-      commit('setUID', uid)
     } catch (e) {
       console.log(e)
     }
@@ -86,7 +83,6 @@ export const actions = {
     try {
       await firebase.auth().signOut()
       commit('cleanUser')
-      commit('cleanUID')
     } catch (e) {
       console.log(e)
     }
@@ -116,12 +112,6 @@ export const mutations = {
   cleanUser(state) {
     state.user = ''
   },
-  setUID(state, uid) {
-    state.uid = uid
-  },
-  cleanUID(state) {
-    state.uid = ''
-  },
   pushArticle(state, id) {
     state.user.lists.articles.push(id)
   },
@@ -143,6 +133,5 @@ export const mutations = {
 }
 
 export const state = () => ({
-  user: '',
-  uid: ''
+  user: ''
 })

@@ -11,10 +11,13 @@ import Navbar from '../components/Navbar'
 import 'firebase/auth'
 export default {
   components: { Navbar },
-  mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
+  async mounted() {
+    await firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        this.$store.dispatch('fetchUserInfo')
+        const token = await (await firebase.auth().currentUser).uid
+        this.$cookies.set('access_token', token)
+      } else {
+        this.$cookies.remove('access_token')
       }
     })
   }

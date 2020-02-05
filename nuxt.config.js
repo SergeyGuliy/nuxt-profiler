@@ -38,7 +38,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/vuetify', '@nuxtjs/axios'],
+  modules: [
+    '@nuxtjs/proxy',
+    '@nuxtjs/vuetify',
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt'
+  ],
   /*
    ** Build configuration
    */

@@ -41,9 +41,6 @@ export default {
       allRepositories: await fetchAllRepositories()
     }
   },
-  async fetch({ store }) {
-    await store.dispatch('fetchUserInfo')
-  },
   methods: {
     deleteFromMyRepositories(id) {
       try {
