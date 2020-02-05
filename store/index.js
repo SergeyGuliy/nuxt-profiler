@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import 'firebase/auth'
 
 export const actions = {
   async nuxtServerInit({ dispatch }, { app }) {
@@ -7,7 +6,7 @@ export const actions = {
       const cookie = app.$cookies.get('access_token')
       await dispatch('fetchUserInfo', cookie)
     } catch (e) {
-      console.log('error')
+      console.log(e)
     }
   },
   async fetchUserInfo({ commit }, uid) {

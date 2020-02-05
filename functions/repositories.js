@@ -46,7 +46,7 @@ async function fetchPublicRepositoriesIDS() {
     (
       await firebase
         .database()
-        .ref(`/systeData/public/repositories`)
+        .ref(`/systemData/public/repositories`)
         .once('value')
     ).val() || []
   )

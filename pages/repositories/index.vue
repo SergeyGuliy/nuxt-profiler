@@ -2,9 +2,13 @@
   <div>
     <h1>ALL REPOSITORIES</h1>
     <ol>
-      <li v-for="(item, index) in repositories">
-        <span @click="$router.push(`/articles/${index}`)">{{ index }}</span>
-        <span>{{ item.name }}</span>
+      <li v-for="rep of publicList">
+        <span
+          @click="$router.push(`/articles/${rep.id}`)"
+          @click.middle="deleteFromMyList(rep.id)"
+          >{{ rep.id }}</span
+        >
+        <span>{{ rep.name }}</span>
       </li>
     </ol>
   </div>
@@ -17,21 +21,25 @@ import {
 } from '~/functions/repositories'
 export default {
   name: 'Index',
-  async asyncData() {
-    const allRepositories = await fetchAllRepositories()
-    const publicRepositoriesIDS = await fetchPublicRepositoriesIDS()
-    const publicRepositories = []
-    for (const i of publicRepositoriesIDS) {
-      try {
-        const rep = allRepositories[i]
-        rep.id = i
-        publicRepositories.push(rep)
-      } catch (e) {
-        continue
+  computed: {
+    publicList() {
+      const publicListList = []
+      for (const i of this.publicRepositoriesIDS) {
+        try {
+          const rep = this.allRepositories[i]
+          rep.id = i
+          publicListList.push(rep)
+        } catch (e) {
+          continue
+        }
       }
+      return publicListList
     }
+  },
+  async asyncData() {
     return {
-      repositories: publicRepositories
+      allRepositories: await fetchAllRepositories(),
+      publicRepositoriesIDS: await fetchPublicRepositoriesIDS()
     }
   }
 }

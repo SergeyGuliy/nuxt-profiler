@@ -8,7 +8,6 @@
 <script>
 import firebase from 'firebase'
 import Navbar from '../components/Navbar'
-import 'firebase/auth'
 export default {
   components: { Navbar },
   async mounted() {
