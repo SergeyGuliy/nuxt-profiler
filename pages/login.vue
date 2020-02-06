@@ -19,6 +19,7 @@ export default {
       password: ''
     }
   },
+  layout: 'empty',
   methods: {
     async submitLogIn() {
       try {

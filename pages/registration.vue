@@ -20,6 +20,7 @@ export default {
       password: ''
     }
   },
+  layout: 'empty',
   methods: {
     async submitRegistration() {
       try {

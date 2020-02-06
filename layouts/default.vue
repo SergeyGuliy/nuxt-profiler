@@ -3,12 +3,8 @@
     <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
     <Sidebar :status="sidebarStatus" />
     <v-content>
-      <v-container class="fill-height">
-        <v-row justify="center" align="center">
-          <v-col class="shrink">
-            <nuxt />
-          </v-col>
-        </v-row>
+      <v-container class="fill-height" align-itemst-start>
+        <nuxt />
       </v-container>
     </v-content>
   </v-app>
@@ -38,4 +34,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+#inspire .container.fill-height
+  align-items: start
+</style>

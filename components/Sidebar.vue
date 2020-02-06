@@ -1,13 +1,13 @@
 <template>
   <v-navigation-drawer v-model="status" app clipped>
     <v-list dense>
-      <v-list-item v-for="item in items" :key="item.text" link>
+      <v-list-item link>
         <v-list-item-action>
-          <v-icon>{{ item.icon }}</v-icon>
+          <v-icon>mdi-login</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>
-            {{ item.text }}
+            Most Popular
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
