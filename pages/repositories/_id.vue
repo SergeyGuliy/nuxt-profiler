@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: 'Id'
+  name: 'Id',
+  head: {
+    title: `Profiler - Repository Information`
+  }
 }
 </script>
 

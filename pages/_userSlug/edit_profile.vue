@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: 'EditProfile'
+  name: 'EditProfile',
+  head: {
+    title: `Profiler - Edit Profile`
+  }
 }
 </script>
 

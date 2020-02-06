@@ -10,6 +10,9 @@ export default {
     return {
       data: await fetchArticleByID(route.params.id)
     }
+  },
+  head: {
+    title: `Profiler - Article Information`
   }
 }
 </script>

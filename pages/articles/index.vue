@@ -33,6 +33,9 @@ export default {
       return publicListList
     }
   },
+  head: {
+    title: `Profiler - Public Articles`
+  },
   async asyncData() {
     return {
       allArticles: await fetchAllArticles(),

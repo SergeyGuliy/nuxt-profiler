@@ -35,6 +35,9 @@ export default {
       return myList
     }
   },
+  head: {
+    title: `Profiler - User Articles`
+  },
   async asyncData() {
     return {
       allArticles: await fetchAllArticles()

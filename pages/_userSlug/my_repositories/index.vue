@@ -35,6 +35,9 @@ export default {
       return myList
     }
   },
+  head: {
+    title: `Profiler - User Repositories`
+  },
   async asyncData() {
     return {
       allRepositories: await fetchAllRepositories()

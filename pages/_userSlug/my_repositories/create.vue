@@ -43,6 +43,9 @@ export default {
       accessibility: ''
     }
   },
+  head: {
+    title: `Profiler - Create Repository`
+  },
   methods: {
     async save() {
       const data = {

@@ -41,6 +41,9 @@ export default {
       allUsers: await fetchAllUsers()
     }
   },
+  head: {
+    title: `Profiler - All Users`
+  },
   methods: {
     deleteFromMyList(id) {
       try {

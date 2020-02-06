@@ -21,6 +21,9 @@ export default {
     }
   },
   layout: 'empty',
+  head: {
+    title: 'Profiler - Registration'
+  },
   methods: {
     async submitRegistration() {
       try {

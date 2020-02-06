@@ -41,6 +41,9 @@ export default {
       accessibility: 'private'
     }
   },
+  head: {
+    title: `Profiler - Create Article`
+  },
   methods: {
     async save() {
       const data = {

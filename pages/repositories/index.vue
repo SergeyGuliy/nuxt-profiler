@@ -36,6 +36,9 @@ export default {
       return publicListList
     }
   },
+  head: {
+    title: `Profiler - Public Repositories`
+  },
   async asyncData() {
     return {
       allRepositories: await fetchAllRepositories(),

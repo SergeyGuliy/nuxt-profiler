@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: 'MyAdminPanel'
+  name: 'MyAdminPanel',
+  head: {
+    title: `Profiler - Admin Panel`
+  }
 }
 </script>
 

@@ -2,20 +2,19 @@
   <v-app id="inspire">
     <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
     <Sidebar :status="sidebarStatus" />
-    <v-content>
-      <v-container class="fill-height" align-itemst-start>
-        <nuxt />
-      </v-container>
-    </v-content>
+    <Body>
+      <nuxt />
+    </Body>
   </v-app>
 </template>
 
 <script>
 import firebase from 'firebase'
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/Sidebar'
+import Navbar from '../components/main/Navbar'
+import Sidebar from '../components/main/Sidebar'
+import Body from '../components/main/Body'
 export default {
-  components: { Navbar, Sidebar },
+  components: { Navbar, Sidebar, Body },
   data() {
     return {
       sidebarStatus: false
@@ -34,7 +33,4 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-#inspire .container.fill-height
-  align-items: start
-</style>
+<style scoped lang="sass"></style>

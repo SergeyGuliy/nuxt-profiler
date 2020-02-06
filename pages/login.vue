@@ -20,6 +20,9 @@ export default {
     }
   },
   layout: 'empty',
+  head: {
+    title: 'Profiler - Login'
+  },
   methods: {
     async submitLogIn() {
       try {

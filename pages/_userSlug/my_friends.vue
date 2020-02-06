@@ -39,6 +39,9 @@ export default {
       allUsers: await fetchAllUsers()
     }
   },
+  head: {
+    title: `Profiler - User Friends`
+  },
   methods: {
     deleteFromMyList(id) {
       try {
