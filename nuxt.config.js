@@ -29,7 +29,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/firebase'],
+  plugins: ['~/plugins/firebase', '~/plugins/global-components'],
   /*
 
    ** Nuxt.js dev-modules
@@ -57,7 +57,8 @@ export default {
     '@nuxtjs/proxy',
     '@nuxtjs/vuetify',
     '@nuxtjs/axios',
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
+    'vuetify-dialog/nuxt'
   ],
 
   /*

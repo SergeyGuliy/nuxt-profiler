@@ -1,17 +1,51 @@
 <template>
-  <div>
-    <h1>THIS IS MY ARTICLES LIST OF USER {{ $route.params.userSlug }}</h1>
-    <ol>
-      <li v-for="usr of myList">
-        <span
-          @click="$router.push(`/users/${usr.id}`)"
-          @click.middle="deleteFromMyList(usr.id)"
-          >{{ usr.id }}</span
-        >
-        <span>{{ usr.name }}</span>
-      </li>
-    </ol>
-  </div>
+  <BodyCard>
+    <template #head>
+      <BodyCardHeader>
+        <template #title>List of my Friends</template>
+        <div class="flex">
+          <v-btn class="mx-1">Save</v-btn>
+        </div>
+      </BodyCardHeader>
+    </template>
+    <template #body>
+      <BodyCardMain1>
+        <template #c-1>
+          <Table>
+            <template #table-head>
+              <tr>
+                <th>Name</th>
+                <th>Creator</th>
+                <th>Actions</th>
+              </tr>
+            </template>
+            <template #table-body>
+              <tr v-for="item in myList" :key="item.id">
+                <td>{{ item.name }}</td>
+                <td>
+                  <v-btn @click="$router.push(`/users/${item.id}`)"
+                    >{{ item.creatorName }}
+                    <v-icon>mdi-face-profile</v-icon></v-btn
+                  >
+                </td>
+                <td>
+                  <v-btn
+                    @click="$router.push(`/articles/${item.id}`)"
+                    icon
+                    color="secondary"
+                    ><v-icon>mdi-book</v-icon></v-btn
+                  >
+                  <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
+                    ><v-icon>mdi-minus-circle</v-icon></v-btn
+                  >
+                </td>
+              </tr>
+            </template>
+          </Table>
+        </template>
+      </BodyCardMain1>
+    </template>
+  </BodyCard>
 </template>
 
 <script>
@@ -55,4 +89,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.v-data-table__wrapper tr > td > button.v-btn
+  padding: 0 5px
+  height: 27px
+td, th
+  text-align: center !important
+</style>

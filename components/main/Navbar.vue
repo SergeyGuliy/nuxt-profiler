@@ -24,7 +24,9 @@
       class="active"
       ><v-icon>mdi-invert-colors</v-icon>
     </v-btn>
-    <v-btn icon><v-icon>mdi-logout</v-icon></v-btn>
+    <v-btn @click="$store.dispatch('logOut')" icon
+      ><v-icon>mdi-logout</v-icon></v-btn
+    >
     <template v-slot:extension v-if="$store.getters.user.id">
       <NavLink :link="`/${$store.getters.user.profile}/edit_profile`">
         edit profile
@@ -67,4 +69,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.v-toolbar__content .v-btn.v-btn--icon
+  width: 35px
+  height: 35px
+.v-btn
+  padding: 0 5px !important
+</style>

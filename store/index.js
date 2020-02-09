@@ -86,7 +86,7 @@ export const actions = {
       console.log(e)
     }
   },
-  async updateUserInfo({ dispatch, getters }) {
+  async updateUserInfo({ getters }) {
     try {
       const uid = (await firebase.auth().currentUser).uid
       await firebase
@@ -94,6 +94,7 @@ export const actions = {
         .ref(`/1_users/${uid}`)
         .update(getters.user)
     } catch (e) {
+      console.log(e)
       console.log('Failed to update user info')
     }
   }
@@ -108,8 +109,14 @@ export const mutations = {
   setUser(state, user) {
     state.user = user
   },
+  updateUserInfo(state, userInfo) {
+    state.user.userInfo = userInfo
+  },
   cleanUser(state) {
     state.user = ''
+  },
+  becomeAdmin(state) {
+    state.user.isAdmin = true
   },
   pushArticle(state, id) {
     state.user.lists.articles.push(id)
