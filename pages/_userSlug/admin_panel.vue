@@ -12,16 +12,23 @@
             <v-card-subtitle>
               <v-text-field
                 v-model="newLanguage"
+                @keypress.enter="addLanguage"
                 label="Language"
                 outlined
-                @keypress.enter="addLanguage"
-              ></v-text-field>
-              <v-btn @click="addLanguage" block>ADD</v-btn>
-              <v-list v-if="languages.length !== 0">
+              />
+              <v-btn
+                @click="addLanguage"
+                :disabled="!newLanguage || loading"
+                :loading="loading"
+                block
+                >ADD</v-btn
+              >
+              <v-list>
                 <v-list-item
                   v-for="item in languages"
                   :key="item.name"
                   @click="selectLanguage(item)"
+                  :class="{ my_active: item.name === languageSelected }"
                 >
                   <v-list-item-content>
                     <v-list-item-title v-text="item.name" />
@@ -42,11 +49,15 @@
             <v-card-subtitle>
               <v-text-field
                 v-model="newTechnology"
+                @keypress.enter="addTechnology"
                 label="Technologie"
                 outlined
-                @keypress.enter="addTechnology"
-              ></v-text-field>
-              <v-btn v-if="newTechnology" @click="addTechnology" block
+              />
+              <v-btn
+                :disabled="!newTechnology || !languageSelected || loading"
+                @click="addTechnology"
+                :loading="loading"
+                block
                 >ADD</v-btn
               >
               <v-list v-if="languageSelected">
@@ -55,7 +66,7 @@
                   :key="item"
                 >
                   <v-list-item-content>
-                    <v-list-item-title v-text="item"></v-list-item-title>
+                    <v-list-item-title v-text="item" />
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -107,10 +118,7 @@ export default {
       this.loading = true
       try {
         await updateCategories(this.languages)
-        // await new Promise((resolve) => setTimeout(resolve, 2000))
-      } catch (e) {
-        //
-      }
+      } catch (e) {}
       this.loading = false
     },
     selectLanguage(item) {
@@ -153,4 +161,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.my_active
+  background-color: #7F828B !important
+button.v-btn.v-btn--block
+  margin-bottom: 15px
+</style>

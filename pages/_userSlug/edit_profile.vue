@@ -118,7 +118,7 @@
               />
               <v-select
                 v-model="work.work_languages"
-                :items="items"
+                :items="Object.keys(languages)"
                 chips
                 label="Stack languages"
                 multiple
@@ -136,7 +136,7 @@
               </v-select>
               <v-select
                 v-model="work.work_technologies"
-                :items="items"
+                :items="technologies"
                 chips
                 label="Stack technologies"
                 multiple
@@ -197,6 +197,7 @@
 </template>
 
 <script>
+import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'EditProfile',
   head: {
@@ -208,20 +209,6 @@ export default {
       loading: false,
       loadingSave: false,
       menu: false,
-      items: [
-        'foo',
-        'bar',
-        'fizz',
-        'buzz',
-        '1foo',
-        'b1ar',
-        'fi1zz',
-        'buz1z',
-        'foo1',
-        'ba1r',
-        'fi1zz',
-        'buz11z'
-      ],
       work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
       work_type: ['Office worker', 'Freelancer'],
       work_position: [
@@ -230,10 +217,23 @@ export default {
         'Business Analytic',
         'Human resources',
         'Quality assurance'
-      ],
-      value: ['foo', 'bar', 'fizz', 'buzz']
+      ]
     }
   },
+  // computed: {
+  //   technologies() {
+  //     const technolies = []
+  //     for (const i in this.work.work_technologies) {
+  //       try {
+  //         this.languages[i].technologies.forEach((item) => {
+  //           console.log(item)
+  //           technolies.push(item)
+  //         })
+  //       } catch (e) {}
+  //     }
+  //     return technolies
+  //   }
+  // },
   watch: {
     isUpdating(val) {
       if (val) {
@@ -244,11 +244,12 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
   },
-  asyncData({ store }) {
+  async asyncData({ store }) {
     return {
       contacts: Object.assign({}, store.getters.user.userInfo.contacts),
       info: Object.assign({}, store.getters.user.userInfo.info),
-      work: Object.assign({}, store.getters.user.userInfo.work)
+      work: Object.assign({}, store.getters.user.userInfo.work),
+      languages: await fetchCategories()
     }
   },
   methods: {
