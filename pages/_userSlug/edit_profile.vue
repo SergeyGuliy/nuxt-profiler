@@ -32,79 +32,163 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-btn @click="submitUpdateInfo" class="mx-1">Save</v-btn>
+          <v-btn @click="submitUpdateInfo" :loading="loadingSave" class="mx-1"
+            >Save</v-btn
+          >
         </div>
       </BodyCardHeader>
     </template>
     <template #body>
       <BodyCardMain3>
         <template #c-1>
-          <v-card color="#385F73" dark>
+          <v-card color="#385F73" dark height="100%">
             <v-card-subtitle>
               <v-text-field
                 v-model="info.first_name"
-                label="First Name"
+                label="First name"
                 outlined
-                clearable
-                counter="25"
               ></v-text-field>
-            </v-card-subtitle>
-            <v-card-subtitle>
               <v-text-field
-                label="First Name"
-                single-line
+                v-model="info.last_name"
+                label="Last name"
                 outlined
               ></v-text-field>
-            </v-card-subtitle>
-            <v-card-subtitle>
               <v-text-field
-                label="Outlined"
-                single-line
+                v-model="info.location"
+                label="Your current Location"
                 outlined
               ></v-text-field>
-            </v-card-subtitle>
-            <v-card-subtitle>
-              <v-text-field
-                label="Outlined"
-                single-line
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="info.date_of_birth"
+                    v-on="on"
+                    label="Birthday date"
+                    readonly
+                    outlined
+                  />
+                </template>
+                <v-date-picker
+                  ref="picker"
+                  v-model="info.date_of_birth"
+                  :max="new Date().toISOString().substr(0, 10)"
+                  @change="save"
+                  min="1950-01-01"
+                />
+              </v-menu>
+              <v-textarea
+                v-model="info.about"
+                label="Tell about yourself"
                 outlined
-              ></v-text-field>
-            </v-card-subtitle>
-            <v-card-subtitle>
-              <v-text-field
-                label="Outlined"
-                single-line
-                outlined
-              ></v-text-field>
+              ></v-textarea>
             </v-card-subtitle>
           </v-card>
         </template>
         <template #c-2>
-          <v-card color="#385F73" dark>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
+          <v-card color="#385F73" dark height="100%">
+            <v-card-subtitle>
+              <v-select
+                v-model="work.work_status"
+                :items="work_status"
+                label="Work status"
+                outlined
+                height="56px"
+              >
+              </v-select>
+              <v-select
+                v-model="work.work_type"
+                :items="work_type"
+                label="Working type"
+                outlined
+                height="56px"
+              />
+              <v-select
+                v-model="work.work_position"
+                :items="work_position"
+                label="Work position"
+                outlined
+                height="56px"
+              />
+              <v-select
+                v-model="work.work_languages"
+                :items="items"
+                chips
+                label="Stack languages"
+                multiple
+                outlined
+                height="56px"
+              >
+                <!--                <template v-slot:selection="{ item, index }">-->
+                <!--                  <v-chip v-if="index === 0">-->
+                <!--                    <span>{{ item }}</span>-->
+                <!--                  </v-chip>-->
+                <!--                  <span v-if="index === 1" class="grey&#45;&#45;text caption"-->
+                <!--                    >(+{{ work.work_languages.length - 1 }})</span-->
+                <!--                  >-->
+                <!--                </template>-->
+              </v-select>
+              <v-select
+                v-model="work.work_technologies"
+                :items="items"
+                chips
+                label="Stack technologies"
+                multiple
+                outlined
+                height="56px"
+              >
+                <!--                <template v-slot:selection="{ item, index }">-->
+                <!--                  <v-chip v-if="index === 0">-->
+                <!--                    <span>{{ item }}</span>-->
+                <!--                  </v-chip>-->
+                <!--                  <span v-if="index === 1" class="grey&#45;&#45;text caption"-->
+                <!--                    >(+{{ work.work_technologies.length - 1 }})</span-->
+                <!--                  >-->
+                <!--                </template>-->
+              </v-select>
+            </v-card-subtitle>
           </v-card>
         </template>
         <template #c-3>
-          <v-card color="#385F73" dark>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
+          <v-card color="#385F73" dark height="100%">
+            <v-card-subtitle>
+              <v-text-field
+                v-model="contacts.phone"
+                label="Contact phone"
+                outlined
+                type="number"
+              ></v-text-field>
+              <v-text-field
+                v-model="contacts.site"
+                label="Your web-cite"
+                outlined
+                type="url"
+              ></v-text-field>
+              <v-text-field
+                v-model="contacts.linkedIn"
+                label="LinkedIn"
+                outlined
+                type="url"
+              ></v-text-field>
+              <v-text-field
+                v-model="contacts.facebook"
+                label="Facebook"
+                outlined
+                type="url"
+              ></v-text-field>
+              <v-text-field
+                v-model="contacts.github"
+                label="GitHub"
+                outlined
+                type="url"
+              ></v-text-field>
+            </v-card-subtitle>
           </v-card>
         </template>
       </BodyCardMain3>
@@ -122,15 +206,45 @@ export default {
     return {
       dialog: false,
       loading: false,
-      rules: {
-        contacts: {},
-        // info: { first_name: [(v) => v.length <= 10 || 'Max 10 characters'] },
-        work: {}
+      loadingSave: false,
+      menu: false,
+      items: [
+        'foo',
+        'bar',
+        'fizz',
+        'buzz',
+        '1foo',
+        'b1ar',
+        'fi1zz',
+        'buz1z',
+        'foo1',
+        'ba1r',
+        'fi1zz',
+        'buz11z'
+      ],
+      work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
+      work_type: ['Office worker', 'Freelancer'],
+      work_position: [
+        'Developer',
+        'System Administrator',
+        'Business Analytic',
+        'Human resources',
+        'Quality assurance'
+      ],
+      value: ['foo', 'bar', 'fizz', 'buzz']
+    }
+  },
+  watch: {
+    isUpdating(val) {
+      if (val) {
+        setTimeout(() => (this.isUpdating = false), 3000)
       }
+    },
+    menu(val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
   },
   asyncData({ store }) {
-    console.log(Object.assign({}, store.getters.user.userInfo.info))
     return {
       contacts: Object.assign({}, store.getters.user.userInfo.contacts),
       info: Object.assign({}, store.getters.user.userInfo.info),
@@ -151,7 +265,14 @@ export default {
         work: this.work
       })
       await this.$store.dispatch('updateUserInfo')
-      this.dialog = false
+      this.$router.push('/')
+    },
+    save(date) {
+      this.$refs.menu.save(date)
+    },
+    remove(item) {
+      const index = this.friends.indexOf(item.name)
+      if (index >= 0) this.friends.splice(index, 1)
     }
   }
 }

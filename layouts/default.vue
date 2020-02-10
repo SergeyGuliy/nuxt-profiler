@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
-    <Sidebar :status="sidebarStatus" />
+    <!--    <Sidebar :status="sidebarStatus" />-->
     <Body>
       <nuxt />
     </Body>
@@ -11,10 +11,11 @@
 <script>
 import firebase from 'firebase'
 import Navbar from '../components/main/Navbar'
-import Sidebar from '../components/main/Sidebar'
+// import Sidebar from '../components/main/Sidebar'
 import Body from '../components/main/Body'
 export default {
-  components: { Navbar, Sidebar, Body },
+  components: { Navbar, Body },
+  // components: { Navbar, Sidebar, Body },
   data() {
     return {
       sidebarStatus: false

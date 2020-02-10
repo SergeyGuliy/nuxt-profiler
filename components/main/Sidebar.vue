@@ -50,6 +50,7 @@
 <script>
 export default {
   name: 'Sidebar',
+  props: ['status'],
   data: () => ({
     drawer: null,
     items: [
@@ -66,8 +67,7 @@ export default {
       { picture: 58, text: 'Nokia' },
       { picture: 78, text: 'MKBHD' }
     ]
-  }),
-  props: ['status']
+  })
 }
 </script>
 

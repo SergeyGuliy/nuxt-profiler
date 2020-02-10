@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-container class="fill-height" align-itemst-start>
+    <v-container class="fill-height" align-itemst-start fluid>
       <slot></slot>
     </v-container>
   </v-content>
