@@ -2,7 +2,7 @@
   <BodyCard>
     <template #head>
       <BodyCardHeader>
-        <template #title>Edit Profile</template>
+        <template #title>{{ technologies }}</template>
         <div class="flex">
           <v-dialog v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
@@ -220,20 +220,20 @@ export default {
       ]
     }
   },
-  // computed: {
-  //   technologies() {
-  //     const technolies = []
-  //     for (const i in this.work.work_technologies) {
-  //       try {
-  //         this.languages[i].technologies.forEach((item) => {
-  //           console.log(item)
-  //           technolies.push(item)
-  //         })
-  //       } catch (e) {}
-  //     }
-  //     return technolies
-  //   }
-  // },
+  computed: {
+    technologies() {
+      // return this.work.work_languages
+      const technolies = []
+      for (const i of this.work.work_languages) {
+        try {
+          this.languages[i].technologies.forEach((item) => {
+            technolies.push(item)
+          })
+        } catch (e) {}
+      }
+      return technolies
+    }
+  },
   watch: {
     isUpdating(val) {
       if (val) {
@@ -266,7 +266,7 @@ export default {
         work: this.work
       })
       await this.$store.dispatch('updateUserInfo')
-      this.$router.push('/')
+      // this.$router.push('/')
     },
     save(date) {
       this.$refs.menu.save(date)
