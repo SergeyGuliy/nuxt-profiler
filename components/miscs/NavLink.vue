@@ -9,7 +9,9 @@
 <script>
 export default {
   name: 'NavLink',
-  props: ['link']
+  props: {
+    link: String
+  }
 }
 </script>
 

@@ -62,7 +62,9 @@ export default {
         await firebase.auth().signOut()
         this.$store.commit('cleanUser')
       } catch (e) {
-        console.log(e)
+        await this.$dialog.warning({
+          text: e
+        })
       }
     }
   }
