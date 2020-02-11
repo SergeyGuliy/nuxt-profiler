@@ -52,7 +52,7 @@
 
 <script>
 import firebase from 'firebase'
-import NavLink from '../miscs/NavLink'
+import NavLink from '../misc/NavLink'
 export default {
   name: 'Navbar',
   components: { NavLink },

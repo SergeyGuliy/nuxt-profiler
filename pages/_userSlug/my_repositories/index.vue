@@ -1,7 +1,7 @@
 <template>
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>List of my Repositories</template>
         <div class="flex">
           <v-btn
@@ -14,10 +14,10 @@
             >Create</v-btn
           >
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain1>
+      <PageBody col="1">
         <template #c-1>
           <Table>
             <template #table-head>
@@ -51,9 +51,9 @@
             </template>
           </Table>
         </template>
-      </BodyCardMain1>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

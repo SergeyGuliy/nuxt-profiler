@@ -1,7 +1,7 @@
 <template>
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>Edit Profile</template>
         <div class="flex">
           <v-dialog
@@ -37,12 +37,12 @@
           </v-dialog>
           <v-btn class="mx-1">Save</v-btn>
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain3>
+      <PageBody col="3">
         <template #c-1>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-title class="headline">Unlimited music now</v-card-title>
 
             <v-card-subtitle
@@ -53,10 +53,10 @@
             <v-card-actions>
               <v-btn text>Listen Now</v-btn>
             </v-card-actions>
-          </v-card>
+          </Card>
         </template>
         <template #c-2>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-title class="headline">Unlimited music now</v-card-title>
 
             <v-card-subtitle
@@ -67,10 +67,10 @@
             <v-card-actions>
               <v-btn text>Listen Now</v-btn>
             </v-card-actions>
-          </v-card>
+          </Card>
         </template>
         <template #c-3>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-title class="headline">Unlimited music now</v-card-title>
 
             <v-card-subtitle
@@ -81,11 +81,11 @@
             <v-card-actions>
               <v-btn text>Listen Now</v-btn>
             </v-card-actions>
-          </v-card>
+          </Card>
         </template>
-      </BodyCardMain3>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

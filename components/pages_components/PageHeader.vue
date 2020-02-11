@@ -1,10 +1,10 @@
 <template>
   <div class="flex">
     <h3 class="headline">
-      <slot name="title"></slot>
+      <slot name="title" />
     </h3>
     <div>
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

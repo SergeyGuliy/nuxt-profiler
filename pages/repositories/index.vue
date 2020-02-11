@@ -1,28 +1,15 @@
 <template>
-  <!--  <div>-->
-  <!--    <h1>ALL REPOSITORIES</h1>-->
-  <!--    <ol>-->
-  <!--      <li v-for="rep of publicList">-->
-  <!--        <span-->
-  <!--          @click="$router.push(`/articles/${rep.id}`)"-->
-  <!--          @click.middle="deleteFromMyList(rep.id)"-->
-  <!--          >{{ rep.id }}</span-->
-  <!--        >-->
-  <!--        <span>{{ rep.name }}</span>-->
-  <!--      </li>-->
-  <!--    </ol>-->
-  <!--  </div>-->
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>Edit Profile</template>
         <div class="flex">
           <v-btn class="mx-1">Save</v-btn>
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain1>
+      <PageBody col="1">
         <template #c-1>
           <Table>
             <template #table-head>
@@ -71,9 +58,9 @@
             </template>
           </Table>
         </template>
-      </BodyCardMain1>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

@@ -1,14 +1,14 @@
 <template>
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>List of my Articles</template>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain2>
+      <PageBody col="2">
         <template #c-1>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-subtitle>
               <v-text-field
                 v-model="newLanguage"
@@ -42,10 +42,10 @@
                 </v-list-item>
               </v-list>
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
         <template #c-2>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-subtitle>
               <v-text-field
                 v-model="newTechnology"
@@ -77,11 +77,11 @@
                 </v-list-item>
               </v-list>
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
-      </BodyCardMain2>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

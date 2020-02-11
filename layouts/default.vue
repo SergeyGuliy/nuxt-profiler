@@ -10,9 +10,9 @@
 
 <script>
 import firebase from 'firebase'
-import Navbar from '../components/main/Navbar'
-// import Sidebar from '../components/main/Sidebar'
-import Body from '../components/main/Body'
+import Navbar from '../components/layout_components/Navbar'
+// import Sidebar from '../components/layout_components/Sidebar'
+import Body from '../components/layout_components/Body'
 export default {
   components: { Navbar, Body },
   // components: { Navbar, Sidebar, Body },

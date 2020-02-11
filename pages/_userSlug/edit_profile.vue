@@ -1,7 +1,7 @@
 <template>
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>Edite profile</template>
         <div class="flex">
           <v-dialog v-model="dialog" persistent max-width="290">
@@ -36,12 +36,12 @@
             >Save</v-btn
           >
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain3>
+      <PageBody col="3">
         <template #c-1>
-          <v-card color="#385F73" dark height="100%">
+          <Card>
             <v-card-subtitle>
               <v-text-field
                 v-model="info.first_name"
@@ -89,10 +89,10 @@
                 outlined
               />
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
         <template #c-2>
-          <v-card color="#385F73" dark height="100%">
+          <Card>
             <v-card-subtitle>
               <v-select
                 v-model="work.work_status"
@@ -137,10 +137,10 @@
               >
               </v-select>
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
         <template #c-3>
-          <v-card color="#385F73" dark height="100%">
+          <Card>
             <v-card-subtitle>
               <v-text-field
                 v-model="contacts.phone"
@@ -173,11 +173,11 @@
                 type="url"
               />
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
-      </BodyCardMain3>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

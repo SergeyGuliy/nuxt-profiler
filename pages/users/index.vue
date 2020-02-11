@@ -1,31 +1,15 @@
 <template>
-  <!--  <div>-->
-  <!--    <h1>ALL USERS</h1>-->
-  <!--    <ol>-->
-  <!--      <li v-for="usr of list">-->
-  <!--        <span @click="$router.push(`/users/${usr.id}`)">{{ usr.id }}</span>-->
-  <!--        <span>{{ usr.name }}</span>-->
-  <!--        <button-->
-  <!--          v-if="!$store.getters.user.lists.friends.includes(usr.id)"-->
-  <!--          @click="addTomMyList(usr.id)"-->
-  <!--        >-->
-  <!--          ADD-->
-  <!--        </button>-->
-  <!--        <button v-else @click="deleteFromMyList(usr.id)">REMOVE</button>-->
-  <!--      </li>-->
-  <!--    </ol>-->
-  <!--  </div>-->
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>Edit Profile</template>
         <div class="flex">
           <v-btn class="mx-1">Save</v-btn>
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain1>
+      <PageBody col="1">
         <template #c-1>
           <Table>
             <template #table-head>
@@ -71,9 +55,9 @@
             </template>
           </Table>
         </template>
-      </BodyCardMain1>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

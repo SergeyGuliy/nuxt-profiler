@@ -1,7 +1,7 @@
 <template>
-  <BodyCard>
+  <Page>
     <template #head>
-      <BodyCardHeader>
+      <PageHeader>
         <template #title>Create Article</template>
         <div class="flex">
           <v-container fluid>
@@ -15,12 +15,12 @@
             >Save</v-btn
           >
         </div>
-      </BodyCardHeader>
+      </PageHeader>
     </template>
     <template #body>
-      <BodyCardMain2>
+      <PageBody col="2">
         <template #c-1>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-subtitle>
               <v-text-field
                 v-model="name"
@@ -38,10 +38,10 @@
                 outlined
               />
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
         <template #c-2>
-          <v-card color="#385F73" dark>
+          <Card>
             <v-card-subtitle>
               <v-textarea
                 v-model="about"
@@ -51,11 +51,11 @@
                 outlined
               />
             </v-card-subtitle>
-          </v-card>
+          </Card>
         </template>
-      </BodyCardMain2>
+      </PageBody>
     </template>
-  </BodyCard>
+  </Page>
 </template>
 
 <script>

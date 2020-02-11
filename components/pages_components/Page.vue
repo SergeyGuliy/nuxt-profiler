@@ -1,9 +1,9 @@
 <template>
   <v-card hover>
     <v-card-title class="headline">
-      <slot name="head"></slot>
+      <slot name="head">ERROR!!!!</slot>
     </v-card-title>
-    <v-divider></v-divider>
+    <v-divider />
     <v-card-subtitle>
       <slot name="body">ERROR!!!!</slot>
     </v-card-subtitle>

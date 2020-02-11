@@ -1,19 +1,17 @@
 import Vue from 'vue'
-import BodyCard from '../components/miscs/Body'
-import BodyCardHeader from '../components/miscs/BodyCardHeader'
-import BodyCardMain1 from '../components/miscs/BodyCardMain1'
-import BodyCardMain2 from '../components/miscs/BodyCardMain2'
-import BodyCardMain3 from '../components/miscs/BodyCardMain3'
-import NavLink from '~/components/miscs/NavLink'
-import Table from '~/components/miscs/Table'
+import Page from '../components/pages_components/Page'
+import PageHeader from '../components/pages_components/PageHeader'
+import PageBody from '../components/pages_components/PageBody'
+import NavLink from '~/components/misc/NavLink'
+import Table from '~/components/pages_components/Table'
+import Card from '~/components/pages_components/Card'
 const components = {
-  BodyCard,
-  BodyCardHeader,
-  BodyCardMain1,
-  BodyCardMain2,
-  BodyCardMain3,
+  Page,
+  PageHeader,
+  PageBody,
   NavLink,
-  Table
+  Table,
+  Card
 }
 
 Object.keys(components).forEach((key) => {
