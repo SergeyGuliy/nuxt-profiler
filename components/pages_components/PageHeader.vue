@@ -3,8 +3,8 @@
     <h3 class="headline">
       <slot name="title" />
     </h3>
-    <div>
-      <slot />
+    <div class="flex-left">
+      <slot name="actions" />
     </div>
   </div>
 </template>
@@ -19,5 +19,8 @@ export default {
 .flex
   display: flex
   justify-content: space-between
+  align-items: center
+.flex-left
+  display: flex
   align-items: center
 </style>

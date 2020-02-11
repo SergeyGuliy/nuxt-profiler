@@ -3,9 +3,9 @@
     <template #head>
       <PageHeader>
         <template #title>List of my Friends</template>
-        <div class="flex">
+        <template #actions>
           <v-btn class="mx-1">Save</v-btn>
-        </div>
+        </template>
       </PageHeader>
     </template>
     <template #body>

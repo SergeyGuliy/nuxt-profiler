@@ -3,7 +3,7 @@
     <template #head>
       <PageHeader>
         <template #title>List of my Repositories</template>
-        <div class="flex">
+        <template #actions>
           <v-btn
             @click="
               $router.push(
@@ -13,7 +13,7 @@
             class="mx-1"
             >Create</v-btn
           >
-        </div>
+        </template>
       </PageHeader>
     </template>
     <template #body>

@@ -3,18 +3,17 @@
     <template #head>
       <PageHeader>
         <template #title>Create Repository</template>
-        <div class="flex">
-          <v-container fluid>
-            <v-switch
-              v-model="isPublic"
-              :label="isPublic ? 'Public article' : 'Private article'"
-              inset
-            />
-          </v-container>
+        <template #actions>
+          <v-switch
+            v-model="isPublic"
+            :label="isPublic ? 'Public article' : 'Private article'"
+            class="switch"
+            inset
+          />
           <v-btn @click="save" :disabled="!formIsValid" class="mx-1"
             >Save</v-btn
           >
-        </div>
+        </template>
       </PageHeader>
     </template>
     <template #body>
@@ -136,9 +135,7 @@ export default {
 </script>
 
 <style scoped lang="sass">
-.container.container--fluid
+.v-input.switch
+  margin: 3px
   height: 36px
-  padding: 0
-  .v-input
-    margin: 3px
 </style>

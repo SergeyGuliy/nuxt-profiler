@@ -3,7 +3,7 @@
     <template #head>
       <PageHeader>
         <template #title>Edite profile</template>
-        <div class="flex">
+        <template #actions>
           <v-dialog v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" v-if="!$store.getters.user.isAdmin" mx-1
@@ -35,7 +35,7 @@
           <v-btn @click="submitUpdateInfo" :loading="loadingSave" class="mx-1"
             >Save</v-btn
           >
-        </div>
+        </template>
       </PageHeader>
     </template>
     <template #body>

@@ -3,7 +3,7 @@
     <template #head>
       <PageHeader>
         <template #title>List of my Articles</template>
-        <div class="flex">
+        <template #actions>
           <v-btn
             @click="
               $router.push(`/${$store.getters.user.profile}/my_articles/create`)
@@ -11,7 +11,7 @@
             class="mx-1"
             >Create</v-btn
           >
-        </div>
+        </template>
       </PageHeader>
     </template>
     <template #body>
