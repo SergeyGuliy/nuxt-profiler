@@ -42,137 +42,127 @@
       <PageBody col="3">
         <template #c-1>
           <Card>
-            <v-card-subtitle>
-              <v-text-field
-                v-model="info.first_name"
-                label="First name"
-                outlined
-              />
-              <v-text-field
-                v-model="info.last_name"
-                label="Last name"
-                outlined
-              />
-              <v-text-field
-                v-model="info.location"
-                label="Your current Location"
-                outlined
-              />
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="info.date_of_birth"
-                    v-on="on"
-                    label="Birthday date"
-                    readonly
-                    outlined
-                  />
-                </template>
-                <v-date-picker
-                  ref="picker"
+            <v-text-field
+              v-model="info.first_name"
+              label="First name"
+              outlined
+            />
+            <v-text-field v-model="info.last_name" label="Last name" outlined />
+            <v-text-field
+              v-model="info.location"
+              label="Your current Location"
+              outlined
+            />
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
                   v-model="info.date_of_birth"
-                  :max="new Date().toISOString().substr(0, 10)"
-                  @change="save"
-                  min="1950-01-01"
+                  v-on="on"
+                  label="Birthday date"
+                  readonly
+                  outlined
                 />
-              </v-menu>
-              <v-textarea
-                v-model="info.about"
-                label="Tell about yourself"
-                outlined
+              </template>
+              <v-date-picker
+                ref="picker"
+                v-model="info.date_of_birth"
+                :max="new Date().toISOString().substr(0, 10)"
+                @change="save"
+                min="1950-01-01"
               />
-            </v-card-subtitle>
+            </v-menu>
+            <v-textarea
+              v-model="info.about"
+              label="Tell about yourself"
+              outlined
+            />
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <v-card-subtitle>
-              <v-select
-                v-model="work.work_status"
-                :items="work_status"
-                label="Work status"
-                outlined
-                height="56px"
-              >
-              </v-select>
-              <v-select
-                v-model="work.work_type"
-                :items="work_type"
-                label="Working type"
-                outlined
-                height="56px"
-              />
-              <v-select
-                v-model="work.work_position"
-                :items="work_position"
-                label="Work position"
-                outlined
-                height="56px"
-              />
-              <v-select
-                v-model="work.work_languages"
-                :items="Object.keys(languages)"
-                chips
-                label="Stack languages"
-                multiple
-                outlined
-                height="56px"
-              >
-              </v-select>
-              <v-select
-                v-model="work.work_technologies"
-                :items="technologies"
-                chips
-                label="Stack technologies"
-                multiple
-                outlined
-                height="56px"
-              >
-              </v-select>
-            </v-card-subtitle>
+            <v-select
+              v-model="work.work_status"
+              :items="work_status"
+              label="Work status"
+              outlined
+              height="56px"
+            >
+            </v-select>
+            <v-select
+              v-model="work.work_type"
+              :items="work_type"
+              label="Working type"
+              outlined
+              height="56px"
+            />
+            <v-select
+              v-model="work.work_position"
+              :items="work_position"
+              label="Work position"
+              outlined
+              height="56px"
+            />
+            <v-select
+              v-model="work.work_languages"
+              :items="Object.keys(languages)"
+              chips
+              label="Stack languages"
+              multiple
+              outlined
+              height="56px"
+            >
+            </v-select>
+            <v-select
+              v-model="work.work_technologies"
+              :items="technologies"
+              chips
+              label="Stack technologies"
+              multiple
+              outlined
+              height="56px"
+            >
+            </v-select>
           </Card>
         </template>
         <template #c-3>
           <Card>
-            <v-card-subtitle>
-              <v-text-field
-                v-model="contacts.phone"
-                label="Contact phone"
-                outlined
-                type="number"
-              />
-              <v-text-field
-                v-model="contacts.site"
-                label="Your web-cite"
-                outlined
-                type="url"
-              />
-              <v-text-field
-                v-model="contacts.linkedIn"
-                label="LinkedIn"
-                outlined
-                type="url"
-              />
-              <v-text-field
-                v-model="contacts.facebook"
-                label="Facebook"
-                outlined
-                type="url"
-              />
-              <v-text-field
-                v-model="contacts.github"
-                label="GitHub"
-                outlined
-                type="url"
-              />
-            </v-card-subtitle>
+            <v-text-field
+              v-model="contacts.phone"
+              label="Contact phone"
+              outlined
+              type="number"
+            />
+            <v-text-field
+              v-model="contacts.site"
+              label="Your web-cite"
+              outlined
+              type="url"
+            />
+            <v-text-field
+              v-model="contacts.linkedIn"
+              label="LinkedIn"
+              outlined
+              type="url"
+            />
+            <v-text-field
+              v-model="contacts.facebook"
+              label="Facebook"
+              outlined
+              type="url"
+            />
+            <v-text-field
+              v-model="contacts.github"
+              label="GitHub"
+              outlined
+              type="url"
+            />
           </Card>
         </template>
       </PageBody>

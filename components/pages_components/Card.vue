@@ -1,6 +1,8 @@
 <template>
-  <v-card color="#385F73" dark>
-    <slot></slot>
+  <v-card :dark="$vuetify.theme.dark">
+    <v-card-subtitle>
+      <slot></slot>
+    </v-card-subtitle>
   </v-card>
 </template>
 

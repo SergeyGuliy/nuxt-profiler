@@ -20,44 +20,40 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <v-card-subtitle>
-              <v-text-field
-                v-model="name"
-                :rules="rules.name"
-                :counter="15"
-                label="Article name"
-                outlined
-              />
-              <v-text-field
-                v-model="cite"
-                :rules="rules.cite"
-                :counter="100"
-                placeholder="https://github.com/....."
-                label="Link to official site of repository"
-                outlined
-              />
-              <v-text-field
-                v-model="gitHub"
-                :rules="rules.gitHub"
-                :counter="100"
-                placeholder="https://....."
-                label="Link to repository"
-                outlined
-              />
-            </v-card-subtitle>
+            <v-text-field
+              v-model="name"
+              :rules="rules.name"
+              :counter="15"
+              label="Article name"
+              outlined
+            />
+            <v-text-field
+              v-model="cite"
+              :rules="rules.cite"
+              :counter="100"
+              placeholder="https://github.com/....."
+              label="Link to official site of repository"
+              outlined
+            />
+            <v-text-field
+              v-model="gitHub"
+              :rules="rules.gitHub"
+              :counter="100"
+              placeholder="https://....."
+              label="Link to repository"
+              outlined
+            />
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <v-card-subtitle>
-              <v-textarea
-                v-model="about"
-                :rules="rules.about"
-                :counter="200"
-                label="Description"
-                outlined
-              />
-            </v-card-subtitle>
+            <v-textarea
+              v-model="about"
+              :rules="rules.about"
+              :counter="200"
+              label="Description"
+              outlined
+            />
           </Card>
         </template>
       </PageBody>

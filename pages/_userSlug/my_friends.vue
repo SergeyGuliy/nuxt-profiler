@@ -90,9 +90,6 @@ export default {
 </script>
 
 <style scoped lang="sass">
-.v-data-table__wrapper tr > td > button.v-btn
-  padding: 0 5px
-  height: 27px
 td, th
   text-align: center !important
 </style>

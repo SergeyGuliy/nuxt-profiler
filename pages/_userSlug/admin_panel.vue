@@ -12,74 +12,70 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <v-card-subtitle>
-              <v-text-field
-                v-model="newLanguage"
-                @keypress.enter="addLanguage"
-                label="Language"
-                outlined
-              />
-              <v-btn
-                @click="addLanguage"
-                :disabled="!newLanguage || loading"
-                :loading="loading"
-                block
-                >ADD</v-btn
+            <v-text-field
+              v-model="newLanguage"
+              @keypress.enter="addLanguage"
+              label="Language"
+              outlined
+            />
+            <v-btn
+              @click="addLanguage"
+              :disabled="!newLanguage || loading"
+              :loading="loading"
+              block
+              >ADD</v-btn
+            >
+            <v-list>
+              <v-list-item
+                v-for="item in languages"
+                :key="item.name"
+                @click="selectLanguage(item)"
+                :class="{ my_active: item.name === languageSelected }"
               >
-              <v-list>
-                <v-list-item
-                  v-for="item in languages"
-                  :key="item.name"
-                  @click="selectLanguage(item)"
-                  :class="{ my_active: item.name === languageSelected }"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.name" />
-                  </v-list-item-content>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.name" />
+                </v-list-item-content>
 
-                  <v-list-item-action>
-                    <v-btn @click.stop="deleteLanguage(item)" icon>
-                      <v-icon color="grey lighten-1">mdi-delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-card-subtitle>
+                <v-list-item-action>
+                  <v-btn @click.stop="deleteLanguage(item)" icon>
+                    <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <v-card-subtitle>
-              <v-text-field
-                v-model="newTechnology"
-                @keypress.enter="addTechnology"
-                label="Technologie"
-                outlined
-              />
-              <v-btn
-                :disabled="!newTechnology || !languageSelected || loading"
-                @click="addTechnology"
-                :loading="loading"
-                block
-                >ADD</v-btn
+            <v-text-field
+              v-model="newTechnology"
+              @keypress.enter="addTechnology"
+              label="Technologie"
+              outlined
+            />
+            <v-btn
+              :disabled="!newTechnology || !languageSelected || loading"
+              @click="addTechnology"
+              :loading="loading"
+              block
+              >ADD</v-btn
+            >
+            <v-list v-if="languageSelected">
+              <v-list-item
+                v-for="item in languageSelected.technologies"
+                :key="item"
               >
-              <v-list v-if="languageSelected">
-                <v-list-item
-                  v-for="item in languageSelected.technologies"
-                  :key="item"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item" />
-                  </v-list-item-content>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item" />
+                </v-list-item-content>
 
-                  <v-list-item-action>
-                    <v-btn @click="deleteTechnology(item)" icon>
-                      <v-icon color="grey lighten-1">mdi-delete</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-card-subtitle>
+                <v-list-item-action>
+                  <v-btn @click="deleteTechnology(item)" icon>
+                    <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
           </Card>
         </template>
       </PageBody>

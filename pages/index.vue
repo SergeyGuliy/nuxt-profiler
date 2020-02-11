@@ -8,46 +8,13 @@
     <template #body>
       <PageBody col="3">
         <template #c-1>
-          <Card>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
-          </Card>
+          <Card> </Card>
         </template>
         <template #c-2>
-          <Card>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
-          </Card>
+          <Card> </Card>
         </template>
         <template #c-3>
-          <Card>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
-          </Card>
+          <Card> </Card>
         </template>
       </PageBody>
     </template>
