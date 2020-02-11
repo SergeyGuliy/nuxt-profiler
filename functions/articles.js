@@ -15,7 +15,7 @@ async function createArticle(data) {
     .database()
     .ref(`/2_articles/`)
     .push(data)
-  if (data.accessibility === 'public') {
+  if (data.isPublic) {
     const item =
       (
         await firebase

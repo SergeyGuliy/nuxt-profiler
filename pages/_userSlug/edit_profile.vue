@@ -2,7 +2,7 @@
   <BodyCard>
     <template #head>
       <BodyCardHeader>
-        <template #title>{{ technologies }}</template>
+        <template #title>Edite profile</template>
         <div class="flex">
           <v-dialog v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
@@ -47,17 +47,17 @@
                 v-model="info.first_name"
                 label="First name"
                 outlined
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="info.last_name"
                 label="Last name"
                 outlined
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="info.location"
                 label="Your current Location"
                 outlined
-              ></v-text-field>
+              />
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -87,7 +87,7 @@
                 v-model="info.about"
                 label="Tell about yourself"
                 outlined
-              ></v-textarea>
+              />
             </v-card-subtitle>
           </v-card>
         </template>
@@ -125,14 +125,6 @@
                 outlined
                 height="56px"
               >
-                <!--                <template v-slot:selection="{ item, index }">-->
-                <!--                  <v-chip v-if="index === 0">-->
-                <!--                    <span>{{ item }}</span>-->
-                <!--                  </v-chip>-->
-                <!--                  <span v-if="index === 1" class="grey&#45;&#45;text caption"-->
-                <!--                    >(+{{ work.work_languages.length - 1 }})</span-->
-                <!--                  >-->
-                <!--                </template>-->
               </v-select>
               <v-select
                 v-model="work.work_technologies"
@@ -143,14 +135,6 @@
                 outlined
                 height="56px"
               >
-                <!--                <template v-slot:selection="{ item, index }">-->
-                <!--                  <v-chip v-if="index === 0">-->
-                <!--                    <span>{{ item }}</span>-->
-                <!--                  </v-chip>-->
-                <!--                  <span v-if="index === 1" class="grey&#45;&#45;text caption"-->
-                <!--                    >(+{{ work.work_technologies.length - 1 }})</span-->
-                <!--                  >-->
-                <!--                </template>-->
               </v-select>
             </v-card-subtitle>
           </v-card>
@@ -163,31 +147,31 @@
                 label="Contact phone"
                 outlined
                 type="number"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="contacts.site"
                 label="Your web-cite"
                 outlined
                 type="url"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="contacts.linkedIn"
                 label="LinkedIn"
                 outlined
                 type="url"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="contacts.facebook"
                 label="Facebook"
                 outlined
                 type="url"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="contacts.github"
                 label="GitHub"
                 outlined
                 type="url"
-              ></v-text-field>
+              />
             </v-card-subtitle>
           </v-card>
         </template>

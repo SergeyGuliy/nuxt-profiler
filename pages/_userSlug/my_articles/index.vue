@@ -6,9 +6,7 @@
         <div class="flex">
           <v-btn
             @click="
-              $router.push(
-                `/${$store.getters.user.profile}/my_repositories/create`
-              )
+              $router.push(`/${$store.getters.user.profile}/my_articles/create`)
             "
             class="mx-1"
             >Create</v-btn

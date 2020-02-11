@@ -1,42 +1,19 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <h1>USER #{{ $route.params.userSlug }} CREATING REPOSITORY</h1>-->
-<!--    <form @submit.prevent="save">-->
-<!--      <div>-->
-<!--        <input-->
-<!--          id="private"-->
-<!--          v-model="accessibility"-->
-<!--          type="radio"-->
-<!--          value="private"-->
-<!--        />-->
-<!--        <label for="private">PRIVATE</label>-->
-<!--        <input-->
-<!--          id="public"-->
-<!--          v-model="accessibility"-->
-<!--          type="radio"-->
-<!--          value="public"-->
-<!--        />-->
-<!--        <label for="public">PUBLIC</label>-->
-<!--      </div>-->
-<!--      <input v-model="name" type="text" placeholder="name" />-->
-<!--      <br />-->
-<!--      <input v-model="about" type="text" placeholder="about" />-->
-<!--      <br />-->
-<!--      <input v-model="cite" type="text" placeholder="link" />-->
-<!--      <br />-->
-<!--      <input v-model="gitHub" type="text" placeholder="gitHub link" />-->
-<!--      <br />-->
-<!--      <button>SAVE</button>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</template>-->
 <template>
   <BodyCard>
     <template #head>
       <BodyCardHeader>
         <template #title>Create Repository</template>
         <div class="flex">
-          <v-btn class="mx-1">Save</v-btn>
+          <v-container fluid>
+            <v-switch
+              v-model="isPublic"
+              :label="isPublic ? 'Public article' : 'Private article'"
+              inset
+            />
+          </v-container>
+          <v-btn @click="save" :disabled="!formIsValid" class="mx-1"
+            >Save</v-btn
+          >
         </div>
       </BodyCardHeader>
     </template>
@@ -44,30 +21,44 @@
       <BodyCardMain2>
         <template #c-1>
           <v-card color="#385F73" dark>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
+            <v-card-subtitle>
+              <v-text-field
+                v-model="name"
+                :rules="rules.name"
+                :counter="15"
+                label="Article name"
+                outlined
+              />
+              <v-text-field
+                v-model="cite"
+                :rules="rules.cite"
+                :counter="100"
+                placeholder="https://github.com/....."
+                label="Link to official site of repository"
+                outlined
+              />
+              <v-text-field
+                v-model="gitHub"
+                :rules="rules.gitHub"
+                :counter="100"
+                placeholder="https://....."
+                label="Link to repository"
+                outlined
+              />
+            </v-card-subtitle>
           </v-card>
         </template>
         <template #c-2>
           <v-card color="#385F73" dark>
-            <v-card-title class="headline">Unlimited music now</v-card-title>
-
-            <v-card-subtitle
-              >Listen to your favorite artists and albums whenever and wherever,
-              online and offline.</v-card-subtitle
-            >
-
-            <v-card-actions>
-              <v-btn text>Listen Now</v-btn>
-            </v-card-actions>
+            <v-card-subtitle>
+              <v-textarea
+                v-model="about"
+                :rules="rules.about"
+                :counter="200"
+                label="Description"
+                outlined
+              />
+            </v-card-subtitle>
           </v-card>
         </template>
       </BodyCardMain2>
@@ -85,7 +76,40 @@ export default {
       about: '',
       cite: '',
       gitHub: '',
-      accessibility: 'private'
+      isPublic: false,
+      rules: {
+        name: [
+          (v) => !!v || 'Name is required',
+          (v) => v.length <= 15 || 'Name must be less than 10 characters'
+        ],
+        cite: [
+          (v) => !!v || 'Link is required',
+          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => v.length <= 200 || 'Link must be less than 100 characters'
+        ],
+        gitHub: [
+          (v) => !!v || 'Link is required',
+          (v) =>
+            /https:\/\/github.com\/.+/.test(v) ||
+            'Link must starts with "https://github.com/"',
+          (v) => v.length <= 200 || 'Link must be less than 100 characters'
+        ],
+        about: [
+          (v) =>
+            v.length <= 200 || 'Description must be less than 200 characters'
+        ]
+      }
+    }
+  },
+  computed: {
+    formIsValid() {
+      return (
+        !!this.name &&
+        this.name.length <= 15 &&
+        /https:\/\/.+/.test(this.cite) &&
+        /https:\/\/github.com\/.+/.test(this.gitHub) &&
+        this.cite.length <= 200
+      )
     }
   },
   head: {
@@ -97,7 +121,8 @@ export default {
         name: this.name,
         about: this.about,
         cite: this.cite,
-        accessibility: this.accessibility,
+        gitHub: this.gitHub,
+        isPublic: this.isPublic,
         creatorName: this.$store.getters.user.profile,
         creatorId: this.$store.getters.user.id
       }
@@ -110,4 +135,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.container.container--fluid
+  height: 36px
+  padding: 0
+  .v-input
+    margin: 3px
+</style>

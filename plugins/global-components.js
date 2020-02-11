@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import BodyCard from '../components/miscs/BodyCard'
+import BodyCard from '../components/miscs/Body'
 import BodyCardHeader from '../components/miscs/BodyCardHeader'
 import BodyCardMain1 from '../components/miscs/BodyCardMain1'
 import BodyCardMain2 from '../components/miscs/BodyCardMain2'

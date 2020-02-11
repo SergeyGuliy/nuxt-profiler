@@ -15,7 +15,7 @@ async function createRepository(data) {
     .database()
     .ref(`/3_repositories/`)
     .push(data)
-  if (data.accessibility === 'public') {
+  if (data.isPublic) {
     const item =
       (
         await firebase
