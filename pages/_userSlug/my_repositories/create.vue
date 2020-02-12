@@ -92,12 +92,12 @@ export default {
       rules: {
         name: [
           (v) => !!v || 'Name is required',
-          (v) => v.length <= 15 || 'Name must be less than 10 characters'
+          (v) => v.length <= 15 || 'Name must be less than 15 characters'
         ],
         cite: [
           (v) => !!v || 'Link is required',
           (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
-          (v) => v.length <= 200 || 'Link must be less than 100 characters'
+          (v) => v.length <= 200 || 'Link must be less than 200 characters'
         ],
         gitHub: [
           (v) => !!v || 'Link is required',

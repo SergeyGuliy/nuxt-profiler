@@ -44,12 +44,22 @@
           <Card>
             <v-text-field
               v-model="info.first_name"
+              :rules="rules.name"
+              :counter="15"
               label="First name"
               outlined
             />
-            <v-text-field v-model="info.last_name" label="Last name" outlined />
+            <v-text-field
+              v-model="info.last_name"
+              :rules="rules.name"
+              :counter="15"
+              label="Last name"
+              outlined
+            />
             <v-text-field
               v-model="info.location"
+              :rules="rules.name"
+              :counter="15"
               label="Your current Location"
               outlined
             />
@@ -80,6 +90,8 @@
             </v-menu>
             <v-textarea
               v-model="info.about"
+              :rules="rules.about"
+              :counter="200"
               label="Tell about yourself"
               outlined
             />
@@ -133,12 +145,27 @@
         </template>
         <template #c-3>
           <Card>
-            <v-text-field
-              v-model="contacts.phone"
-              label="Contact phone"
-              outlined
-              type="number"
-            />
+            <v-row>
+              <v-col cols="5">
+                <v-select
+                  v-model="work.work_status"
+                  :items="codes"
+                  label="Country code"
+                  outlined
+                  height="56px"
+                  placeholder="+XXX"
+                />
+              </v-col>
+              <v-col cols="7">
+                <v-text-field
+                  v-model="contacts.phone"
+                  label="Phone number"
+                  outlined
+                  type="number"
+                  placeholder="XX-XXX-XX-XX"
+                />
+              </v-col>
+            </v-row>
             <v-text-field
               v-model="contacts.site"
               label="Your web-cite"
@@ -172,6 +199,7 @@
 
 <script>
 import { fetchCategories } from '~/functions/language-technologies'
+import { fetchCodes } from '~/functions/country-codes'
 export default {
   name: 'EditProfile',
   head: {
@@ -191,7 +219,26 @@ export default {
         'Business Analytic',
         'Human resources',
         'Quality assurance'
-      ]
+      ],
+      rules: {
+        name: [
+          (v) => v.length <= 15 || 'Input must be less than 15 characters'
+        ],
+        cite: [
+          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => v.length <= 200 || 'Link must be less than 200 characters'
+        ],
+        gitHub: [
+          (v) =>
+            /https:\/\/github.com\/.+/.test(v) ||
+            'Link must starts with "https://github.com/"',
+          (v) => v.length <= 200 || 'Link must be less than 100 characters'
+        ],
+        about: [
+          (v) =>
+            v.length <= 200 || 'Description must be less than 200 characters'
+        ]
+      }
     }
   },
   computed: {
@@ -217,12 +264,16 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
   },
-  async asyncData({ store }) {
+  async asyncData(context) {
+    // console.log(context)
+    // const codes = await context.$axios.head('http://country.io/phone.json')
+    // console.log(codes)
     return {
-      contacts: Object.assign({}, store.getters.user.userInfo.contacts),
-      info: Object.assign({}, store.getters.user.userInfo.info),
-      work: Object.assign({}, store.getters.user.userInfo.work),
-      languages: await fetchCategories()
+      contacts: Object.assign({}, context.store.getters.user.userInfo.contacts),
+      info: Object.assign({}, context.store.getters.user.userInfo.info),
+      work: Object.assign({}, context.store.getters.user.userInfo.work),
+      languages: await fetchCategories(),
+      codes: await fetchCodes()
     }
   },
   methods: {
@@ -255,4 +306,12 @@ export default {
 <style scoped lang="sass">
 .hidden
   visibility: hidden
+.row
+  height: 86px
+  margin: 0
+  .col
+    height: 86px
+    padding: 0
+    .v-input__append-inner
+      display: none !important
 </style>
