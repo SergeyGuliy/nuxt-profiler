@@ -47,6 +47,20 @@
         </template>
         <template #c-2>
           <Card>
+            <v-select
+              :items="Object.keys(languages)"
+              v-model="language"
+              label="Stack languages"
+              outlined
+            >
+            </v-select>
+            <v-select
+              :items="technologies"
+              v-model="technology"
+              label="Stack technologies"
+              outlined
+            >
+            </v-select>
             <v-textarea
               v-model="about"
               :rules="rules.about"
@@ -63,6 +77,7 @@
 
 <script>
 import { createRepository } from '~/functions/repositories'
+import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Create',
   data() {
@@ -71,6 +86,8 @@ export default {
       about: '',
       cite: '',
       gitHub: '',
+      language: '',
+      technology: '',
       isPublic: false,
       rules: {
         name: [
@@ -105,6 +122,27 @@ export default {
         /https:\/\/github.com\/.+/.test(this.gitHub) &&
         this.cite.length <= 200
       )
+    },
+    technologies() {
+      try {
+        const technologies = []
+        this.languages[this.language].technologies.forEach((item) => {
+          technologies.push(item)
+        })
+        return technologies
+      } catch (e) {
+        return []
+      }
+    }
+  },
+  watch: {
+    language() {
+      this.technology = ''
+    }
+  },
+  async asyncData() {
+    return {
+      languages: await fetchCategories()
     }
   },
   head: {
@@ -117,6 +155,8 @@ export default {
         about: this.about,
         cite: this.cite,
         gitHub: this.gitHub,
+        language: this.language,
+        technology: this.technology,
         isPublic: this.isPublic,
         creatorName: this.$store.getters.user.profile,
         creatorId: this.$store.getters.user.id

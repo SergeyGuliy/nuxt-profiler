@@ -31,7 +31,7 @@
                   <v-btn
                     @click="$router.push(`/users/${item.id}`)"
                     icon
-                    color="secondary"
+                    color="green"
                     ><v-icon>mdi-face-profile</v-icon></v-btn
                   >
                   <v-btn

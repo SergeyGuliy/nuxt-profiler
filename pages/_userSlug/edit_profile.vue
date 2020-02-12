@@ -196,7 +196,6 @@ export default {
   },
   computed: {
     technologies() {
-      // return this.work.work_languages
       const technolies = []
       for (const i of this.work.work_languages) {
         try {

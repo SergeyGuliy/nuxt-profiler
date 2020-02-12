@@ -16,6 +16,8 @@
               <tr>
                 <th>Name</th>
                 <th>Creator</th>
+                <th>Language</th>
+                <th>Technology</th>
                 <th>Actions</th>
               </tr>
             </template>
@@ -25,14 +27,16 @@
                 <td>
                   <v-btn @click="$router.push(`/users/${item.id}`)"
                     >{{ item.creatorName }}
-                    <v-icon>mdi-face-profile</v-icon></v-btn
+                    <v-icon color="green">mdi-face-profile</v-icon></v-btn
                   >
                 </td>
+                <td>{{ item.language }}</td>
+                <td>{{ item.technology }}</td>
                 <td>
                   <v-btn
                     @click="$router.push(`/repositories/${item.id}`)"
                     icon
-                    color="secondary"
+                    color="green"
                     ><v-icon>mdi-source-repository</v-icon></v-btn
                   >
                   <v-btn

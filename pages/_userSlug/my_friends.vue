@@ -15,24 +15,23 @@
             <template #table-head>
               <tr>
                 <th>Name</th>
-                <th>Creator</th>
+                <th>Repositories</th>
+                <th>Articles</th>
+                <th>Friends</th>
                 <th>Actions</th>
               </tr>
             </template>
             <template #table-body>
               <tr v-for="item in myList" :key="item.id">
-                <td>{{ item.name }}</td>
-                <td>
-                  <v-btn @click="$router.push(`/users/${item.id}`)"
-                    >{{ item.creatorName }}
-                    <v-icon>mdi-face-profile</v-icon></v-btn
-                  >
-                </td>
+                <td>{{ item.profile }}</td>
+                <td>{{ item.lists.repositories.length }}</td>
+                <td>{{ item.lists.articles.length }}</td>
+                <td>{{ item.lists.friends.length }}</td>
                 <td>
                   <v-btn
                     @click="$router.push(`/articles/${item.id}`)"
                     icon
-                    color="secondary"
+                    color="green"
                     ><v-icon>mdi-book</v-icon></v-btn
                   >
                   <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
