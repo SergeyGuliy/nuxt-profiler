@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left dense id="NavBar">
+  <v-app-bar id="NavBar" app clipped-left dense>
     <v-app-bar-nav-icon @click="$emit('sidebar-toogle')" />
     <v-btn icon text exact-active-class="outlined" to="/"
       ><v-icon>mdi-home</v-icon></v-btn
@@ -17,7 +17,7 @@
       </NavLink>
     </v-toolbar-title>
     <v-spacer />
-    <v-btn icon><v-icon>mdi-translate</v-icon></v-btn>
+    <!--    <v-btn icon><v-icon>mdi-translate</v-icon></v-btn>-->
     <v-btn
       @click="$vuetify.theme.dark = !$vuetify.theme.dark"
       icon
@@ -73,7 +73,9 @@ export default {
 
 <style lang="sass">
 #NavBar
-  .v-toolbar__content .v-btn.v-btn--icon
+  .v-toolbar__content, .v-toolbar__extension
+    padding: 0 10px
+  .v-btn.v-btn--icon
     width: 30px
     height: 30px
   .v-btn
