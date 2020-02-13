@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="myFriends">
     <template #head>
       <PageHeader>
         <template #title>List of my Friends</template>
@@ -88,7 +88,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-td, th
-  text-align: center !important
+<style lang="sass">
+#myFriends
+  td, th
+    text-align: center
 </style>

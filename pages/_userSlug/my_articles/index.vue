@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="myArticles">
     <template #head>
       <PageHeader>
         <template #title>List of my Articles</template>
@@ -99,7 +99,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-td, th
-  text-align: center !important
+<style lang="sass">
+#myArticles
+  td, th
+    text-align: center
 </style>

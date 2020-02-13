@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="allUsers">
     <template #head>
       <PageHeader>
         <template #title>Edit Profile</template>
@@ -112,7 +112,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-td, th
-  text-align: center !important
+<style lang="sass">
+#allUsers
+  td, th
+    text-align: center
 </style>

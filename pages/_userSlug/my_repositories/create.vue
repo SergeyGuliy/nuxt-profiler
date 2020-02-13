@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="createRepository">
     <template #head>
       <PageHeader>
         <template #title>Create Repository</template>
@@ -170,8 +170,9 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.v-input.switch
-  margin: 3px
-  height: 36px
+<style lang="sass">
+#createRepository
+  .v-input.switch
+    margin: 3px
+    height: 36px
 </style>

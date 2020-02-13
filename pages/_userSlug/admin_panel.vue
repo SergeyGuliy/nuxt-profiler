@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="adminPanel">
     <template #head>
       <PageHeader>
         <template #title>List of my Articles</template>
@@ -30,7 +30,6 @@
                 v-for="item in languages"
                 :key="item.name"
                 @click="selectLanguage(item)"
-                :class="{ my_active: item.name === languageSelected }"
               >
                 <v-list-item-content>
                   <v-list-item-title v-text="item.name" />
@@ -160,9 +159,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.my_active
-  background-color: #7F828B !important
-button.v-btn.v-btn--block
-  margin-bottom: 15px
+<style lang="sass">
+#adminPanel
+  button.v-btn.v-btn--block
+    margin-bottom: 15px
 </style>

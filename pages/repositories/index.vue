@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="allRepositories">
     <template #head>
       <PageHeader>
         <template #title>Edit Profile</template>
@@ -120,7 +120,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-td, th
-  text-align: center !important
+<style lang="sass">
+#allRepositories
+  td, th
+    text-align: center
 </style>

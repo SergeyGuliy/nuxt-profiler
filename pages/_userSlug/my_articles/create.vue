@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="createArticle">
     <template #head>
       <PageHeader>
         <template #title>Create Article</template>
@@ -152,8 +152,9 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.v-input.switch
-  margin: 3px
-  height: 36px
+<style lang="sass">
+#createArticle
+  .v-input.switch
+    margin: 3px
+    height: 36px
 </style>

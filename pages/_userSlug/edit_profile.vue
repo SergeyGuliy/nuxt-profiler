@@ -1,5 +1,5 @@
 <template>
-  <Page id="edit_profile">
+  <Page id="editProfile">
     <template #head>
       <PageHeader>
         <template #title>Edite profile</template>
@@ -410,7 +410,7 @@ export default {
 </script>
 
 <style lang="sass">
-#edit_profile
+#editProfile
   .row
     height: 86px
     margin: 0 0 5px 0

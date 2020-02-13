@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="myRepositories">
     <template #head>
       <PageHeader>
         <template #title>List of my Repositories</template>
@@ -101,7 +101,8 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-td, th
-  text-align: center !important
+<style lang="sass">
+#myRepositories
+  td, th
+    text-align: center
 </style>
