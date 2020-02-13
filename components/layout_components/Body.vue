@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-content id="Body">
     <v-container class="fill-height" align-itemst-start fluid>
       <slot></slot>
     </v-container>
@@ -12,8 +12,9 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.container.fill-height
-  align-items: start
-  padding: 12px 5px
+<style lang="sass">
+#Body
+  .container.fill-height
+    align-items: start
+    padding: 12px 5px
 </style>

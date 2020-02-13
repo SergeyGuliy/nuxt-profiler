@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left dense>
+  <v-app-bar app clipped-left dense id="NavBar">
     <v-app-bar-nav-icon @click="$emit('sidebar-toogle')" />
     <v-btn icon text exact-active-class="outlined" to="/"
       ><v-icon>mdi-home</v-icon></v-btn
@@ -71,10 +71,11 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.v-toolbar__content .v-btn.v-btn--icon
-  width: 35px
-  height: 35px
-.v-btn
-  padding: 0 5px !important
+<style lang="sass">
+#NavBar
+  .v-toolbar__content .v-btn.v-btn--icon
+    width: 30px
+    height: 30px
+  .v-btn
+    padding: 0 5px
 </style>

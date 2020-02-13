@@ -1,5 +1,5 @@
 <template>
-  <div :class="columnClass" class="grid ">
+  <div id="PageBody" :class="columnClass">
     <div v-if="col >= 1" class="c-1">
       <slot name="c-1" />
     </div>
@@ -35,22 +35,22 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.grid
+<style lang="sass">
+#PageBody
   width: 100%
   display: grid
   grid-column-gap: 5px
   grid-row-gap: 5px
-.c-1
-  grid-area: col-1
-.c-2
-  grid-area: col-2
-.c-3
-  grid-area: col-3
-.v-card
-  height: 100%
+  .c-1
+    grid-area: col-1
+  .c-2
+    grid-area: col-2
+  .c-3
+    grid-area: col-3
+  .v-card
+    height: 100%
 
-.grid-column-3
+#PageBody.grid-column-3
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
   grid-template-rows: 1fr 1fr 1fr
   grid-template-areas: 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3'
@@ -59,14 +59,14 @@ export default {
   @media screen and (max-width: 740px)
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
 
-.grid-column-2
+#PageBody.grid-column-2
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
   grid-template-rows: 1fr 1fr 1fr
   grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2' 'col-1 col-1 col-1 col-2 col-2 col-2'
   @media screen and (max-width: 740px)
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2'
 
-.grid-column-1
+#PageBody.grid-column-1
   grid-template-columns: 1fr
   grid-template-rows: 1fr
   grid-template-areas: 'col-1'

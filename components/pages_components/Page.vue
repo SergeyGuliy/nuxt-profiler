@@ -1,5 +1,5 @@
 <template>
-  <v-card hover>
+  <v-card hover class="Page">
     <v-card-title class="headline">
       <slot name="head">ERROR!!!!</slot>
     </v-card-title>
@@ -16,13 +16,13 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.v-card
-  min-height: 100% !important
+<style lang="sass">
+.Page.v-card
+  min-height: 100%
   min-width: 100%
   .v-card__title
     padding: 16px 10px
   .v-card__subtitle
     padding: 16px 10px
-    min-height: 100% !important
+    min-height: 100%
 </style>

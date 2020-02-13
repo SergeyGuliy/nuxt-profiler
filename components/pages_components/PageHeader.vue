@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div id="PageHeader">
     <h3 class="headline">
       <slot name="title" />
     </h3>
@@ -15,12 +15,13 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.flex
+<style lang="sass">
+#PageHeader
+  width: 100%
   display: flex
   justify-content: space-between
   align-items: center
-.flex-left
-  display: flex
-  align-items: center
+  .flex-left
+    display: flex
+    align-items: center
 </style>
