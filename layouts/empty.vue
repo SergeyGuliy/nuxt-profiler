@@ -2,11 +2,7 @@
   <v-app id="inspire">
     <v-content>
       <v-container class="fill-height">
-        <v-row justify="center" align="center">
-          <v-col class="shrink">
-            <nuxt />
-          </v-col>
-        </v-row>
+        <nuxt />
       </v-container>
     </v-content>
   </v-app>

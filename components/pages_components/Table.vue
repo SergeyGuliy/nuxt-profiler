@@ -1,7 +1,7 @@
 <template>
   <div id="Table">
     <v-simple-table :dark="$vuetify.theme.dark">
-      <template v-slot:default class="centered">
+      <template v-slot:default>
         <thead>
           <slot name="table-head"></slot>
         </thead>
@@ -21,7 +21,7 @@ export default {
 
 <style lang="sass">
 #Table
-  .v-data-table__wrapper
-    height: 100%
-    max-height: calc(100vh - 221px)
+  td, th
+    width: 20%
+    padding: 3px
 </style>
