@@ -130,17 +130,15 @@
               small-chips
               multiple
               outlined
-              height="56px"
             >
             </v-select>
             <v-select
               v-model="work.work_technologies"
               :items="technologies"
-              chips
+              small-chips
               label="Stack technologies"
               multiple
               outlined
-              height="56px"
             >
             </v-select>
           </Card>
@@ -150,7 +148,7 @@
             <v-row>
               <v-col cols="3">
                 <v-select
-                  v-model="phone_code"
+                  v-model="contacts.phone_code"
                   :items="codes"
                   label="Code"
                   outlined
@@ -159,7 +157,7 @@
               </v-col>
               <v-col cols="9">
                 <v-text-field
-                  :disabled="!phone_code"
+                  :disabled="!contacts.phone_code"
                   v-model="contacts.phone"
                   v-mask="'##-###-##-##'"
                   :counter="12"
@@ -175,7 +173,7 @@
             <v-row>
               <v-col cols="3">
                 <v-select
-                  v-model="git_type"
+                  v-model="contacts.git_type"
                   :items="git_types"
                   label="Git"
                   outlined
@@ -186,7 +184,7 @@
                 <v-text-field
                   v-model="contacts.github"
                   :rules="rules.git"
-                  :disabled="!git_type"
+                  :disabled="!contacts.git_type"
                   :counter="100"
                   :placeholder="git_type_placeholder"
                   :label="git_type_label"
@@ -296,7 +294,7 @@ export default {
         ],
         git: [
           (v) => {
-            if (this.git_type === 'GitHub') {
+            if (this.contacts.git_type === 'GitHub') {
               return (
                 /https:\/\/github.com\/.+/.test(v) ||
                 'Must starts with "https://github.com/"'
@@ -326,18 +324,18 @@ export default {
       return technolies
     },
     git_type_placeholder() {
-      if (this.git_type === 'GitHub') {
+      if (this.contacts.git_type === 'GitHub') {
         return 'https://github.com/USER_SLUG'
-      } else if (this.git_type === 'GitLab') {
+      } else if (this.contacts.git_type === 'GitLab') {
         return 'https://gitlab.com/USER_SLUG'
       } else {
         return ''
       }
     },
     git_type_label() {
-      if (this.git_type === 'GitHub') {
+      if (this.contacts.git_type === 'GitHub') {
         return 'GitHub'
-      } else if (this.git_type === 'GitLab') {
+      } else if (this.contacts.git_type === 'GitLab') {
         return 'GitLab'
       } else {
         return 'Select Git Type'
@@ -366,6 +364,9 @@ export default {
     },
     menu(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    },
+    'contacts.git_type'() {
+      this.contacts.github = ''
     }
   },
   async asyncData(context) {
@@ -389,6 +390,11 @@ export default {
         info: this.info,
         work: this.work
       })
+      console.log({
+        contacts: this.contacts,
+        info: this.info,
+        work: this.work
+      })
       await this.$store.dispatch('updateUserInfo')
       // this.$router.push('/')
     },
@@ -405,14 +411,14 @@ export default {
 
 <style lang="sass">
 #edit_profile
-  .hidden
-    visibility: hidden
   .row
     height: 86px
-    margin: 0
+    margin: 0 0 5px 0
     .col
       height: 86px
       padding: 0
       .v-input__append-inner
         display: none
+  .v-input
+    margin-bottom: 5px
 </style>

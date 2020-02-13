@@ -46,8 +46,10 @@ export const actions = {
             contacts: {
               email: data.email,
               facebook: '',
+              git_type: '',
               github: '',
               linkedIn: '',
+              phone_code: '',
               phone: '',
               site: ''
             },

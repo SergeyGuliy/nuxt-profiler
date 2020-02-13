@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="HomePage">
     <template #head>
       <PageHeader>
         <template #title>Edit Profile</template>
