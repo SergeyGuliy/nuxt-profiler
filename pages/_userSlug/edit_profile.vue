@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page id="edit_profile">
     <template #head>
       <PageHeader>
         <template #title>Edite profile</template>
@@ -94,6 +94,8 @@
               :counter="200"
               label="Tell about yourself"
               outlined
+              auto-grow
+              rows="1"
             />
           </Card>
         </template>
@@ -124,8 +126,8 @@
             <v-select
               v-model="work.work_languages"
               :items="Object.keys(languages)"
-              chips
               label="Stack languages"
+              small-chips
               multiple
               outlined
               height="56px"
@@ -146,49 +148,79 @@
         <template #c-3>
           <Card>
             <v-row>
-              <v-col cols="5">
+              <v-col cols="3">
                 <v-select
-                  v-model="work.work_status"
+                  v-model="phone_code"
                   :items="codes"
-                  label="Country code"
+                  label="Code"
                   outlined
                   height="56px"
-                  placeholder="+XXX"
                 />
               </v-col>
-              <v-col cols="7">
+              <v-col cols="9">
                 <v-text-field
+                  :disabled="!phone_code"
                   v-model="contacts.phone"
-                  label="Phone number"
+                  v-mask="'##-###-##-##'"
+                  :counter="12"
+                  :rules="rules.phone"
+                  :label="phone_label"
+                  :placeholder="phone_placeholder"
                   outlined
-                  type="number"
-                  placeholder="XX-XXX-XX-XX"
+                  raw
+                  type="tel"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="3">
+                <v-select
+                  v-model="git_type"
+                  :items="git_types"
+                  label="Git"
+                  outlined
+                  height="56px"
+                />
+              </v-col>
+              <v-col cols="9">
+                <v-text-field
+                  v-model="contacts.github"
+                  :rules="rules.git"
+                  :disabled="!git_type"
+                  :counter="100"
+                  :placeholder="git_type_placeholder"
+                  :label="git_type_label"
+                  outlined
+                  type="url"
                 />
               </v-col>
             </v-row>
             <v-text-field
               v-model="contacts.site"
+              :rules="rules.cite"
+              :counter="100"
               label="Your web-cite"
               outlined
               type="url"
+              placeholder="https://EXAMPLE.com"
             />
             <v-text-field
               v-model="contacts.linkedIn"
+              :rules="rules.linkedIn"
+              :counter="100"
               label="LinkedIn"
               outlined
               type="url"
+              placeholder="https://www.linkedin.com/in/USER_SLUG"
             />
             <v-text-field
               v-model="contacts.facebook"
+              :rules="rules.facebook"
+              :counter="100"
               label="Facebook"
               outlined
               type="url"
-            />
-            <v-text-field
-              v-model="contacts.github"
-              label="GitHub"
-              outlined
-              type="url"
+              placeholder="https://www.facebook.com/USER_SLUG"
             />
           </Card>
         </template>
@@ -199,7 +231,6 @@
 
 <script>
 import { fetchCategories } from '~/functions/language-technologies'
-import { fetchCodes } from '~/functions/country-codes'
 export default {
   name: 'EditProfile',
   head: {
@@ -211,6 +242,9 @@ export default {
       loading: false,
       loadingSave: false,
       menu: false,
+      phone_code: null,
+      git_type: null,
+      git_types: ['GitHub', 'GitLab'],
       work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
       work_type: ['Office worker', 'Freelancer'],
       work_position: [
@@ -220,23 +254,61 @@ export default {
         'Human resources',
         'Quality assurance'
       ],
+      codes: [
+        '+380',
+        '+971',
+        '+44',
+        '+1',
+        '+598',
+        '+998',
+        '+678',
+        '+681',
+        '+967',
+        '+260',
+        '+263',
+        '+591',
+        '+673'
+      ],
       rules: {
         name: [
           (v) => v.length <= 15 || 'Input must be less than 15 characters'
         ],
-        cite: [
-          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
-          (v) => v.length <= 200 || 'Link must be less than 200 characters'
-        ],
-        gitHub: [
-          (v) =>
-            /https:\/\/github.com\/.+/.test(v) ||
-            'Link must starts with "https://github.com/"',
-          (v) => v.length <= 200 || 'Link must be less than 100 characters'
-        ],
         about: [
           (v) =>
             v.length <= 200 || 'Description must be less than 200 characters'
+        ],
+        phone: [(v) => v.length === 12 || 'Phone length must be 12'],
+        cite: [
+          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => v.length <= 100 || 'Link must be less than 100 characters'
+        ],
+        linkedIn: [
+          (v) =>
+            /https:\/\/www.linkedin.com\/.+/.test(v) ||
+            'Link must starts with "https://www.linkedin.com"',
+          (v) => v.length <= 100 || 'Link must be less than 100 characters'
+        ],
+        facebook: [
+          (v) =>
+            /https:\/\/www.facebook.com\/.+/.test(v) ||
+            'Link must starts with "https://www.facebook.com/"',
+          (v) => v.length <= 100 || 'Link must be less than 100 characters'
+        ],
+        git: [
+          (v) => {
+            if (this.git_type === 'GitHub') {
+              return (
+                /https:\/\/github.com\/.+/.test(v) ||
+                'Must starts with "https://github.com/"'
+              )
+            } else {
+              return (
+                /https:\/\/gitlab.com\/.+/.test(v) ||
+                'Must starts with "https://gitlab.com/"'
+              )
+            }
+          },
+          (v) => v.length <= 100 || 'Must be less than 100 characters'
         ]
       }
     }
@@ -252,6 +324,38 @@ export default {
         } catch (e) {}
       }
       return technolies
+    },
+    git_type_placeholder() {
+      if (this.git_type === 'GitHub') {
+        return 'https://github.com/USER_SLUG'
+      } else if (this.git_type === 'GitLab') {
+        return 'https://gitlab.com/USER_SLUG'
+      } else {
+        return ''
+      }
+    },
+    git_type_label() {
+      if (this.git_type === 'GitHub') {
+        return 'GitHub'
+      } else if (this.git_type === 'GitLab') {
+        return 'GitLab'
+      } else {
+        return 'Select Git Type'
+      }
+    },
+    phone_label() {
+      if (!this.phone_code) {
+        return 'Select Phone Code'
+      } else {
+        return 'Phone number'
+      }
+    },
+    phone_placeholder() {
+      if (!this.phone_code) {
+        return ''
+      } else {
+        return '##-###-##-##'
+      }
     }
   },
   watch: {
@@ -265,15 +369,11 @@ export default {
     }
   },
   async asyncData(context) {
-    // console.log(context)
-    // const codes = await context.$axios.head('http://country.io/phone.json')
-    // console.log(codes)
     return {
       contacts: Object.assign({}, context.store.getters.user.userInfo.contacts),
       info: Object.assign({}, context.store.getters.user.userInfo.info),
       work: Object.assign({}, context.store.getters.user.userInfo.work),
-      languages: await fetchCategories(),
-      codes: await fetchCodes()
+      languages: await fetchCategories()
     }
   },
   methods: {
@@ -303,15 +403,16 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.hidden
-  visibility: hidden
-.row
-  height: 86px
-  margin: 0
-  .col
+<style lang="sass">
+#edit_profile
+  .hidden
+    visibility: hidden
+  .row
     height: 86px
-    padding: 0
-    .v-input__append-inner
-      display: none !important
+    margin: 0
+    .col
+      height: 86px
+      padding: 0
+      .v-input__append-inner
+        display: none
 </style>

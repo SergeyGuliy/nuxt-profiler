@@ -12,4 +12,7 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.v-card__subtitle
+  padding: 16px 5px
+</style>

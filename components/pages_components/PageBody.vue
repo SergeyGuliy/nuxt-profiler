@@ -39,8 +39,8 @@ export default {
 .grid
   width: 100%
   display: grid
-  grid-column-gap: 15px
-  grid-row-gap: 15px
+  grid-column-gap: 5px
+  grid-row-gap: 5px
 .c-1
   grid-area: col-1
 .c-2

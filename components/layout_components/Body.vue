@@ -15,4 +15,5 @@ export default {
 <style scoped lang="sass">
 .container.fill-height
   align-items: start
+  padding: 12px 5px
 </style>
