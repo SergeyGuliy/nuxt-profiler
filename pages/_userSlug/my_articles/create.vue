@@ -133,20 +133,24 @@ export default {
   },
   methods: {
     async save() {
-      const data = {
-        name: this.name,
-        about: this.about,
-        cite: this.cite,
-        language: this.language,
-        technology: this.technology,
-        isPublic: this.isPublic,
-        creatorName: this.$store.getters.user.profile,
-        creatorId: this.$store.getters.user.id
+      try {
+        const data = {
+          name: this.name,
+          about: this.about,
+          cite: this.cite,
+          language: this.language,
+          technology: this.technology,
+          isPublic: this.isPublic,
+          creatorName: this.$store.getters.user.profile,
+          creatorId: this.$store.getters.user.id
+        }
+        const id = await createArticle(data)
+        this.$store.commit('pushArticle', id)
+        await this.$store.dispatch('updateUserInfo')
+        this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
+      } catch (e) {
+        console.log(e)
       }
-      const id = await createArticle(data)
-      this.$store.commit('pushArticle', id)
-      await this.$store.dispatch('updateUserInfo')
-      this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
     }
   }
 }

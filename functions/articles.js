@@ -11,25 +11,29 @@ async function fetchAllArticles() {
   )
 }
 async function createArticle(data) {
-  const push = await firebase
-    .database()
-    .ref(`/2_articles/`)
-    .push(data)
-  if (data.isPublic) {
-    const item =
-      (
-        await firebase
-          .database()
-          .ref(`/systemData/public/articles/`)
-          .once('value')
-      ).val() || []
-    item.push(push.key)
-    await firebase
+  try {
+    const push = await firebase
       .database()
-      .ref(`/systemData/public/articles`)
-      .set(item)
+      .ref(`/2_articles/`)
+      .push(data)
+    if (data.isPublic) {
+      const item =
+        (
+          await firebase
+            .database()
+            .ref(`/systemData/public/articles/`)
+            .once('value')
+        ).val() || []
+      item.push(push.key)
+      await firebase
+        .database()
+        .ref(`/systemData/public/articles`)
+        .set(item)
+    }
+    return push.key
+  } catch (e) {
+    console.log(e)
   }
-  return push.key
 }
 async function fetchArticleByID(id) {
   return (

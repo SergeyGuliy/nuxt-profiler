@@ -150,21 +150,27 @@ export default {
   },
   methods: {
     async save() {
-      const data = {
-        name: this.name,
-        about: this.about,
-        cite: this.cite,
-        gitHub: this.gitHub,
-        language: this.language,
-        technology: this.technology,
-        isPublic: this.isPublic,
-        creatorName: this.$store.getters.user.profile,
-        creatorId: this.$store.getters.user.id
+      try {
+        const data = {
+          name: this.name,
+          about: this.about,
+          cite: this.cite,
+          gitHub: this.gitHub,
+          language: this.language,
+          technology: this.technology,
+          isPublic: this.isPublic,
+          creatorName: this.$store.getters.user.profile,
+          creatorId: this.$store.getters.user.id
+        }
+        const id = await createRepository(data)
+        this.$store.commit('pushRepository', id)
+        await this.$store.dispatch('updateUserInfo')
+        this.$router.push(
+          `/${this.$store.getters.user.profile}/my_repositories`
+        )
+      } catch (e) {
+        console.log(e)
       }
-      const id = await createRepository(data)
-      this.$store.commit('pushRepository', id)
-      await this.$store.dispatch('updateUserInfo')
-      this.$router.push(`/${this.$store.getters.user.profile}/my_repositories`)
     }
   }
 }

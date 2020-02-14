@@ -28,14 +28,6 @@ export default {
       dialog: false,
       loading: false
     }
-  },
-  methods: {
-    async submitBecomeAdmin() {
-      this.loading = true
-      this.$store.commit('becomeAdmin')
-      await this.$store.dispatch('updateUserInfo')
-      this.dialog = false
-    }
   }
 }
 </script>

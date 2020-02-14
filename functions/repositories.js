@@ -11,25 +11,29 @@ async function fetchAllRepositories() {
   )
 }
 async function createRepository(data) {
-  const push = await firebase
-    .database()
-    .ref(`/3_repositories/`)
-    .push(data)
-  if (data.isPublic) {
-    const item =
-      (
-        await firebase
-          .database()
-          .ref(`/systemData/public/repositories/`)
-          .once('value')
-      ).val() || []
-    item.push(push.key)
-    await firebase
+  try {
+    const push = await firebase
       .database()
-      .ref(`/systemData/public/repositories`)
-      .set(item)
+      .ref(`/3_repositories/`)
+      .push(data)
+    if (data.isPublic) {
+      const item =
+        (
+          await firebase
+            .database()
+            .ref(`/systemData/public/repositories/`)
+            .once('value')
+        ).val() || []
+      item.push(push.key)
+      await firebase
+        .database()
+        .ref(`/systemData/public/repositories`)
+        .set(item)
+    }
+    return push.key
+  } catch (e) {
+    console.log(e)
   }
-  return push.key
 }
 async function fetchRepositoryByID(id) {
   return (

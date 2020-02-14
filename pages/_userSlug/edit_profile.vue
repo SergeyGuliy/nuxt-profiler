@@ -379,23 +379,31 @@ export default {
   },
   methods: {
     async submitBecomeAdmin() {
-      this.loading = true
-      this.$store.commit('becomeAdmin')
-      await this.$store.dispatch('updateUserInfo')
-      this.dialog = false
+      try {
+        this.loading = true
+        this.$store.commit('becomeAdmin')
+        await this.$store.dispatch('updateUserInfo')
+        this.dialog = false
+      } catch (e) {
+        console.log(e)
+      }
     },
     async submitUpdateInfo() {
-      this.$store.commit('updateUserInfo', {
-        contacts: this.contacts,
-        info: this.info,
-        work: this.work
-      })
-      console.log({
-        contacts: this.contacts,
-        info: this.info,
-        work: this.work
-      })
-      await this.$store.dispatch('updateUserInfo')
+      try {
+        this.$store.commit('updateUserInfo', {
+          contacts: this.contacts,
+          info: this.info,
+          work: this.work
+        })
+        console.log({
+          contacts: this.contacts,
+          info: this.info,
+          work: this.work
+        })
+        await this.$store.dispatch('updateUserInfo')
+      } catch (e) {
+        console.log(e)
+      }
       // this.$router.push('/')
     },
     save(date) {
