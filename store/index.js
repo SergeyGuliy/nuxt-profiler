@@ -67,6 +67,7 @@ export const actions = {
             repositories: ['empty']
           }
         })
+      await dispatch('fetchUserInfo', uid)
     } catch (e) {
       console.log(e)
     }
@@ -76,6 +77,8 @@ export const actions = {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
+      const uid = (await firebase.auth().currentUser).uid
+      await dispatch('fetchUserInfo', uid)
     } catch (e) {
       console.log(e)
     }
