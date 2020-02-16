@@ -100,6 +100,7 @@ export default {
       loading: false
     }
   },
+  middleware: 'isNotAdmin',
   watch: {
     languages: {
       deep: true,
