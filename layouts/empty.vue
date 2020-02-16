@@ -22,7 +22,8 @@ export default {
         this.$cookies.remove('access_token')
       }
     })
-  }
+  },
+  middleware: 'isLoggedIn'
 }
 </script>
 
