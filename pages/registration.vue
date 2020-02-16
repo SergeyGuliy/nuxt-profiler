@@ -63,6 +63,7 @@
 import 'firebase/auth'
 export default {
   name: 'Registration',
+  transition: 'bounce',
   data() {
     return {
       showPassword: false,

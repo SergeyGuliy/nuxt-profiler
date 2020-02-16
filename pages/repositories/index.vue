@@ -74,6 +74,7 @@ import {
 } from '~/functions/repositories'
 export default {
   name: 'Index',
+  transition: 'bounce',
   computed: {
     publicList() {
       const publicListList = []

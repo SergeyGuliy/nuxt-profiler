@@ -55,6 +55,7 @@
 <script>
 export default {
   name: 'Login',
+  transition: 'bounce',
   data() {
     return {
       showPassword: false,

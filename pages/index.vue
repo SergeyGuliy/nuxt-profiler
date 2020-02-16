@@ -23,6 +23,7 @@
 
 <script>
 export default {
+  transition: 'bounce',
   data() {
     return {
       dialog: false,
