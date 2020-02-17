@@ -15,5 +15,5 @@ export default {
 <style lang="sass">
 #Card
   .v-card__subtitle
-    padding: 16px 5px
+    padding: 16px 15px
 </style>

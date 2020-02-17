@@ -22,7 +22,6 @@ import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
   async asyncData(route) {
-    console.log(await fetchRepositoryByID(route.params.id))
     return {
       data: await fetchRepositoryByID(route.params.id)
     }

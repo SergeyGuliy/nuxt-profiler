@@ -22,7 +22,6 @@ import { fetchUserByID } from '~/functions/users'
 export default {
   name: 'Id',
   async asyncData(route) {
-    console.log(await fetchUserByID(route.params.id))
     return {
       data: await fetchUserByID(route.params.id)
     }
