@@ -23,7 +23,9 @@
             </template>
             <template #table-body>
               <tr v-for="item in publicList" :key="item.id">
-                <td>{{ item.name }}</td>
+                <td>
+                  {{ item.name }}
+                </td>
                 <td>
                   <v-btn @click="$router.push(`/users/${item.id}`)"
                     >{{ item.creatorName }}

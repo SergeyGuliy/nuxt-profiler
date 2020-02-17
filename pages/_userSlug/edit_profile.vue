@@ -240,8 +240,6 @@ export default {
       loading: false,
       loadingSave: false,
       menu: false,
-      phone_code: null,
-      git_type: null,
       git_types: ['GitHub', 'GitLab'],
       work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
       work_type: ['Office worker', 'Freelancer'],
@@ -395,16 +393,11 @@ export default {
           info: this.info,
           work: this.work
         })
-        console.log({
-          contacts: this.contacts,
-          info: this.info,
-          work: this.work
-        })
+        console.log(this.contacts)
         await this.$store.dispatch('updateUserInfo')
       } catch (e) {
         console.log(e)
       }
-      // this.$router.push('/')
     },
     save(date) {
       this.$refs.menu.save(date)
