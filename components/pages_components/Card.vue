@@ -16,4 +16,5 @@ export default {
 #Card
   .v-card__subtitle
     padding: 16px 15px
+    min-height: 100%
 </style>

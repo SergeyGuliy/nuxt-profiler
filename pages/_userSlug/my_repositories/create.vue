@@ -118,7 +118,6 @@ export default {
       return (
         !!this.name &&
         this.name.length <= 15 &&
-        /https:\/\/.+/.test(this.cite) &&
         /https:\/\/github.com\/.+/.test(this.gitHub) &&
         this.cite.length <= 200
       )
@@ -151,11 +150,16 @@ export default {
   methods: {
     async save() {
       try {
+        const gitApiKey = this.gitHub.split(`https://github.com/`)[1]
+        const gitApi = await this.$axios.get(
+          `https://api.github.com/repos/${gitApiKey}`
+        )
         const data = {
           name: this.name,
           about: this.about,
           cite: this.cite,
           gitHub: this.gitHub,
+          gitApi,
           language: this.language,
           technology: this.technology,
           isPublic: this.isPublic,
@@ -169,7 +173,9 @@ export default {
           `/${this.$store.getters.user.profile}/my_repositories`
         )
       } catch (e) {
-        console.log(e)
+        if (e.message === 'Request failed with status code 404') {
+          alert('Cannot access to git repository')
+        }
       }
     }
   }

@@ -63,7 +63,7 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
   grid-template-rows: 1fr 1fr 1fr
   grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2' 'col-1 col-1 col-1 col-2 col-2 col-2'
-  @media screen and (max-width: 740px)
+  @media screen and (max-width: 850px)
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2'
 
 #PageBody.grid-column-1

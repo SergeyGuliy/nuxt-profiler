@@ -1,5 +1,5 @@
 <template>
-  <v-card hover class="Page">
+  <v-card class="Page">
     <v-card-title class="headline">
       <slot name="head">ERROR!!!!</slot>
     </v-card-title>
