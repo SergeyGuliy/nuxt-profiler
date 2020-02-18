@@ -31,7 +31,7 @@
               v-model="cite"
               :rules="rules.cite"
               :counter="100"
-              placeholder="https://github.com/....."
+              placeholder="https://....."
               label="Link to official site of repository"
               outlined
             />
@@ -39,7 +39,7 @@
               v-model="gitHub"
               :rules="rules.gitHub"
               :counter="100"
-              placeholder="https://....."
+              placeholder="https://github.com/....."
               label="Link to repository"
               outlined
             />

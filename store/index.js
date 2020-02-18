@@ -48,6 +48,7 @@ export const actions = {
               facebook: '',
               git_type: '',
               github: '',
+              gitApi: '',
               linkedIn: '',
               phone_code: '',
               phone: '',
