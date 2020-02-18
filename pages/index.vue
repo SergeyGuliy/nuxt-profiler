@@ -1,11 +1,35 @@
 <template>
-  <div class="container">
-    It's will be Profiler v.2
-  </div>
+  <Page id="HomePage">
+    <template #head>
+      <PageHeader>
+        <template #title>Edit Profile</template>
+      </PageHeader>
+    </template>
+    <template #body>
+      <PageBody col="3">
+        <template #c-1>
+          <Card> </Card>
+        </template>
+        <template #c-2>
+          <Card> </Card>
+        </template>
+        <template #c-3>
+          <Card> </Card>
+        </template>
+      </PageBody>
+    </template>
+  </Page>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      dialog: false,
+      loading: false
+    }
+  }
+}
 </script>
 
-<style></style>
+<style scoped></style>

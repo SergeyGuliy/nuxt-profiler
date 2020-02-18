@@ -1,10 +1,12 @@
+import colors from 'vuetify/lib/util/colors'
+
 export default {
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Profiler',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -14,7 +16,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
   /*
    ** Customize the progress-bar color
@@ -27,18 +29,42 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    '~/plugins/firebase',
+    '~/plugins/global-components',
+    '~/plugins/mask'
+  ],
   /*
+
    ** Nuxt.js dev-modules
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify'
   ],
+  vuetify: {
+    font: {
+      family: 'Roboto'
+    },
+    icons: {
+      iconfont: 'mdi'
+    },
+    theme: {
+      dark: false
+    }
+  },
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: [
+    '@nuxtjs/proxy',
+    '@nuxtjs/vuetify',
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
+    'vuetify-dialog/nuxt'
+  ],
+
   /*
    ** Build configuration
    */
