@@ -21,8 +21,8 @@ export default {
   min-height: 100%
   min-width: 100%
   .v-card__title
-    padding: 16px 5px
+    padding: 16px 10px
   .v-card__subtitle
-    padding: 16px 5px
+    padding: 16px 10px
     min-height: 100%
 </style>

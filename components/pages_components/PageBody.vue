@@ -39,8 +39,8 @@ export default {
 #PageBody
   width: 100%
   display: grid
-  grid-column-gap: 5px
-  grid-row-gap: 5px
+  grid-column-gap: 10px
+  grid-row-gap: 10px
   .c-1
     grid-area: col-1
   .c-2

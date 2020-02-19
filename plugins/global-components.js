@@ -5,13 +5,15 @@ import PageBody from '../components/pages_components/PageBody'
 import NavLink from '~/components/misc/NavLink'
 import Table from '~/components/pages_components/Table'
 import Card from '~/components/pages_components/Card'
+import CardContainer from '~/components/pages_components/CardContainer'
 const components = {
   Page,
   PageHeader,
   PageBody,
   NavLink,
   Table,
-  Card
+  Card,
+  CardContainer
 }
 
 Object.keys(components).forEach((key) => {
