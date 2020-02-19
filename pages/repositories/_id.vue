@@ -1,8 +1,8 @@
 <template>
-  <Page id="ShowArticle">
+  <Page id="ShowRepository">
     <template #head>
       <PageHeader>
-        <template #title>{{ data }}</template>
+        <template #title>{{ data.name }}</template>
         <template #actions>
           <v-btn class="mx-1">Save</v-btn>
         </template>
@@ -12,28 +12,31 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <div class="flex">
-              <span class="font-weight-black">Название:</span>
-              <span>{{ data.name }}</span>
-            </div>
-            <div class="flex">
+            <CardContainer v-if="data.language">
               <span class="font-weight-black">Язык:</span>
               <span>{{ data.language }}</span>
-            </div>
-            <div class="flex">
+            </CardContainer>
+
+            <CardContainer v-if="data.technology">
               <span class="font-weight-black">Технология:</span>
               <span>{{ data.technology }}</span>
-            </div>
-            <span class="font-weight-black">Описание:</span>
-            <p v-if="data.about">{{ data.about }}</p>
-            <p v-else>
-              Описание отсутствует gefwe wef wef f ffffffwef wef weffqhg
-            </p>
+            </CardContainer>
+
+            <CardContainer>
+              <span class="font-weight-black">Описание:</span>
+            </CardContainer>
+
+            <CardContainer>
+              <p v-if="data.about">{{ data.about }}</p>
+              <p v-else>
+                Описание отсутствует.
+              </p>
+            </CardContainer>
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <div class="flex">
+            <CardContainer>
               <span class="font-weight-black">Создатель:</span>
               <v-btn
                 @click="$router.push(`/users/${data.creatorId}`)"
@@ -42,8 +45,8 @@
                 outlined
                 >{{ data.creatorName }}</v-btn
               >
-            </div>
-            <div class="flex">
+            </CardContainer>
+            <CardContainer v-if="data.cite">
               <span class="font-weight-black">Ссылка на статью:</span>
               <v-btn
                 :href="data.cite"
@@ -55,8 +58,8 @@
               >
                 {{ data.cite.split('://')[1] }}
               </v-btn>
-            </div>
-            <div class="flex">
+            </CardContainer>
+            <CardContainer>
               <span class="font-weight-black">Ссылка на gitHub:</span>
               <v-btn
                 :href="data.gitHub"
@@ -68,7 +71,7 @@
               >
                 {{ data.gitHub.split('://')[1] }}
               </v-btn>
-            </div>
+            </CardContainer>
           </Card>
         </template>
       </PageBody>
@@ -80,9 +83,17 @@
 import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
-  async asyncData(route) {
-    return {
-      data: await fetchRepositoryByID(route.params.id)
+  async asyncData({ route, app }) {
+    try {
+      const data = await fetchRepositoryByID(route.params.id)
+      const gitApiInfo = (await app.$axios.get(data.gitApiKey)).data
+      console.log(gitApiInfo)
+      return {
+        data,
+        gitApiInfo
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   head: {
@@ -93,13 +104,6 @@ export default {
 
 <style lang="sass">
 #ShowRepository
-  .flex
-    display: flex
-    justify-content: space-between
-    align-items: center
-    margin-bottom: 6px
-    a, button
-      padding: 0 5px
-      letter-spacing: 0.7px
-      max-width: 240px
+  p
+    margin: 0 5px 5px 5px
 </style>
