@@ -107,8 +107,12 @@ export default {
     }
   },
   async asyncData() {
-    return {
-      languages: await fetchCategories()
+    try {
+      return {
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {

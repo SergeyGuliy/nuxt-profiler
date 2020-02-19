@@ -368,11 +368,18 @@ export default {
     }
   },
   async asyncData(context) {
-    return {
-      contacts: Object.assign({}, context.store.getters.user.userInfo.contacts),
-      info: Object.assign({}, context.store.getters.user.userInfo.info),
-      work: Object.assign({}, context.store.getters.user.userInfo.work),
-      languages: await fetchCategories()
+    try {
+      return {
+        contacts: Object.assign(
+          {},
+          context.store.getters.user.userInfo.contacts
+        ),
+        info: Object.assign({}, context.store.getters.user.userInfo.info),
+        work: Object.assign({}, context.store.getters.user.userInfo.work),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {

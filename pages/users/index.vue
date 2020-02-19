@@ -2,7 +2,7 @@
   <Page id="allUsers">
     <template #head>
       <PageHeader>
-        <template #title>Edit Profile</template>
+        <template #title>List of all Users</template>
         <template #actions>
           <v-btn class="mx-1">Save</v-btn>
         </template>
@@ -83,8 +83,12 @@ export default {
     }
   },
   async asyncData() {
-    return {
-      allUsers: await fetchAllUsers()
+    try {
+      return {
+        allUsers: await fetchAllUsers()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   head: {

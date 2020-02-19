@@ -23,7 +23,7 @@
             <v-text-field
               v-model="name"
               :rules="rules.name"
-              :counter="15"
+              :counter="25"
               label="Article name"
               outlined
             />
@@ -67,6 +67,8 @@
               :counter="200"
               label="Description"
               outlined
+              auto-grow
+              rows="1"
             />
           </Card>
         </template>
@@ -92,7 +94,7 @@ export default {
       rules: {
         name: [
           (v) => !!v || 'Name is required',
-          (v) => v.length <= 15 || 'Name must be less than 15 characters'
+          (v) => v.length <= 25 || 'Name must be less than 25 characters'
         ],
         cite: [
           (v) => !!v || 'Link is required',
@@ -117,7 +119,7 @@ export default {
     formIsValid() {
       return (
         !!this.name &&
-        this.name.length <= 15 &&
+        this.name.length <= 25 &&
         /https:\/\/github.com\/.+/.test(this.gitHub) &&
         this.cite.length <= 200
       )
@@ -140,8 +142,12 @@ export default {
     }
   },
   async asyncData() {
-    return {
-      languages: await fetchCategories()
+    try {
+      return {
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   head: {
@@ -150,16 +156,17 @@ export default {
   methods: {
     async save() {
       try {
-        const gitApiKey = this.gitHub.split(`https://github.com/`)[1]
-        const gitApi = await this.$axios.get(
-          `https://api.github.com/repos/${gitApiKey}`
-        )
+        const gitApiKey = `https://api.github.com/repos/${
+          this.gitHub.split(`https://github.com/`)[1]
+        }`
+        alert(gitApiKey)
+        await this.$axios.get(`${gitApiKey}`)
         const data = {
           name: this.name,
           about: this.about,
           cite: this.cite,
           gitHub: this.gitHub,
-          gitApi,
+          gitApiKey,
           language: this.language,
           technology: this.technology,
           isPublic: this.isPublic,

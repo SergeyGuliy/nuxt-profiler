@@ -42,10 +42,10 @@
                 <td>{{ item.technology }}</td>
                 <td>
                   <v-btn
-                    @click="$router.push(`/articles/${item.id}`)"
+                    @click="$router.push(`/repositories/${item.id}`)"
                     icon
                     color="green"
-                    ><v-icon>mdi-book</v-icon></v-btn
+                    ><v-icon>mdi-source-repository</v-icon></v-btn
                   >
                   <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
                     ><v-icon>mdi-minus-circle</v-icon></v-btn
@@ -84,8 +84,12 @@ export default {
     title: `Profiler - User Repositories`
   },
   async asyncData() {
-    return {
-      allRepositories: await fetchAllRepositories()
+    try {
+      return {
+        allRepositories: await fetchAllRepositories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {

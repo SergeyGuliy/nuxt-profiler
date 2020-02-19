@@ -2,7 +2,7 @@
   <Page id="allRepositories">
     <template #head>
       <PageHeader>
-        <template #title>Edit Profile</template>
+        <template #title>List of public Repositories</template>
         <template #actions>
           <v-btn class="mx-1">Save</v-btn>
         </template>
@@ -94,9 +94,13 @@ export default {
     title: `Profiler - Public Repositories`
   },
   async asyncData() {
-    return {
-      allRepositories: await fetchAllRepositories(),
-      publicRepositoriesIDS: await fetchPublicRepositoriesIDS()
+    try {
+      return {
+        allRepositories: await fetchAllRepositories(),
+        publicRepositoriesIDS: await fetchPublicRepositoriesIDS()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {

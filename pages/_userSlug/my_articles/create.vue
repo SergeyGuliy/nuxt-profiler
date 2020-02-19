@@ -23,7 +23,7 @@
             <v-text-field
               v-model="name"
               :rules="rules.name"
-              :counter="15"
+              :counter="25"
               label="Article name"
               outlined
             />
@@ -59,6 +59,8 @@
               :counter="200"
               label="Description"
               outlined
+              auto-grow
+              rows="1"
             />
           </Card>
         </template>
@@ -83,7 +85,7 @@ export default {
       rules: {
         name: [
           (v) => !!v || 'Name is required',
-          (v) => v.length <= 15 || 'Name must be less than 10 characters'
+          (v) => v.length <= 25 || 'Name must be less than 25 characters'
         ],
         cite: [
           (v) => !!v || 'Link is required',
@@ -101,8 +103,8 @@ export default {
     formIsValid() {
       return (
         !!this.name &&
-        this.name.length <= 15 &&
-        /https:\/\/github.com\/.+/.test(this.cite) &&
+        this.name.length <= 25 &&
+        /https:\/\/.+/.test(this.cite) &&
         this.cite.length <= 200
       )
     },
@@ -124,8 +126,12 @@ export default {
     }
   },
   async asyncData() {
-    return {
-      languages: await fetchCategories()
+    try {
+      return {
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   head: {

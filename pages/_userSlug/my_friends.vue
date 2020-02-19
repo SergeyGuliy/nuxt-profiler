@@ -29,10 +29,10 @@
                 <td>{{ item.lists.friends.length }}</td>
                 <td>
                   <v-btn
-                    @click="$router.push(`/articles/${item.id}`)"
+                    @click="$router.push(`/users/${item.id}`)"
                     icon
                     color="green"
-                    ><v-icon>mdi-book</v-icon></v-btn
+                    ><v-icon>mdi-face-profile</v-icon></v-btn
                   >
                   <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
                     ><v-icon>mdi-minus-circle</v-icon></v-btn
@@ -68,8 +68,12 @@ export default {
     }
   },
   async asyncData() {
-    return {
-      allUsers: await fetchAllUsers()
+    try {
+      return {
+        allUsers: await fetchAllUsers()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   head: {
