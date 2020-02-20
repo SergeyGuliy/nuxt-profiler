@@ -115,9 +115,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#allUsers
-  td, th
-    text-align: center
-</style>

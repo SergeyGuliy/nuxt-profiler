@@ -13,13 +13,14 @@ export default {
 <style lang="sass">
 #CardContainer
   display: flex
-  height: 28px
+  min-height: 29px
   justify-content: space-between
   align-items: center
-  margin-bottom: 6px
+  flex-wrap: wrap
   a, button
     padding: 0 5px
     letter-spacing: 0.7px
-    max-width: 240px
     height: 23px
+  p
+    margin: 0 5px 5px 5px
 </style>

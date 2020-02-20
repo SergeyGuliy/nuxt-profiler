@@ -123,9 +123,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#allRepositories
-  td, th
-    text-align: center
-</style>

@@ -396,13 +396,20 @@ export default {
     async submitUpdateInfo() {
       try {
         if (this.contacts.git_type === 'GitHub') {
-          const gitApiKey = this.contacts.github.split(`https://github.com/`)[1]
-          this.contacts.gitApi = (
-            await this.$axios.get(`https://api.github.com/users/${gitApiKey}`)
-          ).data
+          try {
+            const gitApiKey = `https://api.github.com/users/${
+              this.contacts.github.split('https://github.com/')[1]
+            }`
+            const checkingGitApi = (await this.$axios.get(gitApiKey)).data
+            console.log(checkingGitApi)
+            this.contacts.gitApi = gitApiKey
+          } catch (e) {
+            this.contacts.gitApi = ''
+          }
         } else {
           this.contacts.gitApi = ''
         }
+        console.log(this.contacts.gitApi)
         this.$store.commit('updateUserInfo', {
           contacts: this.contacts,
           info: this.info,

@@ -119,9 +119,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#allArticles
-  td, th
-    text-align: center
-</style>

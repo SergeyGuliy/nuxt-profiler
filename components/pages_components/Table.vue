@@ -1,6 +1,6 @@
 <template>
   <div id="Table">
-    <v-simple-table :dark="$vuetify.theme.dark">
+    <v-simple-table :dark="$vuetify.theme.dark" :height="table_height">
       <template v-slot:default>
         <thead>
           <slot name="table-head"></slot>
@@ -15,7 +15,8 @@
 
 <script>
 export default {
-  name: 'Table'
+  name: 'Table',
+  props: ['table_height']
 }
 </script>
 
@@ -23,5 +24,8 @@ export default {
 #Table
   td, th
     width: 20%
-    padding: 3px
+    padding: 5px 0
+    height: 100%
+    text-align: center
+    border-bottom: none
 </style>

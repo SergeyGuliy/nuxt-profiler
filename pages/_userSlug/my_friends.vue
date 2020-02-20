@@ -91,9 +91,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#myFriends
-  td, th
-    text-align: center
-</style>
