@@ -13,7 +13,6 @@ export default {
     async copy(copiedText) {
       try {
         await this.$copyText(copiedText)
-        console.log(res)
       } catch (e) {
         console.log(e)
       }
