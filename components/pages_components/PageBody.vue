@@ -52,11 +52,13 @@ export default {
 
 #PageBody.grid-column-3
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr 1fr
-  grid-template-areas: 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3'
+  grid-template-rows: 1fr
+  grid-template-areas: 'col-1 col-1 col-2 col-2 col-3 col-3'
   @media screen and (max-width: 1150px)
-    grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2'  'col-1 col-1 col-1 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
+    grid-template-rows: 1fr 1fr
+    grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
   @media screen and (max-width: 740px)
+    grid-template-rows: 1fr 1fr 1fr
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
 
 #PageBody.grid-column-2
