@@ -192,7 +192,7 @@
           <Card>
             <Header>Your lists</Header>
             <v-expansion-panels accordion multiple>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="myFriends.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Friends <v-chip small label>{{ myFriends.length }}</v-chip>
@@ -210,7 +210,7 @@
                   </v-btn>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="myArticles.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Articles
@@ -229,7 +229,7 @@
                   </v-btn>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="myRepositories.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Repositories
