@@ -11,6 +11,7 @@ import BtnCopy from '~/components/misc/BtnCopy'
 import BtnRouter from '~/components/misc/BtnRouter'
 import BtnOpenBlank from '~/components/misc/BtnOpenBlank'
 import Header from '~/components/misc/Header'
+import LineTitle from '~/components/misc/LineTitle'
 const components = {
   Page,
   PageHeader,
@@ -23,7 +24,8 @@ const components = {
   BtnCopy,
   BtnRouter,
   BtnOpenBlank,
-  Header
+  Header,
+  LineTitle
 }
 
 Object.keys(components).forEach((key) => {

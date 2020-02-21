@@ -1,35 +1,38 @@
 <template>
-  <div id="Git">
-    <img
-      src="https://avatars1.githubusercontent.com/u/43864245?v=4"
-      class="git__img"
-      alt="profile_img"
-    />
-    <div class="git__actions">
-      <a
-        :href="`${data.userInfo.contacts.github}/?tab=followers`"
-        class="box"
-        target="_blank"
-      >
-        Followers
-        <span class="badge">{{ gitApiInfo.followers }}</span>
-      </a>
-      <a
-        :href="`${data.userInfo.contacts.github}/?tab=following`"
-        class="box"
-        target="_blank"
-      >
-        Following
-        <span class="badge">{{ gitApiInfo.following }}</span>
-      </a>
-      <a
-        :href="`${data.userInfo.contacts.github}/?tab=repositories`"
-        class="box"
-        target="_blank"
-      >
-        Repositories
-        <span class="badge">{{ gitApiInfo.public_repos }}</span>
-      </a>
+  <div>
+    <Header> GitHub Info</Header>
+    <div id="Git">
+      <img
+        src="https://avatars1.githubusercontent.com/u/43864245?v=4"
+        class="git__img"
+        alt="profile_img"
+      />
+      <div class="git__actions">
+        <a
+          :href="`${data.userInfo.contacts.github}/?tab=followers`"
+          class="box"
+          target="_blank"
+        >
+          Followers
+          <span class="badge">{{ gitApiInfo.followers }}</span>
+        </a>
+        <a
+          :href="`${data.userInfo.contacts.github}/?tab=following`"
+          class="box"
+          target="_blank"
+        >
+          Following
+          <span class="badge">{{ gitApiInfo.following }}</span>
+        </a>
+        <a
+          :href="`${data.userInfo.contacts.github}/?tab=repositories`"
+          class="box"
+          target="_blank"
+        >
+          Repositories
+          <span class="badge">{{ gitApiInfo.public_repos }}</span>
+        </a>
+      </div>
     </div>
   </div>
 </template>

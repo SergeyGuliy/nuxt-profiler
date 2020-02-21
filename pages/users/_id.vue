@@ -20,27 +20,29 @@
       <PageBody col="3">
         <template #c-1>
           <Card>
-            <Header v-if="gitApiInfo"> GitHub Info</Header>
-
-            <GitInfo v-if="gitApiInfo" :gitApiInfo="gitApiInfo" :data="data" />
+            <GitInfo
+              v-if="data.userInfo.contacts.gitApiInfo"
+              :gitApiInfo="gitApiInfo"
+              :data="data"
+            />
 
             <Header> User Info</Header>
             <CardContainer>
-              <span class="font-weight-black">Location:</span>
-              <span v-if="data.userInfo.info.location">{{
-                data.userInfo.info.location
-              }}</span>
+              <LineTitle>Location:</LineTitle>
+              <span v-if="data.userInfo.info.location">
+                {{ data.userInfo.info.location }}</span
+              >
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Date of birth:</span>
+              <LineTitle>Date of birth:</LineTitle>
               <span v-if="data.userInfo.info.date_of_birth">{{
                 data.userInfo.info.date_of_birth
               }}</span>
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Описание:</span>
+              <LineTitle>Описание:</LineTitle>
             </CardContainer>
             <CardContainer>
               <p v-if="data.userInfo.info.about">
@@ -54,7 +56,20 @@
           <Card>
             <Header> Contacts</Header>
             <CardContainer>
-              <span class="font-weight-black">Phone:</span>
+              <LineTitle>E-mail:</LineTitle>
+
+              <div v-if="data.userInfo.contacts.email">
+                <BtnOpenBlank
+                  :link="`mailto:${data.userInfo.contacts.email}`"
+                  icon="mdi-at"
+                  text="mail"
+                />
+                <BtnCopy :copyValue="data.userInfo.contacts.email" />
+              </div>
+              <span v-else>Not indicated</span>
+            </CardContainer>
+            <CardContainer>
+              <LineTitle>Phone:</LineTitle>
               <div v-if="data.userInfo.contacts.phone">
                 <BtnOpenBlank
                   :link="
@@ -72,32 +87,15 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">E-mail:</span>
-
-              <div v-if="data.userInfo.contacts.email">
-                <BtnOpenBlank
-                  :link="`mailto:${data.userInfo.contacts.email}`"
-                  icon="mdi-at"
-                  text="mail"
-                />
-                <BtnCopy :copyValue="data.userInfo.contacts.email" />
-              </div>
-              <span v-else>Not indicated</span>
-            </CardContainer>
-            <CardContainer>
-              <span
-                v-if="data.userInfo.contacts.git_type === 'GitHub'"
-                class="font-weight-black"
-              >
+              <LineTitle v-if="data.userInfo.contacts.git_type === 'GitHub'">
                 GitHub:
-              </span>
-              <span
+              </LineTitle>
+              <LineTitle
                 v-else-if="data.userInfo.contacts.git_type === 'GitLab'"
-                class="font-weight-black"
               >
                 GitLab:
-              </span>
-              <span v-else class="font-weight-black">Git:</span>
+              </LineTitle>
+              <LineTitle v-else>Git:</LineTitle>
               <div v-if="data.userInfo.contacts.github">
                 <BtnOpenBlank
                   :link="data.userInfo.contacts.github"
@@ -108,7 +106,7 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">LinkedIn:</span>
+              <LineTitle>LinkedIn:</LineTitle>
               <div v-if="data.userInfo.contacts.linkedIn">
                 <BtnOpenBlank
                   :link="data.userInfo.contacts.linkedIn"
@@ -119,7 +117,7 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Facebook:</span>
+              <LineTitle>Facebook:</LineTitle>
               <div v-if="data.userInfo.contacts.facebook">
                 <BtnOpenBlank
                   :link="data.userInfo.contacts.facebook"
@@ -131,7 +129,7 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Your site:</span>
+              <LineTitle>Your site:</LineTitle>
               <div v-if="data.userInfo.contacts.site">
                 <BtnOpenBlank :link="data.userInfo.contacts.site" />
                 <BtnCopy :copyValue="data.userInfo.contacts.site" />
@@ -142,28 +140,28 @@
 
             <Header> Working Info</Header>
             <CardContainer>
-              <span class="font-weight-black">Work Status:</span>
+              <LineTitle>Work Status:</LineTitle>
               <span v-if="data.userInfo.work.work_status">
                 {{ data.userInfo.work.work_status }}
               </span>
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Work Type:</span>
+              <LineTitle>Work Type:</LineTitle>
               <span v-if="data.userInfo.work.work_type">
                 {{ data.userInfo.work.work_type }}
               </span>
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Work Position:</span>
+              <LineTitle>Work Position:</LineTitle>
               <span v-if="data.userInfo.work.work_position">
                 {{ data.userInfo.work.work_position }}
               </span>
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Working Languages:</span>
+              <LineTitle>Working Languages:</LineTitle>
               <v-chip-group column>
                 <v-chip
                   v-for="item in data.userInfo.work.work_languages"
@@ -175,7 +173,7 @@
               </v-chip-group>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Working Languages:</span>
+              <LineTitle>Working Languages:</LineTitle>
               <v-chip-group column>
                 <v-chip
                   v-for="item in data.userInfo.work.work_technologies"
@@ -192,7 +190,7 @@
           <Card>
             <Header>Your lists</Header>
             <v-expansion-panels accordion multiple>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="userFriends.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Friends
@@ -211,7 +209,7 @@
                   </v-btn>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="userArticles.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Articles
@@ -230,7 +228,7 @@
                   </v-btn>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel>
+              <v-expansion-panel :disabled="userRepositories.length === 0">
                 <v-expansion-panel-header>
                   <Header>
                     Repositories
@@ -311,19 +309,27 @@ export default {
   async asyncData({ route, app }) {
     try {
       const data = await fetchUserByID(route.params.id)
+      const allUsers = await fetchAllUsers()
+      const allRepositories = await fetchAllRepositories()
+      const allArticles = await fetchAllArticles()
       if (data.userInfo.contacts.gitApi) {
         return {
           data,
-          gitApiInfo: (await app.$axios.get(data.userInfo.contacts.gitApi))
-            .data,
-          allUsers: await fetchAllUsers(),
-          allRepositories: await fetchAllRepositories(),
-          allArticles: await fetchAllArticles()
+          allUsers,
+          allRepositories,
+          allArticles,
+          gitApiInfo: (await app.$axios.get(data.userInfo.contacts.gitApi)).data
         }
       }
+      return {
+        data,
+        allUsers,
+        allRepositories,
+        allArticles
+      }
     } catch (e) {
-      alert('error')
       console.log(e)
+      throw Error
     }
   },
   head: {
@@ -340,4 +346,6 @@ export default {
       margin: 2px
       padding: 0 5px
       height: 25px
+  .v-expansion-panel-header
+    padding: 0 24px
 </style>

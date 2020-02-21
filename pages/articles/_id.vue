@@ -13,15 +13,15 @@
         <template #c-1>
           <Card>
             <CardContainer v-if="data.language">
-              <span class="font-weight-black">Язык:</span>
+              <LineTitle>Язык:</LineTitle>
               <span>{{ data.language }}</span>
             </CardContainer>
             <CardContainer v-if="data.technology">
-              <span class="font-weight-black">Технология:</span>
+              <LineTitle>Технология:</LineTitle>
               <span>{{ data.technology }}</span>
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Описание:</span>
+              <LineTitle>Описание:</LineTitle>
             </CardContainer>
             <CardContainer>
               <p v-if="data.about">{{ data.about }}</p>
@@ -34,27 +34,19 @@
         <template #c-2>
           <Card>
             <CardContainer>
-              <span class="font-weight-black">Создатель:</span>
-              <v-btn
-                @click="$router.push(`/users/${data.creatorId}`)"
-                color="blue"
-                small
-                outlined
-                >{{ data.creatorName }}</v-btn
-              >
+              <LineTitle>Создатель:</LineTitle>
+              <BtnRouter
+                :link="`/users/${data.creatorId}`"
+                :text="data.creatorName"
+                icon="mdi-face-profile"
+              />
             </CardContainer>
             <CardContainer>
-              <span class="font-weight-black">Ссылка на статью:</span>
-              <v-btn
-                :href="data.cite"
-                link
-                target="_blank"
-                color="blue"
-                small
-                outlined
-              >
-                {{ data.cite.split('://')[1] }}
-              </v-btn>
+              <LineTitle>Ссылка на статью:</LineTitle>
+              <div>
+                <BtnOpenBlank :link="data.cite" />
+                <BtnCopy :copyValue="data.cite" />
+              </div>
             </CardContainer>
           </Card>
         </template>
