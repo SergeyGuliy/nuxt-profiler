@@ -13,10 +13,10 @@ export default {
     async copy(copiedText) {
       try {
         await this.$copyText(copiedText)
-        // this.$dialog.notify.info(`Coppied: ${copiedText}`, {
-        //   position: 'top-right',
-        //   timeout: 3000
-        // })
+        this.$dialog.message.success(`Coppied: ${copiedText}`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }

@@ -58,8 +58,8 @@ export const actions = {
               work_status: '',
               work_type: '',
               work_position: '',
-              work_languages: '',
-              work_technologies: ''
+              work_languages: ['empty'],
+              work_technologies: ['empty']
             }
           },
           lists: {

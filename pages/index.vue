@@ -164,27 +164,25 @@
             </CardContainer>
             <CardContainer>
               <LineTitle>Working Languages:</LineTitle>
-              <v-chip-group column>
-                <v-chip
-                  v-for="item in data.userInfo.work.work_languages"
-                  :key="item"
-                  label
-                  small
-                  >{{ item }}</v-chip
-                >
+              <v-chip-group v-if="!workLanguages.length == 0" column>
+                <v-chip v-for="item in workLanguages" :key="item" label small>{{
+                  item
+                }}</v-chip>
               </v-chip-group>
+              <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
               <LineTitle>Working Languages:</LineTitle>
-              <v-chip-group column>
+              <v-chip-group v-if="!workTechnologies.length == 0" column>
                 <v-chip
-                  v-for="item in data.userInfo.work.work_technologies"
+                  v-for="item in workTechnologies"
                   :key="item"
                   label
                   small
                   >{{ item }}</v-chip
                 >
               </v-chip-group>
+              <span v-else>Not indicated</span>
             </CardContainer>
           </Card>
         </template>
@@ -268,6 +266,24 @@ export default {
     }
   },
   computed: {
+    workLanguages() {
+      const workLanguages = []
+      this.data.userInfo.work.work_languages.forEach((item) => {
+        if (item !== 'empty') {
+          workLanguages.push(item)
+        }
+      })
+      return workLanguages
+    },
+    workTechnologies() {
+      const workTechnologies = []
+      this.data.userInfo.work.work_technologies.forEach((item) => {
+        if (item !== 'empty') {
+          workTechnologies.push(item)
+        }
+      })
+      return workTechnologies
+    },
     myArticles() {
       const myListIDS = this.$store.getters.user.lists.articles
       const myList = []
@@ -335,14 +351,6 @@ export default {
       }
     } catch (e) {
       console.log(e)
-    }
-  },
-  methods: {
-    log() {
-      console.log(this.data)
-      if (this.gitApiInfo) {
-        console.log(this.gitApiInfo)
-      }
     }
   }
 }
