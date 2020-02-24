@@ -2,16 +2,26 @@
   <Page id="myFriends">
     <template #head>
       <PageHeader>
-        <template #title>List of my Friends</template>
-        <template #actions>
-          <v-btn class="mx-1">Save</v-btn>
+        <template #title>
+          {{
+            myList.length > 0 ? 'List of my Friends' : "You don't have friends"
+          }}
+        </template>
+        <template #actions v-if="myList.length > 0">
+          <v-text-field
+            v-model="searchKey"
+            label="Search"
+            outlined
+            clearable
+            dense
+          />
         </template>
       </PageHeader>
     </template>
-    <template #body>
+    <template #body v-if="myList.length > 0">
       <PageBody col="1">
         <template #c-1>
-          <Table>
+          <Table v-if="listFiltered.length > 0">
             <template #table-head>
               <tr>
                 <th>Name</th>
@@ -22,7 +32,7 @@
               </tr>
             </template>
             <template #table-body>
-              <tr v-for="item in myList" :key="item.id">
+              <tr v-for="item in listFiltered" :key="item.id">
                 <td>{{ item.profile }}</td>
                 <td>{{ item.lists.repositories.length }}</td>
                 <td>{{ item.lists.articles.length }}</td>
@@ -41,6 +51,7 @@
               </tr>
             </template>
           </Table>
+          <Card v-else>Поиск не дал результата</Card>
         </template>
       </PageBody>
     </template>
@@ -51,6 +62,11 @@
 import { fetchAllUsers } from '~/functions/users'
 export default {
   name: 'MyFriends',
+  data() {
+    return {
+      searchKey: null
+    }
+  },
   computed: {
     myList() {
       const myListIDS = this.$store.getters.user.lists.friends
@@ -65,6 +81,17 @@ export default {
         }
       }
       return myList
+    },
+    listFiltered() {
+      if (this.searchKey) {
+        return this.myList.filter((value) => {
+          return value.profile
+            .toLowerCase()
+            .includes(this.searchKey.toLowerCase())
+        })
+      } else {
+        return this.myList
+      }
     }
   },
   async asyncData() {
@@ -91,3 +118,24 @@ export default {
   }
 }
 </script>
+<style lang="sass">
+#myFriends
+  .v-input
+    margin: 2px
+    width: 32%
+    max-width: 200px
+  .v-input__slot
+    margin: 0
+    padding: 0 7px
+  .v-text-field__details
+    display: none
+  .v-select__selection.v-select__selection--comma, .v-label, .v-text-field__slot
+    font-size: 13px
+  .v-input__append-inner
+    padding: 0
+    height: 20px
+    width: 20px
+    .v-icon
+      height: 20px
+      width: 20px
+</style>
