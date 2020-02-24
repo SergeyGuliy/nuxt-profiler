@@ -21,7 +21,21 @@ export default {
   display: flex
   justify-content: space-between
   align-items: center
+  flex-wrap: wrap
   .flex-left
     display: flex
     align-items: center
+    justify-content: flex-end
+  h3.headline
+    font-size: 20px !important
+    letter-spacing: 1px !important
+    @media screen and (max-width: 700px)
+      font-size: 18px !important
+      letter-spacing: 0.9px !important
+    @media screen and (max-width: 510px)
+      font-size: 16px !important
+      letter-spacing: 0.8px !important
+    @media screen and (max-width: 450px)
+      font-size: 14px !important
+      letter-spacing: 0.7px !important
 </style>

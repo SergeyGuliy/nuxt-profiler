@@ -20,7 +20,7 @@
                 running.</v-card-text
               >
               <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn @click="dialog = false">Disagree</v-btn>
                 <v-btn
                   @click="submitBecomeAdmin"
