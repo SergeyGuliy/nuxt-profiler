@@ -2,22 +2,68 @@
   <Page id="myArticles">
     <template #head>
       <PageHeader>
-        <template #title>List of my Articles</template>
-        <template #actions>
+        <template #title>
+          {{
+            myList.length > 0
+              ? 'List of my articles'
+              : "You don't have articles"
+          }}
+          <v-btn
+            v-if="myList.length > 0"
+            @click="
+              $router.push(`/${$store.getters.user.profile}/my_articles/create`)
+            "
+            color="green"
+            absolute
+            bottom
+            right
+          >
+            Create
+          </v-btn>
+        </template>
+        <template #actions v-if="myList.length > 0">
+          <v-select
+            v-model="language"
+            :items="Object.keys(languages)"
+            label="Language"
+            outlined
+            clearable
+            dense
+          >
+          </v-select>
+          <v-select
+            v-model="technology"
+            :items="technologies"
+            label="Technology"
+            outlined
+            clearable
+            dense
+          >
+          </v-select>
+          <v-text-field
+            v-model="searchKey"
+            label="Search"
+            outlined
+            clearable
+            dense
+          />
+        </template>
+        <template #actions v-else>
           <v-btn
             @click="
               $router.push(`/${$store.getters.user.profile}/my_articles/create`)
             "
+            color="green"
             class="mx-1"
             >Create</v-btn
           >
         </template>
       </PageHeader>
     </template>
-    <template #body>
+    <template #body v-if="myList.length > 0">
       <PageBody col="1">
         <template #c-1>
-          <Table>
+          <Table v-if="listFiltered.length > 0">
             <template #table-head>
               <tr>
                 <th>Name</th>
@@ -28,7 +74,7 @@
               </tr>
             </template>
             <template #table-body>
-              <tr v-for="item in myList" :key="item.id">
+              <tr v-for="item in listFiltered" :key="item.id">
                 <td>{{ item.name }}</td>
                 <td>
                   <v-btn @click="$router.push(`/users/${item.id}`)"
@@ -52,6 +98,7 @@
               </tr>
             </template>
           </Table>
+          <Card v-else>Поиск не дал результата</Card>
         </template>
       </PageBody>
     </template>
@@ -59,9 +106,17 @@
 </template>
 
 <script>
+import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllArticles } from '~/functions/articles'
 export default {
   name: 'MyArticles',
+  data() {
+    return {
+      language: null,
+      technology: null,
+      searchKey: null
+    }
+  },
   computed: {
     myList() {
       const myListIDS = this.$store.getters.user.lists.articles
@@ -76,6 +131,54 @@ export default {
         }
       }
       return myList
+    },
+    listFiltered() {
+      if (this.language) {
+        if (this.technology) {
+          if (this.searchKey) {
+            return this.myList.filter((value) => {
+              return (
+                value.technology === this.technology &&
+                value.language === this.language &&
+                value.name.toLowerCase().includes(this.searchKey.toLowerCase())
+              )
+            })
+          } else {
+            return this.myList.filter((value) => {
+              return value.technology === this.technology
+            })
+          }
+        } else if (this.searchKey) {
+          return this.myList.filter((value) => {
+            return (
+              value.language === this.language &&
+              value.name.toLowerCase().includes(this.searchKey.toLowerCase())
+            )
+          })
+        } else {
+          return this.myList.filter((value) => {
+            return value.language === this.language
+          })
+        }
+      } else if (this.searchKey) {
+        return this.myList.filter((value) => {
+          return value.name.toLowerCase().includes(this.searchKey.toLowerCase())
+        })
+      } else {
+        return this.myList
+      }
+    },
+    technologies() {
+      if (this.language) {
+        return this.languages[this.language].technologies || []
+      } else {
+        return []
+      }
+    }
+  },
+  watch: {
+    language() {
+      this.technology = null
     }
   },
   head: {
@@ -84,7 +187,8 @@ export default {
   async asyncData() {
     try {
       return {
-        allArticles: await fetchAllArticles()
+        allArticles: await fetchAllArticles(),
+        languages: await fetchCategories()
       }
     } catch (e) {
       console.log(e)
@@ -102,3 +206,25 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+#myArticles
+  .v-input
+    margin: 2px
+    width: 32%
+    max-width: 200px
+  .v-input__slot
+    margin: 0
+    padding: 0 7px
+  .v-text-field__details
+    display: none
+  .v-select__selection.v-select__selection--comma, .v-label, .v-text-field__slot
+    font-size: 13px
+  .v-input__append-inner
+    padding: 0
+    height: 20px
+    width: 20px
+    .v-icon
+      height: 20px
+      width: 20px
+</style>
