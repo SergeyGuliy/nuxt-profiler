@@ -13,9 +13,6 @@
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #actions>
-          <v-btn @click="log" class="mx-1">Save</v-btn>
-        </template>
       </PageHeader>
     </template>
     <template #body>

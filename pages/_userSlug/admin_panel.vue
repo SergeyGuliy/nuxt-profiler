@@ -2,10 +2,7 @@
   <Page id="adminPanel">
     <template #head>
       <PageHeader>
-        <template #title>List of my Articles</template>
-        <template #actions>
-          <v-btn class="mx-1">Save</v-btn>
-        </template>
+        <template #title>Admin Panel</template>
       </PageHeader>
     </template>
     <template #body>

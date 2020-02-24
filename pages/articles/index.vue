@@ -38,7 +38,7 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="publicList > 0">
+    <template #body v-if="publicList.length > 0">
       <PageBody col="1">
         <template #c-1>
           <Table v-if="listFiltered.length > 0">
