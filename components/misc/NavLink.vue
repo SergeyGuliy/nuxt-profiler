@@ -1,7 +1,7 @@
 <template>
   <v-btn :to="link" text exact-active-class="outlined">
     <span id="NavLink">
-      <slot></slot>
+      <slot />
     </span>
   </v-btn>
 </template>

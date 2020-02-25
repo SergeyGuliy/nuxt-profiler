@@ -310,6 +310,22 @@ export default {
     }
   },
   computed: {
+    // user() {
+    //   return this.$store.getters.user.userInfo
+    // },
+    // formIsChanged() {
+    //   return (
+    //     this.user.info.first_name === this.info.first_name &&
+    //     this.user.info.last_name === this.info.last_name &&
+    //     this.user.info.about === this.info.about &&
+    //     this.user.info.location === this.info.location &&
+    //     this.user.work.work_languages === this.work.work_languages &&
+    //     this.user.work.work_position === this.work.work_position &&
+    //     this.user.work.work_status === this.work.work_status &&
+    //     this.user.work.work_technologies === this.work.work_technologies &&
+    //     this.user.work.work_type === this.work.work_type
+    //   )
+    // },
     technologies() {
       const technolies = []
       for (const i of this.work.work_languages) {
