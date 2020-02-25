@@ -196,6 +196,10 @@ export default {
       try {
         this.$store.commit('deleteRepository', id)
         this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.error(`You delete repository`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }
