@@ -33,33 +33,33 @@
             </template>
             <template #table-body>
               <tr v-for="item in listFiltered" :key="item.id">
-                <td>{{ item.profile }}</td>
-                <td>{{ item.lists.repositories.length }}</td>
-                <td>{{ item.lists.articles.length }}</td>
-                <td>{{ item.lists.friends.length }}</td>
                 <td>
-                  <v-btn
-                    @click="$router.push(`/users/${item.id}`)"
-                    icon
-                    color="green"
-                    ><v-icon>mdi-face-profile</v-icon></v-btn
-                  >
-                  <v-btn
+                  <TableLink :link="`/users/${item.id}`" :text="item.profile" />
+                </td>
+                <td>
+                  <TableText :text="item.lists.repositories.length - 1" />
+                </td>
+                <td>
+                  <TableText :text="item.lists.articles.length - 1" />
+                </td>
+                <td>
+                  <TableText :text="item.lists.friends.length - 1" />
+                </td>
+                <td>
+                  <TableIcon
                     v-if="!$store.getters.user.lists.friends.includes(item.id)"
-                    @click="addTomMyList(item.id)"
-                    icon
+                    :item="item.id"
+                    :action="addTomMyList"
                     color="info"
-                    ><v-icon>mdi-account-multiple-plus</v-icon></v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      $store.getters.user.lists.friends.includes(item.id)
-                    "
-                    @click="deleteFromMyList(item.id)"
-                    icon
+                    icon="mdi-plus-circle"
+                  />
+                  <TableIcon
+                    v-else
+                    :item="item.id"
+                    :action="deleteFromMyList"
                     color="warning"
-                    ><v-icon>mdi-account-multiple-remove</v-icon></v-btn
-                  >
+                    icon="mdi-minus-circle"
+                  />
                 </td>
               </tr>
             </template>
