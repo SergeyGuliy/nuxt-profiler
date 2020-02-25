@@ -53,7 +53,7 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <LineTitle>Описание:</LineTitle>
+              <LineTitle>About:</LineTitle>
             </CardContainer>
             <CardContainer>
               <p v-if="data.userInfo.info.about">

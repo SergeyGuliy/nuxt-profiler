@@ -28,23 +28,22 @@
         <template #c-1>
           <Card>
             <CardContainer v-if="data.language">
-              <LineTitle>Язык:</LineTitle>
+              <LineTitle>Language:</LineTitle>
               <span>{{ data.language }}</span>
             </CardContainer>
 
             <CardContainer v-if="data.technology">
-              <LineTitle>Технология:</LineTitle>
+              <LineTitle>Technology:</LineTitle>
               <span>{{ data.technology }}</span>
             </CardContainer>
 
             <CardContainer>
-              <LineTitle>Описание:</LineTitle>
+              <LineTitle>Description:</LineTitle>
             </CardContainer>
-
             <CardContainer>
               <p v-if="data.about">{{ data.about }}</p>
               <p v-else>
-                Описание отсутствует.
+                Description is empty.
               </p>
             </CardContainer>
           </Card>
@@ -52,7 +51,7 @@
         <template #c-2>
           <Card>
             <CardContainer>
-              <LineTitle>Создатель:</LineTitle>
+              <LineTitle>Creator:</LineTitle>
               <BtnRouter
                 :link="`/users/${data.creatorId}`"
                 :text="data.creatorName"
@@ -60,14 +59,14 @@
               />
             </CardContainer>
             <CardContainer v-if="data.cite">
-              <LineTitle>Ссылка на статью:</LineTitle>
+              <LineTitle>Link to official site:</LineTitle>
               <div>
                 <BtnOpenBlank :link="data.cite" />
                 <BtnCopy :copyValue="data.cite" />
               </div>
             </CardContainer>
             <CardContainer>
-              <LineTitle>Ссылка на gitHub:</LineTitle>
+              <LineTitle>Link to github repository:</LineTitle>
               <div>
                 <BtnOpenBlank :link="data.gitHub" icon="mdi-git" />
                 <BtnCopy :copyValue="data.gitHub" />

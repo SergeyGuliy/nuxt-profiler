@@ -8,6 +8,7 @@
             v-if="!$store.getters.user.isAdmin"
             @click="submitBecomeAdmin"
             mx-1
+            color="green"
           >
             Become admin
           </v-btn>
@@ -15,10 +16,13 @@
             v-if="$store.getters.user.isAdmin"
             @click="submitBecomeUser"
             mx-1
+            color="green"
           >
             Stop to be admin
           </v-btn>
-          <v-btn @click="submitUpdateInfo" class="mx-1">Save</v-btn>
+          <v-btn @click="submitUpdateInfo" class="mx-1" color="green"
+            >Save</v-btn
+          >
         </template>
       </PageHeader>
     </template>
