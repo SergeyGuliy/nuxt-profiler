@@ -9,7 +9,6 @@
               : "You don't have repositories"
           }}
           <v-btn
-            v-if="myList.length > 0"
             @click="
               $router.push(
                 `/${$store.getters.user.profile}/my_repositories/create`
@@ -50,19 +49,6 @@
             dense
           />
         </template>
-        <template #actions v-else>
-          <v-btn
-            v-if="!myList.length > 0"
-            @click="
-              $router.push(
-                `/${$store.getters.user.profile}/my_repositories/create`
-              )
-            "
-            color="green"
-            class="mx-1"
-            >Create</v-btn
-          >
-        </template>
       </PageHeader>
     </template>
     <template #body v-if="myList.length > 0">
@@ -80,25 +66,31 @@
             </template>
             <template #table-body>
               <tr v-for="item in listFiltered" :key="item.id">
-                <td>{{ item.name }}</td>
                 <td>
-                  <v-btn @click="$router.push(`/users/${item.id}`)"
-                    >{{ item.creatorName }}
-                    <v-icon color="green">mdi-face-profile</v-icon></v-btn
-                  >
+                  <TableLink
+                    :link="`/repositories/${item.id}`"
+                    :text="item.name"
+                  />
                 </td>
-                <td>{{ item.language }}</td>
-                <td>{{ item.technology }}</td>
                 <td>
-                  <v-btn
-                    @click="$router.push(`/repositories/${item.id}`)"
-                    icon
-                    color="green"
-                    ><v-icon>mdi-source-repository</v-icon></v-btn
-                  >
-                  <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
-                    ><v-icon>mdi-minus-circle</v-icon></v-btn
-                  >
+                  <TableLink
+                    :link="`/users/${item.creatorId}`"
+                    :text="item.creatorName"
+                  />
+                </td>
+                <td>
+                  <TableText :text="item.language" />
+                </td>
+                <td>
+                  <TableText :text="item.technology" />
+                </td>
+                <td>
+                  <TableIcon
+                    :item="item.id"
+                    :action="deleteFromMyList"
+                    color="warning"
+                    icon="mdi-minus-circle"
+                  />
                 </td>
               </tr>
             </template>
