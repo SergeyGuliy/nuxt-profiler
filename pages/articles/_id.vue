@@ -79,9 +79,7 @@ export default {
       return {
         data: await fetchArticleByID(route.params.id)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Article Information`
@@ -95,9 +93,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     addTomMyList(id) {
       try {
@@ -107,9 +103,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

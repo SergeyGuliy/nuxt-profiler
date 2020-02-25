@@ -115,9 +115,7 @@ export default {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   methods: {
     async save() {

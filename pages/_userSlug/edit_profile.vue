@@ -379,9 +379,7 @@ export default {
         work: Object.assign({}, context.store.getters.user.userInfo.work),
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   methods: {
     async submitBecomeAdmin() {
@@ -403,9 +401,7 @@ export default {
             timeout: 3000
           })
         }
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     async submitBecomeUser() {
       try {
@@ -426,9 +422,7 @@ export default {
             timeout: 3000
           })
         }
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     async submitUpdateInfo() {
       try {
@@ -456,9 +450,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     save(date) {
       this.$refs.menu.save(date)

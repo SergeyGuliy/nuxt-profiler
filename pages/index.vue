@@ -346,9 +346,7 @@ export default {
         allRepositories,
         allArticles
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 }
 </script>

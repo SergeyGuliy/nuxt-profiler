@@ -126,7 +126,6 @@ export default {
           continue
         }
       }
-      console.log(publicListList)
       return publicListList
     },
     listFiltered() {
@@ -188,9 +187,7 @@ export default {
         publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   methods: {
     deleteFromMyList(id) {
@@ -201,9 +198,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     addTomMyList(id) {
       try {
@@ -213,9 +208,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

@@ -355,7 +355,6 @@ export default {
         allArticles
       }
     } catch (e) {
-      console.log(e)
       throw Error
     }
   },
@@ -371,22 +370,17 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     addTomMyList(id) {
       try {
-        console.log(id)
         this.$store.commit('pushFriend', id)
         this.$store.dispatch('updateUserInfo')
         this.$dialog.message.success(`You add friend`, {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

@@ -103,9 +103,7 @@ export default {
           password: this.password
         })
         this.$router.push('/')
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

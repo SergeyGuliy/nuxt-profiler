@@ -87,20 +87,14 @@ export default {
     try {
       const data = await fetchRepositoryByID(route.params.id)
       const gitApiInfo = (await app.$axios.get(data.gitApiKey)).data
-      console.log(gitApiInfo)
       return {
         data,
         gitApiInfo
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Repository Information`
-  },
-  mounted() {
-    console.log(this.data)
   },
   methods: {
     deleteFromMyList(id) {
@@ -111,9 +105,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
     addTomMyList(id) {
       try {
@@ -123,9 +115,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

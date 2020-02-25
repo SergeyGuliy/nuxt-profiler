@@ -91,9 +91,7 @@ export default {
         this.email = ''
         this.password = ''
         this.$router.push('/')
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

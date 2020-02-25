@@ -146,9 +146,7 @@ export default {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Create Repository`

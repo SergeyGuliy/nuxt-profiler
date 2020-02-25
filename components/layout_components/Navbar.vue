@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import NavLink from '../misc/NavLink'
 export default {
   name: 'Navbar',
@@ -61,11 +61,7 @@ export default {
       try {
         await firebase.auth().signOut()
         this.$store.commit('cleanUser')
-      } catch (e) {
-        await this.$dialog.warning({
-          text: e
-        })
-      }
+      } catch (e) {}
     }
   }
 }

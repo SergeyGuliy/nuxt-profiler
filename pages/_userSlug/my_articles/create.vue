@@ -130,9 +130,7 @@ export default {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Create Article`
@@ -158,9 +156,7 @@ export default {
           timeout: 3000
         })
         this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

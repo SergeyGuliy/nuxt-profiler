@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import Navbar from '../components/layout_components/Navbar'
 // import Sidebar from '../components/layout_components/Sidebar'
 import Body from '../components/layout_components/Body'

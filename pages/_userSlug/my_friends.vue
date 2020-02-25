@@ -104,9 +104,7 @@ export default {
       return {
         allUsers: await fetchAllUsers()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - User Friends`
@@ -120,9 +118,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

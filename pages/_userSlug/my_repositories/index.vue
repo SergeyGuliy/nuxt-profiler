@@ -187,9 +187,7 @@ export default {
         allRepositories: await fetchAllRepositories(),
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   methods: {
     deleteFromMyList(id) {
@@ -200,9 +198,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }
