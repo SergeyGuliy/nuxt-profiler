@@ -188,6 +188,10 @@ export default {
       try {
         this.$store.commit('deleteArticle', id)
         this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.error(`You delete article`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }
@@ -196,6 +200,10 @@ export default {
       try {
         this.$store.commit('pushArticle', id)
         this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`You add article`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }
