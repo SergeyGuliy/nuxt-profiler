@@ -54,39 +54,35 @@
             <template #table-body>
               <tr v-for="item in listFiltered" :key="item.id">
                 <td>
-                  {{ item.name }}
+                  <TableLink :link="`/articles/${item.id}`" :text="item.name" />
                 </td>
                 <td>
-                  <v-btn @click="$router.push(`/users/${item.id}`)"
-                    >{{ item.creatorName }}
-                    <v-icon color="green">mdi-face-profile</v-icon></v-btn
-                  >
+                  <TableLink
+                    :link="`/users/${item.creatorId}`"
+                    :text="item.creatorName"
+                  />
                 </td>
-                <td>{{ item.language }}</td>
-                <td>{{ item.technology }}</td>
                 <td>
-                  <v-btn
-                    @click="$router.push(`/articles/${item.id}`)"
-                    icon
-                    color="green"
-                    ><v-icon>mdi-book</v-icon></v-btn
-                  >
-                  <v-btn
+                  <TableText :text="item.language" />
+                </td>
+                <td>
+                  <TableText :text="item.technology" />
+                </td>
+                <td>
+                  <TableIcon
                     v-if="!$store.getters.user.lists.articles.includes(item.id)"
-                    @click="addTomMyList(item.id)"
-                    icon
+                    :item="item.id"
+                    :action="addTomMyList"
                     color="info"
-                    ><v-icon>mdi-plus-circle</v-icon></v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      $store.getters.user.lists.articles.includes(item.id)
-                    "
-                    @click="deleteFromMyList(item.id)"
-                    icon
+                    icon="mdi-plus-circle"
+                  />
+                  <TableIcon
+                    v-else
+                    :item="item.id"
+                    :action="deleteFromMyList"
                     color="warning"
-                    ><v-icon>mdi-minus-circle</v-icon></v-btn
-                  >
+                    icon="mdi-minus-circle"
+                  />
                 </td>
               </tr>
             </template>
