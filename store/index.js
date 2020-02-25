@@ -121,6 +121,9 @@ export const mutations = {
   becomeAdmin(state) {
     state.user.isAdmin = true
   },
+  unBecomeAdmin(state) {
+    state.user.isAdmin = false
+  },
   pushArticle(state, id) {
     state.user.lists.articles.push(id)
   },

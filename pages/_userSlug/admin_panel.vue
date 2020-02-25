@@ -20,7 +20,7 @@
               :disabled="!newLanguage || loading"
               :loading="loading"
               block
-              >ADD</v-btn
+              >ADD language</v-btn
             >
             <v-list>
               <v-list-item
@@ -46,7 +46,11 @@
             <v-text-field
               v-model="newTechnology"
               @keypress.enter="addTechnology"
-              label="Technologie"
+              :label="
+                languageSelected
+                  ? `Technologie for ${languageSelected.name}`
+                  : `Technologie`
+              "
               outlined
             />
             <v-btn
@@ -54,7 +58,7 @@
               @click="addTechnology"
               :loading="loading"
               block
-              >ADD</v-btn
+              >ADD technology</v-btn
             >
             <v-list v-if="languageSelected">
               <v-list-item
@@ -88,6 +92,9 @@ export default {
   name: 'MyAdminPanel',
   head: {
     title: `Profiler - Admin Panel`
+  },
+  validate({ store }) {
+    return store.getters.user.isAdmin
   },
   data() {
     return {
@@ -127,12 +134,23 @@ export default {
       this.languageSelected = item
     },
     addLanguage() {
-      if (!this.newLanguage) {
+      if (this.languages[this.newLanguage]) {
+        this.$dialog.message.error(
+          `There is already ${this.newLanguage} in list of languages`,
+          {
+            position: 'top-right',
+            timeout: 3000
+          }
+        )
         return
       }
       this.$set(this.languages, this.newLanguage, {
         name: this.newLanguage,
         technologies: []
+      })
+      this.$dialog.message.success(`Created new language ${this.newLanguage}`, {
+        position: 'top-right',
+        timeout: 3000
       })
       this.newLanguage = ''
     },
@@ -141,18 +159,40 @@ export default {
       if (this.languageSelected === language.name) {
         this.languageSelected = ''
       }
+      this.$dialog.message.error(`Deleted language: ${language.name}`, {
+        position: 'top-right',
+        timeout: 3000
+      })
       this.$delete(this.languages, language.name)
     },
     addTechnology() {
-      if (!this.languageSelected) {
+      if (this.languageSelected.technologies.includes(this.newTechnology)) {
+        this.$dialog.message.error(
+          `There is already ${this.newTechnology} in list of technologies`,
+          {
+            position: 'top-right',
+            timeout: 3000
+          }
+        )
         return
       }
       this.languageSelected.technologies.push(this.newTechnology)
+      this.$dialog.message.success(
+        `Created new technology ${this.newTechnology}`,
+        {
+          position: 'top-right',
+          timeout: 3000
+        }
+      )
       this.newTechnology = ''
     },
     deleteTechnology(technology) {
       const id = this.languageSelected.technologies.findIndex((index) => {
         return index === technology
+      })
+      this.$dialog.message.error(`Deleted technology: ${technology}`, {
+        position: 'top-right',
+        timeout: 3000
       })
       this.languageSelected.technologies.splice(id, 1)
     }
