@@ -126,6 +126,10 @@ export default {
       try {
         this.$store.commit('deleteFriend', id)
         this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.error(`You delete friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }
@@ -135,6 +139,10 @@ export default {
         console.log(id)
         this.$store.commit('pushFriend', id)
         this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`You add friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       } catch (e) {
         console.log(e)
       }

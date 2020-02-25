@@ -13,7 +13,18 @@
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #actions> </template>
+        <template #actions>
+          <v-btn
+            @click="addTomMyList(data.id)"
+            v-if="!$store.getters.user.lists.friends.includes(data.id)"
+            class="mx-1"
+            color="green"
+            >Add to my list
+          </v-btn>
+          <v-btn @click="deleteFromMyList()" v-else class="mx-1" color="red"
+            >remove from my list
+          </v-btn>
+        </template>
       </PageHeader>
     </template>
     <template #body>
@@ -350,6 +361,33 @@ export default {
   },
   head: {
     title: `Profiler - User Information`
+  },
+  methods: {
+    deleteFromMyList(id) {
+      try {
+        this.$store.commit('deleteFriend', id)
+        this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.error(`You delete friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    addTomMyList(id) {
+      try {
+        console.log(id)
+        this.$store.commit('pushFriend', id)
+        this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`You add friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
   }
 }
 </script>
