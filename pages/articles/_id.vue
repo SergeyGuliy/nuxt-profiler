@@ -6,6 +6,7 @@
 import { fetchArticleByID } from '~/functions/articles'
 export default {
   name: 'Id',
+  transition: 'bounce',
   async asyncData(route) {
     return {
       data: await fetchArticleByID(route.params.id)

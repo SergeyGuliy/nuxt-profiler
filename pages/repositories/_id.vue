@@ -5,6 +5,7 @@
 <script>
 export default {
   name: 'Id',
+  transition: 'bounce',
   head: {
     title: `Profiler - Repository Information`
   }

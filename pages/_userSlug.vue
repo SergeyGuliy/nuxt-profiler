@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  name: 'UserSlug'
+  name: 'UserSlug',
+  transition: 'bounce'
 }
 </script>
 

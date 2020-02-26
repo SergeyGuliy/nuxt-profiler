@@ -69,6 +69,7 @@
 import { fetchAllArticles, fetchPublicArticlesIDS } from '~/functions/articles'
 export default {
   name: 'Index',
+  transition: 'bounce',
   computed: {
     publicList() {
       const publicListList = []

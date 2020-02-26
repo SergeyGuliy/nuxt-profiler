@@ -64,6 +64,7 @@
 import { fetchAllUsers } from '~/functions/users'
 export default {
   name: 'Index',
+  transition: 'bounce',
   computed: {
     list() {
       const list = []
