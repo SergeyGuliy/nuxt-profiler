@@ -64,6 +64,8 @@ export const actions = {
             repositories: ['empty']
           }
         })
+      this.$cookies.set('access_token', uid)
+      await dispatch('fetchUserInfo', uid)
     } catch (e) {}
   },
   async logIn({ commit, dispatch }, data) {
@@ -71,11 +73,16 @@ export const actions = {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
+      const uid = await (await firebase.auth().currentUser).uid
+      this.$cookies.set('access_token', uid)
+      await dispatch('fetchUserInfo', uid)
     } catch (e) {}
   },
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
+      commit('cleanUser')
+      this.$cookies.remove('access_token')
       commit('cleanUser')
     } catch (e) {}
   },

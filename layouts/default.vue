@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
 import Navbar from '../components/layout_components/Navbar'
 // import Sidebar from '../components/layout_components/Sidebar'
 import Body from '../components/layout_components/Body'
@@ -21,18 +20,7 @@ export default {
       sidebarStatus: false
     }
   },
-  middleware: 'isNotLoggedIn',
-  async mounted() {
-    await firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        const token = await (await firebase.auth().currentUser).uid
-        this.$cookies.set('access_token', token)
-      } else {
-        this.$cookies.remove('access_token')
-      }
-    })
-  }
+  transition: 'bounce',
+  middleware: 'isNotLoggedIn'
 }
 </script>
-
-<style scoped lang="sass"></style>

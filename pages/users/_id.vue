@@ -271,6 +271,7 @@ import { fetchAllRepositories } from '~/functions/repositories'
 
 export default {
   name: 'Id',
+  transition: 'bounce',
   computed: {
     workLanguages() {
       const workLanguages = []

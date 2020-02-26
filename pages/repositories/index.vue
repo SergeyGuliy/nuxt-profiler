@@ -107,6 +107,7 @@ import {
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Index',
+  transition: 'bounce',
   data() {
     return {
       language: null,

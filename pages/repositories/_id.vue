@@ -83,6 +83,7 @@
 import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
+  transition: 'bounce',
   async asyncData({ route, app }) {
     try {
       const data = await fetchRepositoryByID(route.params.id)

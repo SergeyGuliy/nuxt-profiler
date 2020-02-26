@@ -75,6 +75,7 @@
 import { fetchAllUsers } from '~/functions/users'
 export default {
   name: 'Index',
+  transition: 'bounce',
   data() {
     return {
       searchKey: null

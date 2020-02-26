@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import 'firebase/auth'
 export default {
   name: 'Registration',
   transition: 'bounce',
