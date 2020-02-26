@@ -1,7 +1,7 @@
 <template>
   <v-card :dark="$vuetify.theme.dark" id="Card">
     <v-card-subtitle>
-      <slot></slot>
+      <slot />
     </v-card-subtitle>
   </v-card>
 </template>

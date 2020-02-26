@@ -130,9 +130,7 @@ export default {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Create Article`
@@ -153,10 +151,12 @@ export default {
         const id = await createArticle(data)
         this.$store.commit('pushArticle', id)
         await this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`Created Article: ${this.name}`, {
+          position: 'top-right',
+          timeout: 3000
+        })
         this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     }
   }
 }

@@ -16,9 +16,7 @@ async function updateCategories(categories) {
       .database()
       .ref(`/systemData/categories/`)
       .set(categories)
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 }
 
 export { fetchCategories, updateCategories }

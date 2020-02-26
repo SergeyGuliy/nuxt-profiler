@@ -1,13 +1,11 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 export const strict = false
 export const actions = {
   async nuxtServerInit({ dispatch }, { app }) {
     try {
       const cookie = app.$cookies.get('access_token')
       await dispatch('fetchUserInfo', cookie)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   async fetchUserInfo({ commit }, uid) {
     try {
@@ -18,9 +16,7 @@ export const actions = {
           .once('value')
       ).val()
       commit('setUser', userInfo)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   async createNewUser({ commit, dispatch }, data) {
     try {
@@ -58,8 +54,8 @@ export const actions = {
               work_status: '',
               work_type: '',
               work_position: '',
-              work_languages: '',
-              work_technologies: ''
+              work_languages: ['empty'],
+              work_technologies: ['empty']
             }
           },
           lists: {
@@ -68,29 +64,20 @@ export const actions = {
             repositories: ['empty']
           }
         })
-      await dispatch('fetchUserInfo', uid)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   async logIn({ commit, dispatch }, data) {
     try {
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
-      const uid = (await firebase.auth().currentUser).uid
-      await dispatch('fetchUserInfo', uid)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
       commit('cleanUser')
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   async updateUserInfo({ getters }) {
     try {
@@ -99,10 +86,7 @@ export const actions = {
         .database()
         .ref(`/1_users/${uid}`)
         .update(getters.user)
-    } catch (e) {
-      console.log(e)
-      console.log('Failed to update user info')
-    }
+    } catch (e) {}
   }
 }
 
@@ -123,6 +107,9 @@ export const mutations = {
   },
   becomeAdmin(state) {
     state.user.isAdmin = true
+  },
+  unBecomeAdmin(state) {
+    state.user.isAdmin = false
   },
   pushArticle(state, id) {
     state.user.lists.articles.push(id)

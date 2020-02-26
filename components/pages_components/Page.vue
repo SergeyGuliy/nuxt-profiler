@@ -5,7 +5,7 @@
     </v-card-title>
     <v-divider />
     <v-card-subtitle>
-      <slot name="body">ERROR!!!!</slot>
+      <slot name="body" />
     </v-card-subtitle>
   </v-card>
 </template>

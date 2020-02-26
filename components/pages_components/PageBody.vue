@@ -19,13 +19,10 @@ export default {
   computed: {
     columnClass() {
       if (this.col === '1') {
-        console.log('grid-column-1')
         return 'grid-column-1'
       } else if (this.col === '2') {
-        console.log('grid-column-2')
         return 'grid-column-2'
       } else if (this.col === '3') {
-        console.log('grid-column-3')
         return 'grid-column-3'
       } else {
         return 'grid-column-1'

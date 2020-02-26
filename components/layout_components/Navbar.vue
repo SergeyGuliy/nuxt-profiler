@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import firebase from 'firebase/app'
 import NavLink from '../misc/NavLink'
 export default {
   name: 'Navbar',
@@ -56,13 +57,9 @@ export default {
   methods: {
     async logOut() {
       try {
-        await this.$store.dispatch('logOut')
-        this.$router.push('/login')
-      } catch (e) {
-        await this.$dialog.warning({
-          text: e
-        })
-      }
+        await firebase.auth().signOut()
+        this.$store.commit('cleanUser')
+      } catch (e) {}
     }
   }
 }

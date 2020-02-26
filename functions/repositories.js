@@ -31,9 +31,7 @@ async function createRepository(data) {
         .set(item)
     }
     return push.key
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 }
 async function fetchRepositoryByID(id) {
   return (

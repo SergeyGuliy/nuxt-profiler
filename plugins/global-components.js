@@ -12,6 +12,9 @@ import BtnRouter from '~/components/misc/BtnRouter'
 import BtnOpenBlank from '~/components/misc/BtnOpenBlank'
 import Header from '~/components/misc/Header'
 import LineTitle from '~/components/misc/LineTitle'
+import TableLink from '~/components/misc/TableLink'
+import TableText from '~/components/misc/TableText'
+import TableIcon from '~/components/misc/TableIcon'
 const components = {
   Page,
   PageHeader,
@@ -25,7 +28,10 @@ const components = {
   BtnRouter,
   BtnOpenBlank,
   Header,
-  LineTitle
+  LineTitle,
+  TableLink,
+  TableText,
+  TableIcon
 }
 
 Object.keys(components).forEach((key) => {

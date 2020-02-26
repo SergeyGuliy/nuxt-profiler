@@ -146,9 +146,7 @@ export default {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   head: {
     title: `Profiler - Create Repository`
@@ -159,7 +157,6 @@ export default {
         const gitApiKey = `https://api.github.com/repos/${
           this.gitHub.split(`https://github.com/`)[1]
         }`
-        alert(gitApiKey)
         await this.$axios.get(`${gitApiKey}`)
         const data = {
           name: this.name,
@@ -176,12 +173,22 @@ export default {
         const id = await createRepository(data)
         this.$store.commit('pushRepository', id)
         await this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`Created Repository: ${this.name}`, {
+          position: 'top-right',
+          timeout: 3000
+        })
         this.$router.push(
           `/${this.$store.getters.user.profile}/my_repositories`
         )
       } catch (e) {
         if (e.message === 'Request failed with status code 404') {
-          alert('Cannot access to git repository')
+          this.$dialog.message.error(
+            `Error while trying to connect to repository. Check link to repository.`,
+            {
+              position: 'top-right',
+              timeout: 3000
+            }
+          )
         }
       }
     }

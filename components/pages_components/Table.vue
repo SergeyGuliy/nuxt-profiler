@@ -27,5 +27,8 @@ export default {
     padding: 5px 0
     height: 100%
     text-align: center
-    border-bottom: none
+  .theme--light tr:hover
+    background-color: #ffffff
+  .theme--dark tr:hover
+    background-color: #1e1e1e
 </style>

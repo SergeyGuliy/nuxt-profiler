@@ -13,7 +13,18 @@
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #actions> </template>
+        <template #actions>
+          <v-btn
+            @click="addTomMyList(data.id)"
+            v-if="!$store.getters.user.lists.friends.includes(data.id)"
+            class="mx-1"
+            color="green"
+            >Add to my list
+          </v-btn>
+          <v-btn @click="deleteFromMyList()" v-else class="mx-1" color="red"
+            >remove from my list
+          </v-btn>
+        </template>
       </PageHeader>
     </template>
     <template #body>
@@ -42,7 +53,7 @@
               <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
-              <LineTitle>Описание:</LineTitle>
+              <LineTitle>About:</LineTitle>
             </CardContainer>
             <CardContainer>
               <p v-if="data.userInfo.info.about">
@@ -162,27 +173,25 @@
             </CardContainer>
             <CardContainer>
               <LineTitle>Working Languages:</LineTitle>
-              <v-chip-group column>
-                <v-chip
-                  v-for="item in data.userInfo.work.work_languages"
-                  :key="item"
-                  label
-                  small
-                  >{{ item }}</v-chip
-                >
+              <v-chip-group v-if="!workLanguages.length == 0" column>
+                <v-chip v-for="item in workLanguages" :key="item" label small>{{
+                  item
+                }}</v-chip>
               </v-chip-group>
+              <span v-else>Not indicated</span>
             </CardContainer>
             <CardContainer>
               <LineTitle>Working Languages:</LineTitle>
-              <v-chip-group column>
+              <v-chip-group v-if="!workTechnologies.length == 0" column>
                 <v-chip
-                  v-for="item in data.userInfo.work.work_technologies"
+                  v-for="item in workTechnologies"
                   :key="item"
                   label
                   small
                   >{{ item }}</v-chip
                 >
               </v-chip-group>
+              <span v-else>Not indicated</span>
             </CardContainer>
           </Card>
         </template>
@@ -262,9 +271,117 @@ import { fetchAllRepositories } from '~/functions/repositories'
 
 export default {
   name: 'Id',
-  transition: 'bounce',
+  computed: {
+    workLanguages() {
+      const workLanguages = []
+      this.data.userInfo.work.work_languages.forEach((item) => {
+        if (item !== 'empty') {
+          workLanguages.push(item)
+        }
+      })
+      return workLanguages
+    },
+    workTechnologies() {
+      const workTechnologies = []
+      this.data.userInfo.work.work_technologies.forEach((item) => {
+        if (item !== 'empty') {
+          workTechnologies.push(item)
+        }
+      })
+      return workTechnologies
+    },
+    userArticles() {
+      const myListIDS = this.data.lists.articles
+      const myList = []
+      for (const i of myListIDS) {
+        try {
+          const art = this.allArticles[i]
+          art.id = i
+          myList.push(art)
+        } catch (e) {
+          continue
+        }
+      }
+      return myList
+    },
+    userRepositories() {
+      const myListIDS = this.data.lists.repositories
+      const myList = []
+      for (const i of myListIDS) {
+        try {
+          const rep = this.allRepositories[i]
+          rep.id = i
+          myList.push(rep)
+        } catch (e) {
+          continue
+        }
+      }
+      return myList
+    },
+    userFriends() {
+      const myListIDS = this.data.lists.friends
+      const myList = []
+      for (const i of myListIDS) {
+        try {
+          const usr = this.allUsers[i]
+          usr.id = i
+          myList.push(usr)
+        } catch (e) {
+          continue
+        }
+      }
+      return myList
+    }
+  },
+  async asyncData({ route, app }) {
+    try {
+      const data = await fetchUserByID(route.params.id)
+      const allUsers = await fetchAllUsers()
+      const allRepositories = await fetchAllRepositories()
+      const allArticles = await fetchAllArticles()
+      if (data.userInfo.contacts.gitApi) {
+        return {
+          data,
+          allUsers,
+          allRepositories,
+          allArticles,
+          gitApiInfo: (await app.$axios.get(data.userInfo.contacts.gitApi)).data
+        }
+      }
+      return {
+        data,
+        allUsers,
+        allRepositories,
+        allArticles
+      }
+    } catch (e) {
+      throw Error
+    }
+  },
   head: {
     title: `Profiler - User Information`
+  },
+  methods: {
+    deleteFromMyList(id) {
+      try {
+        this.$store.commit('deleteFriend', id)
+        this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.error(`You delete friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {}
+    },
+    addTomMyList(id) {
+      try {
+        this.$store.commit('pushFriend', id)
+        this.$store.dispatch('updateUserInfo')
+        this.$dialog.message.success(`You add friend`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {}
+    }
   }
 }
 </script>

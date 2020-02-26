@@ -4,35 +4,23 @@
       <PageHeader>
         <template #title>Edite profile</template>
         <template #actions>
-          <v-dialog v-model="dialog" persistent max-width="290">
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" v-if="!$store.getters.user.isAdmin" mx-1
-                >Become admin</v-btn
-              >
-            </template>
-            <v-card>
-              <v-card-title class="headline"
-                >Use Google's location service?</v-card-title
-              >
-              <v-card-text
-                >Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.</v-card-text
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="dialog = false">Disagree</v-btn>
-                <v-btn
-                  @click="submitBecomeAdmin"
-                  :loading="loading"
-                  :disabled="loading"
-                  color="primary"
-                  >Agree</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-btn @click="submitUpdateInfo" :loading="loadingSave" class="mx-1"
+          <v-btn
+            v-if="!$store.getters.user.isAdmin"
+            @click="submitBecomeAdmin"
+            mx-1
+            color="green"
+          >
+            Become admin
+          </v-btn>
+          <v-btn
+            v-if="$store.getters.user.isAdmin"
+            @click="submitBecomeUser"
+            mx-1
+            color="green"
+          >
+            Stop to be admin
+          </v-btn>
+          <v-btn @click="submitUpdateInfo" class="mx-1" color="green"
             >Save</v-btn
           >
         </template>
@@ -236,9 +224,6 @@ export default {
   },
   data() {
     return {
-      dialog: false,
-      loading: false,
-      loadingSave: false,
       menu: false,
       git_types: ['GitHub', 'GitLab'],
       work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
@@ -310,6 +295,22 @@ export default {
     }
   },
   computed: {
+    // user() {
+    //   return this.$store.getters.user.userInfo
+    // },
+    // formIsChanged() {
+    //   return (
+    //     this.user.info.first_name === this.info.first_name &&
+    //     this.user.info.last_name === this.info.last_name &&
+    //     this.user.info.about === this.info.about &&
+    //     this.user.info.location === this.info.location &&
+    //     this.user.work.work_languages === this.work.work_languages &&
+    //     this.user.work.work_position === this.work.work_position &&
+    //     this.user.work.work_status === this.work.work_status &&
+    //     this.user.work.work_technologies === this.work.work_technologies &&
+    //     this.user.work.work_type === this.work.work_type
+    //   )
+    // },
     technologies() {
       const technolies = []
       for (const i of this.work.work_languages) {
@@ -378,20 +379,50 @@ export default {
         work: Object.assign({}, context.store.getters.user.userInfo.work),
         languages: await fetchCategories()
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   },
   methods: {
     async submitBecomeAdmin() {
       try {
-        this.loading = true
-        this.$store.commit('becomeAdmin')
-        await this.$store.dispatch('updateUserInfo')
-        this.dialog = false
-      } catch (e) {
-        console.log(e)
-      }
+        const res = await this.$dialog.confirm({
+          text: 'Do you really want to become Admin?',
+          title: 'Warning'
+        })
+        if (res) {
+          this.$store.commit('becomeAdmin')
+          await this.$store.dispatch('updateUserInfo')
+          this.$dialog.message.success(`You had become Admin`, {
+            position: 'top-right',
+            timeout: 3000
+          })
+        } else {
+          this.$dialog.message.error(`You had refuse to become Admin`, {
+            position: 'top-right',
+            timeout: 3000
+          })
+        }
+      } catch (e) {}
+    },
+    async submitBecomeUser() {
+      try {
+        const res = await this.$dialog.confirm({
+          text: 'Do you really want to become casual User?',
+          title: 'Warning'
+        })
+        if (res) {
+          this.$store.commit('unBecomeAdmin')
+          await this.$store.dispatch('updateUserInfo')
+          this.$dialog.message.success(`You had become casual user`, {
+            position: 'top-right',
+            timeout: 3000
+          })
+        } else {
+          this.$dialog.message.error(`You had refuse becoming casual user`, {
+            position: 'top-right',
+            timeout: 3000
+          })
+        }
+      } catch (e) {}
     },
     async submitUpdateInfo() {
       try {
@@ -409,16 +440,17 @@ export default {
         } else {
           this.contacts.gitApi = ''
         }
-        console.log(this.contacts.gitApi)
         this.$store.commit('updateUserInfo', {
           contacts: this.contacts,
           info: this.info,
           work: this.work
         })
         await this.$store.dispatch('updateUserInfo')
-      } catch (e) {
-        console.log(e)
-      }
+        this.$dialog.message.success(`You had update your info`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {}
     },
     save(date) {
       this.$refs.menu.save(date)
