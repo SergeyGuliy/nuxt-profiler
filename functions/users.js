@@ -15,7 +15,7 @@ async function fetchUserByID(id) {
     (
       await firebase
         .database()
-        .ref(`/2_articles/${id}/`)
+        .ref(`/1_users/${id}/`)
         .once('value')
     ).val() || {}
   )

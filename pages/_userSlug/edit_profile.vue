@@ -240,8 +240,6 @@ export default {
       loading: false,
       loadingSave: false,
       menu: false,
-      phone_code: null,
-      git_type: null,
       git_types: ['GitHub', 'GitLab'],
       work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
       work_type: ['Office worker', 'Freelancer'],
@@ -370,11 +368,18 @@ export default {
     }
   },
   async asyncData(context) {
-    return {
-      contacts: Object.assign({}, context.store.getters.user.userInfo.contacts),
-      info: Object.assign({}, context.store.getters.user.userInfo.info),
-      work: Object.assign({}, context.store.getters.user.userInfo.work),
-      languages: await fetchCategories()
+    try {
+      return {
+        contacts: Object.assign(
+          {},
+          context.store.getters.user.userInfo.contacts
+        ),
+        info: Object.assign({}, context.store.getters.user.userInfo.info),
+        work: Object.assign({}, context.store.getters.user.userInfo.work),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {
@@ -390,12 +395,22 @@ export default {
     },
     async submitUpdateInfo() {
       try {
+        if (this.contacts.git_type === 'GitHub') {
+          try {
+            const gitApiKey = `https://api.github.com/users/${
+              this.contacts.github.split('https://github.com/')[1]
+            }`
+            const checkingGitApi = (await this.$axios.get(gitApiKey)).data
+            console.log(checkingGitApi)
+            this.contacts.gitApi = gitApiKey
+          } catch (e) {
+            this.contacts.gitApi = ''
+          }
+        } else {
+          this.contacts.gitApi = ''
+        }
+        console.log(this.contacts.gitApi)
         this.$store.commit('updateUserInfo', {
-          contacts: this.contacts,
-          info: this.info,
-          work: this.work
-        })
-        console.log({
           contacts: this.contacts,
           info: this.info,
           work: this.work
@@ -404,7 +419,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-      // this.$router.push('/')
     },
     save(date) {
       this.$refs.menu.save(date)

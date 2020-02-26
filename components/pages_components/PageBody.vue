@@ -39,8 +39,8 @@ export default {
 #PageBody
   width: 100%
   display: grid
-  grid-column-gap: 5px
-  grid-row-gap: 5px
+  grid-column-gap: 10px
+  grid-row-gap: 10px
   .c-1
     grid-area: col-1
   .c-2
@@ -52,18 +52,20 @@ export default {
 
 #PageBody.grid-column-3
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr 1fr
-  grid-template-areas: 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3' 'col-1 col-1 col-2 col-2 col-3 col-3'
+  grid-template-rows: 1fr
+  grid-template-areas: 'col-1 col-1 col-2 col-2 col-3 col-3'
   @media screen and (max-width: 1150px)
-    grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2'  'col-1 col-1 col-1 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
+    grid-template-rows: 1fr 1fr
+    grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
   @media screen and (max-width: 740px)
+    grid-template-rows: 1fr 1fr 1fr
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2' 'col-3 col-3 col-3 col-3 col-3 col-3'
 
 #PageBody.grid-column-2
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
   grid-template-rows: 1fr 1fr 1fr
   grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2' 'col-1 col-1 col-1 col-2 col-2 col-2'
-  @media screen and (max-width: 740px)
+  @media screen and (max-width: 850px)
     grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2'
 
 #PageBody.grid-column-1

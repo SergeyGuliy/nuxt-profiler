@@ -82,8 +82,12 @@ export default {
     title: `Profiler - User Articles`
   },
   async asyncData() {
-    return {
-      allArticles: await fetchAllArticles()
+    try {
+      return {
+        allArticles: await fetchAllArticles()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {
@@ -98,9 +102,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#myArticles
-  td, th
-    text-align: center
-</style>

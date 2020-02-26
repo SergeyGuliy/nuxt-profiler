@@ -2,7 +2,7 @@
   <Page id="allArticles">
     <template #head>
       <PageHeader>
-        <template #title>Edit Profile</template>
+        <template #title>List of public Articles</template>
         <template #actions>
           <v-btn class="mx-1">Save</v-btn>
         </template>
@@ -23,7 +23,9 @@
             </template>
             <template #table-body>
               <tr v-for="item in publicList" :key="item.id">
-                <td>{{ item.name }}</td>
+                <td>
+                  {{ item.name }}
+                </td>
                 <td>
                   <v-btn @click="$router.push(`/users/${item.id}`)"
                     >{{ item.creatorName }}
@@ -89,9 +91,13 @@ export default {
     title: `Profiler - Public Articles`
   },
   async asyncData() {
-    return {
-      allArticles: await fetchAllArticles(),
-      publicArticlesIDS: await fetchPublicArticlesIDS()
+    try {
+      return {
+        allArticles: await fetchAllArticles(),
+        publicArticlesIDS: await fetchPublicArticlesIDS()
+      }
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {
@@ -114,9 +120,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#allArticles
-  td, th
-    text-align: center
-</style>
