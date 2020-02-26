@@ -21,6 +21,7 @@ export default {
       sidebarStatus: false
     }
   },
+  middleware: 'isNotLoggedIn',
   async mounted() {
     await firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
