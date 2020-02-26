@@ -21,6 +21,7 @@ export default {
   display: flex
   justify-content: space-between
   align-items: center
+  min-height: 44px
   flex-wrap: wrap
   .flex-left
     display: flex
