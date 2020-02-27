@@ -24,7 +24,7 @@
               v-model="name"
               :rules="rules.name"
               :counter="25"
-              label="Article name"
+              label="Repository name"
               outlined
             />
             <v-text-field
@@ -90,7 +90,7 @@ export default {
       gitHub: '',
       language: '',
       technology: '',
-      isPublic: false,
+      isPublic: true,
       rules: {
         name: [
           (v) => !!v || 'Name is required',

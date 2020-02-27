@@ -16,6 +16,7 @@ export default {
 #TableLink
   padding: 0 5px
   min-width: 90%
+  text-transform: none
   span
     @media screen and (max-width: 700px)
       font-size: 12px
@@ -24,6 +25,6 @@ export default {
       font-size: 9px
       letter-spacing: 0.1px
     @media screen and (max-width: 450px)
-      font-size: 8.5px
+      font-size: 7.5px
       letter-spacing: 0.1px
 </style>

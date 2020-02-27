@@ -54,7 +54,7 @@ export default {
     object-fit: cover
     width: 100%
     height: 100%
-    max-height: 300px
+    max-height: 350px
   .git__actions
     height: 30px
     display: flex

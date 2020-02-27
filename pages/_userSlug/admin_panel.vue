@@ -12,12 +12,14 @@
             <v-text-field
               v-model="newLanguage"
               @keypress.enter="addLanguage"
+              :counter="10"
+              :rules="rules.lang"
               label="Language"
               outlined
             />
             <v-btn
               @click="addLanguage"
-              :disabled="!newLanguage || loading"
+              :disabled="!(newLanguage.length >= 2 && newLanguage.length <= 10)"
               :loading="loading"
               block
               >ADD language</v-btn
@@ -46,15 +48,21 @@
             <v-text-field
               v-model="newTechnology"
               @keypress.enter="addTechnology"
+              :counter="10"
+              :rules="rules.tech"
+              :disabled="!languageSelected"
               :label="
                 languageSelected
                   ? `Technologie for ${languageSelected.name}`
-                  : `Technologie`
+                  : `Select language`
               "
               outlined
             />
             <v-btn
-              :disabled="!newTechnology || !languageSelected || loading"
+              :disabled="
+                !(newTechnology.length >= 2 && newTechnology.length <= 10) ||
+                  loading
+              "
               @click="addTechnology"
               :loading="loading"
               block
@@ -98,10 +106,18 @@ export default {
   },
   data() {
     return {
-      newLanguage: null,
-      newTechnology: null,
+      newLanguage: '',
+      newTechnology: '',
       languageSelected: null,
-      loading: false
+      loading: false,
+      rules: {
+        lang: [
+          (v) => v.length <= 10 || 'Language must be less than 10 characters'
+        ],
+        tech: [
+          (v) => v.length <= 10 || 'Technology must be less than 10 characters'
+        ]
+      }
     }
   },
   middleware: 'isNotAdmin',

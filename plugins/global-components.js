@@ -15,6 +15,7 @@ import LineTitle from '~/components/misc/LineTitle'
 import TableLink from '~/components/misc/TableLink'
 import TableText from '~/components/misc/TableText'
 import TableIcon from '~/components/misc/TableIcon'
+import BtnCreate from '~/components/misc/BtnCreate'
 const components = {
   Page,
   PageHeader,
@@ -31,7 +32,8 @@ const components = {
   LineTitle,
   TableLink,
   TableText,
-  TableIcon
+  TableIcon,
+  BtnCreate
 }
 
 Object.keys(components).forEach((key) => {

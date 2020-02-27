@@ -8,17 +8,9 @@
               ? 'List of my articles'
               : "You don't have articles"
           }}
-          <v-btn
-            @click="
-              $router.push(`/${$store.getters.user.profile}/my_articles/create`)
-            "
-            color="green"
-            absolute
-            bottom
-            right
-          >
-            Create
-          </v-btn>
+          <BtnCreate
+            :link="`/${$store.getters.user.profile}/my_articles/create`"
+          />
         </template>
         <template #actions v-if="myList.length > 0">
           <v-select
@@ -137,7 +129,10 @@ export default {
             })
           } else {
             return this.myList.filter((value) => {
-              return value.technology === this.technology
+              return (
+                value.language === this.language &&
+                value.technology === this.technology
+              )
             })
           }
         } else if (this.searchKey) {

@@ -13,7 +13,7 @@ export default {
 
 <style lang="sass">
 #TableText
-  padding: 0 10px
+  padding: 0 3px
   font-size: 14px
   letter-spacing: 0.1px
   @media screen and (max-width: 700px)
@@ -23,6 +23,6 @@ export default {
       font-size: 9px
       letter-spacing: 0.1px
     @media screen and (max-width: 450px)
-      font-size: 8.5px
+      font-size: 7.5px
       letter-spacing: 0.1px
 </style>

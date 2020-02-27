@@ -20,7 +20,7 @@
         <template #c-1>
           <Card>
             <GitInfo
-              v-if="data.userInfo.contacts.gitApiInfo"
+              v-if="data.userInfo.contacts.gitApi"
               :gitApiInfo="gitApiInfo"
               :data="data"
             />
@@ -332,6 +332,9 @@ export default {
       const allUsers = await fetchAllUsers()
       const allRepositories = await fetchAllRepositories()
       const allArticles = await fetchAllArticles()
+      console.log(data)
+      console.log((await app.$axios.get(data.userInfo.contacts.gitApi)).data)
+
       if (data.userInfo.contacts.gitApi) {
         return {
           data,

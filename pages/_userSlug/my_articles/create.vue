@@ -81,7 +81,7 @@ export default {
       cite: '',
       language: '',
       technology: '',
-      isPublic: false,
+      isPublic: true,
       rules: {
         name: [
           (v) => !!v || 'Name is required',

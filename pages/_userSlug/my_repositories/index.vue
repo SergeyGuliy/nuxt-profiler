@@ -8,19 +8,9 @@
               ? 'List of my repositories'
               : "You don't have repositories"
           }}
-          <v-btn
-            @click="
-              $router.push(
-                `/${$store.getters.user.profile}/my_repositories/create`
-              )
-            "
-            color="green"
-            absolute
-            bottom
-            right
-          >
-            Create
-          </v-btn>
+          <BtnCreate
+            :link="`/${$store.getters.user.profile}/my_repositories/create`"
+          />
         </template>
         <template #actions v-if="myList.length > 0">
           <v-select
@@ -142,7 +132,10 @@ export default {
             })
           } else {
             return this.myList.filter((value) => {
-              return value.technology === this.technology
+              return (
+                value.language === this.language &&
+                value.technology === this.technology
+              )
             })
           }
         } else if (this.searchKey) {
