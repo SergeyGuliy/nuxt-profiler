@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'TableText',
-  props: ['text']
+  props: { text: String }
 }
 </script>
 

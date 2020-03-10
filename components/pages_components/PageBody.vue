@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'BodyCardMain3',
-  props: ['col'],
+  props: { col: String },
   computed: {
     columnClass() {
       if (this.col === '1') {

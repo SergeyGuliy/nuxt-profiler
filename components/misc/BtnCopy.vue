@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'BtnCopy',
-  props: ['copyValue'],
+  props: { copyValue: String },
   methods: {
     async copy(copiedText) {
       try {

@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="$router.push(link)" id="TableLink" text>
+  <v-btn id="TableLink" @click="$router.push(link)" text>
     {{ text }}
     <v-icon color="green">{{ icon }}</v-icon>
   </v-btn>
@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'TableLink',
-  props: ['link', 'icon', 'text']
+  props: { link: String, icon: String, text: String }
 }
 </script>
 

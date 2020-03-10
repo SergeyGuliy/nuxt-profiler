@@ -40,7 +40,7 @@
 <script>
 export default {
   name: 'GitInfo',
-  props: ['gitApiInfo', 'data']
+  props: { gitApiInfo: Object, data: Object }
 }
 </script>
 

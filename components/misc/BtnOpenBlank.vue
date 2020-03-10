@@ -8,6 +8,6 @@
 <script>
 export default {
   name: 'BtnOpenBlank',
-  props: ['link', 'text', 'icon']
+  props: { link: String, text: String, icon: String }
 }
 </script>
