@@ -29,6 +29,7 @@
                 v-for="item in languages"
                 :key="item.name"
                 @click="selectLanguage(item)"
+                :class="{ activeLang: item === languageSelected }"
               >
                 <v-list-item-content>
                   <v-list-item-title v-text="item.name" />
@@ -219,4 +220,7 @@ export default {
 #adminPanel
   button.v-btn.v-btn--block
     margin-bottom: 15px
+  .activeLang
+    background-color: #e0e0e0
+    border-radius: 10px
 </style>

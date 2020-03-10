@@ -20,7 +20,11 @@
           >
             Stop to be admin
           </v-btn>
-          <v-btn @click="submitUpdateInfo" class="mx-1" color="green"
+          <v-btn
+            @click="submitUpdateInfo"
+            :disabled="!formIsChanged"
+            class="mx-1"
+            color="green"
             >Save</v-btn
           >
         </template>
@@ -295,22 +299,31 @@ export default {
     }
   },
   computed: {
-    // user() {
-    //   return this.$store.getters.user.userInfo
-    // },
-    // formIsChanged() {
-    //   return (
-    //     this.user.info.first_name === this.info.first_name &&
-    //     this.user.info.last_name === this.info.last_name &&
-    //     this.user.info.about === this.info.about &&
-    //     this.user.info.location === this.info.location &&
-    //     this.user.work.work_languages === this.work.work_languages &&
-    //     this.user.work.work_position === this.work.work_position &&
-    //     this.user.work.work_status === this.work.work_status &&
-    //     this.user.work.work_technologies === this.work.work_technologies &&
-    //     this.user.work.work_type === this.work.work_type
-    //   )
-    // },
+    user() {
+      return this.$store.getters.user.userInfo
+    },
+    formIsChanged() {
+      return (
+        this.user.info.first_name !== this.info.first_name ||
+        this.user.info.last_name !== this.info.last_name ||
+        this.user.info.about !== this.info.about ||
+        this.user.info.location !== this.info.location ||
+        this.user.info.date_of_birth !== this.info.date_of_birth ||
+        this.user.work.work_languages !== this.work.work_languages ||
+        this.user.work.work_position !== this.work.work_position ||
+        this.user.work.work_status.toString() !==
+          this.work.work_status.toString() ||
+        this.user.work.work_technologies.toString() !==
+          this.work.work_technologies.toString() ||
+        this.user.work.work_type.toString() !==
+          this.work.work_type.toString() ||
+        this.user.contacts.phone !== this.contacts.phone ||
+        this.user.contacts.github !== this.contacts.github ||
+        this.user.contacts.site !== this.contacts.site ||
+        this.user.contacts.linkedIn !== this.contacts.linkedIn ||
+        this.user.contacts.facebook !== this.contacts.facebook
+      )
+    },
     technologies() {
       const technolies = []
       for (const i of this.work.work_languages) {
@@ -366,6 +379,9 @@ export default {
     },
     'contacts.git_type'() {
       this.contacts.github = ''
+    },
+    'work.work_languages'() {
+      this.work.work_technologies = ''
     }
   },
   async asyncData(context) {
