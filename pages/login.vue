@@ -33,7 +33,7 @@
                 class="mr-4"
                 block
               >
-                Validate
+                Log in
               </v-btn>
             </v-col>
             <v-col cols="6">

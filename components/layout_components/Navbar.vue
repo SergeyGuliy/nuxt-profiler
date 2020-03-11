@@ -57,7 +57,6 @@ export default {
     async logOut() {
       try {
         await this.$store.dispatch('logOut')
-        this.$router.push('/login')
       } catch (e) {}
     }
   }

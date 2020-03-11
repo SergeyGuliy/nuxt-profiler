@@ -37,13 +37,13 @@
                   <TableLink :link="`/users/${item.id}`" :text="item.profile" />
                 </td>
                 <td>
-                  <TableText :text="item.lists.repositories.length - 1" />
+                  <TableText :text="`${item.lists.repositories.length - 1}`" />
                 </td>
                 <td>
-                  <TableText :text="item.lists.articles.length - 1" />
+                  <TableText :text="`${item.lists.articles.length - 1}`" />
                 </td>
                 <td>
-                  <TableText :text="item.lists.friends.length - 1" />
+                  <TableText :text="`${item.lists.friends.length - 1}`" />
                 </td>
                 <td>
                   <TableIcon

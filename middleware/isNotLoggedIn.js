@@ -1,6 +1,6 @@
-export default function({ store, redirect }) {
+export default function({ $cookies, redirect }) {
   try {
-    if (!store.getters.user || !store.getters.user.id) {
+    if (!$cookies.get('access_token')) {
       return redirect('/login')
     }
   } catch (e) {}

@@ -44,7 +44,7 @@
                 class="mr-4"
                 block
               >
-                Validate
+                Registration
               </v-btn>
             </v-col>
             <v-col cols="6">

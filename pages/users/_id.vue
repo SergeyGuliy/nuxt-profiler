@@ -13,7 +13,7 @@
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #actions>
+        <template #actions v-if="data.id !== $store.getters.user.id">
           <v-btn
             @click="addTomMyList(data.id)"
             v-if="!$store.getters.user.lists.friends.includes(data.id)"
@@ -32,7 +32,7 @@
         <template #c-1>
           <Card>
             <GitInfo
-              v-if="data.userInfo.contacts.gitApiInfo"
+              v-if="data.userInfo.contacts.gitApi"
               :gitApiInfo="gitApiInfo"
               :data="data"
             />

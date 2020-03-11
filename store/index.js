@@ -81,8 +81,8 @@ export const actions = {
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
-      commit('cleanUser')
       this.$cookies.remove('access_token')
+      this.$router.push('/login')
       commit('cleanUser')
     } catch (e) {}
   },

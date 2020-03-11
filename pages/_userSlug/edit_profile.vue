@@ -451,7 +451,13 @@ export default {
             console.log(checkingGitApi)
             this.contacts.gitApi = gitApiKey
           } catch (e) {
+            this.$dialog.message.error(
+              `You had write wrong link to GiHub profile`,
+              { position: 'top-right', timeout: 3000 }
+            )
             this.contacts.gitApi = ''
+            this.contacts.github = ''
+            return
           }
         } else {
           this.contacts.gitApi = ''
