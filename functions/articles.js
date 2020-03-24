@@ -34,14 +34,16 @@ async function createArticle(data) {
   } catch (e) {}
 }
 async function fetchArticleByID(id) {
-  return (
-    (
+  try {
+    return (
       await firebase
         .database()
         .ref(`/2_articles/${id}/`)
         .once('value')
-    ).val() || {}
-  )
+    ).val()
+  } catch (e) {
+    throw Error
+  }
 }
 async function fetchPublicArticlesIDS() {
   return (

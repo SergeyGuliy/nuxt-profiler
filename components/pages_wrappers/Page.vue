@@ -1,10 +1,10 @@
 <template>
   <v-card class="Page">
     <v-card-title class="headline">
-      <slot name="head">ERROR!!!!</slot>
+      <slot name="head" class="print">ERROR!!!!</slot>
     </v-card-title>
     <v-divider />
-    <v-card-subtitle>
+    <v-card-subtitle class="print">
       <slot name="body" />
     </v-card-subtitle>
   </v-card>
@@ -18,11 +18,17 @@ export default {
 
 <style lang="sass">
 .Page.v-card
-  min-height: 100%
+  height: 100%
   min-width: 100%
+  display: flex
+  flex-direction: column
   .v-card__title
     padding: 16px 10px
+    flex: 0 1 auto
   .v-card__subtitle
     padding: 16px 10px
-    min-height: 100%
+    flex: 1 1 auto
+  .print
+    @media print
+      padding: 1px
 </style>

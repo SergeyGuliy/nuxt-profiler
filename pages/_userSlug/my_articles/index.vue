@@ -4,7 +4,7 @@
       <PageHeader>
         <template #title>
           {{
-            myList.length > 0
+            checkedList.length > 0
               ? 'List of my articles'
               : "You don't have articles"
           }}
@@ -12,7 +12,15 @@
             :link="`/${$store.getters.user.profile}/my_articles/create`"
           />
         </template>
-        <template #actions v-if="myList.length > 0">
+        <template #actions v-if="checkedList.length > 0">
+          <v-select
+            :items="[5, 10, 15]"
+            v-model="pageSize"
+            label="Page size"
+            outlined
+            dense
+            style="max-width: 56px;"
+          />
           <v-select
             v-model="language"
             :items="Object.keys(languages)"
@@ -41,7 +49,7 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="myList.length > 0">
+    <template #body v-if="checkedList.length > 0">
       <PageBody col="1">
         <template #c-1>
           <Table v-if="listFiltered.length > 0">
@@ -55,7 +63,7 @@
               </tr>
             </template>
             <template #table-body>
-              <tr v-for="item in listFiltered" :key="item.id">
+              <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
                   <TableLink :link="`/articles/${item.id}`" :text="item.name" />
                 </td>
@@ -75,11 +83,17 @@
                   <TableIcon
                     :item="item.id"
                     :action="deleteFromMyList"
-                    color="warning"
+                    color="red"
                     icon="mdi-minus-circle"
                   />
                 </td>
               </tr>
+            </template>
+            <template #table-pagination>
+              <v-pagination
+                v-model="pageCurrent"
+                :length="listPaginated.length"
+              />
             </template>
           </Table>
           <Card v-else>Поиск не дал результата</Card>
@@ -90,24 +104,25 @@
 </template>
 
 <script>
+import { filterMixin } from '../../../mixins/filterMixin'
+import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllArticles } from '~/functions/articles'
 export default {
   name: 'MyArticles',
+  mixins: [filterMixin, paginationMixin],
   data() {
     return {
-      language: null,
-      technology: null,
-      searchKey: null
+      pageSize: 10
     }
   },
   computed: {
-    myList() {
+    checkedList() {
       const myListIDS = this.$store.getters.user.lists.articles
       const myList = []
       for (const i of myListIDS) {
         try {
-          const art = this.allArticles[i]
+          const art = this.basicList[i]
           art.id = i
           myList.push(art)
         } catch (e) {
@@ -115,66 +130,15 @@ export default {
         }
       }
       return myList
-    },
-    listFiltered() {
-      if (this.language) {
-        if (this.technology) {
-          if (this.searchKey) {
-            return this.myList.filter((value) => {
-              return (
-                value.technology === this.technology &&
-                value.language === this.language &&
-                value.name.toLowerCase().includes(this.searchKey.toLowerCase())
-              )
-            })
-          } else {
-            return this.myList.filter((value) => {
-              return (
-                value.language === this.language &&
-                value.technology === this.technology
-              )
-            })
-          }
-        } else if (this.searchKey) {
-          return this.myList.filter((value) => {
-            return (
-              value.language === this.language &&
-              value.name.toLowerCase().includes(this.searchKey.toLowerCase())
-            )
-          })
-        } else {
-          return this.myList.filter((value) => {
-            return value.language === this.language
-          })
-        }
-      } else if (this.searchKey) {
-        return this.myList.filter((value) => {
-          return value.name.toLowerCase().includes(this.searchKey.toLowerCase())
-        })
-      } else {
-        return this.myList
-      }
-    },
-    technologies() {
-      if (this.language) {
-        return this.languages[this.language].technologies || []
-      } else {
-        return []
-      }
-    }
-  },
-  watch: {
-    language() {
-      this.technology = null
     }
   },
   head: {
-    title: `Profiler - User Articles`
+    title: `Profiler - My Articles`
   },
   async asyncData() {
     try {
       return {
-        allArticles: await fetchAllArticles(),
+        basicList: await fetchAllArticles(),
         languages: await fetchCategories()
       }
     } catch (e) {}
@@ -193,25 +157,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#myArticles
-  .v-input
-    margin: 2px
-    width: 32%
-    max-width: 200px
-  .v-input__slot
-    margin: 0
-    padding: 0 7px
-  .v-text-field__details
-    display: none
-  .v-select__selection.v-select__selection--comma, .v-label, .v-text-field__slot
-    font-size: 13px
-  .v-input__append-inner
-    padding: 0
-    height: 20px
-    width: 20px
-    .v-icon
-      height: 20px
-      width: 20px
-</style>

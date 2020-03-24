@@ -1,13 +1,16 @@
 <template>
-  <Page id="allRepositories">
+  <Page id="userRepositories">
     <template #head>
       <PageHeader>
         <template #title>
           {{
             checkedList.length > 0
-              ? 'List of public repositories'
-              : 'There is no public repositories'
+              ? `${userName} repositories`
+              : `${userName} don't have repositories`
           }}
+          <BtnCreate
+            :link="`/${$store.getters.user.profile}/my_articles/create`"
+          />
         </template>
         <template #actions v-if="checkedList.length > 0">
           <v-select
@@ -62,10 +65,7 @@
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
-                  <TableLink
-                    :link="`/repositories/${item.id}`"
-                    :text="item.name"
-                  />
+                  <TableLink :link="`/articles/${item.id}`" :text="item.name" />
                 </td>
                 <td>
                   <TableLink
@@ -79,7 +79,7 @@
                 <td>
                   <TableText :text="item.technology" />
                 </td>
-                <td>
+                <td v-if="item.isPublic">
                   <TableIcon
                     v-if="
                       !$store.getters.user.lists.repositories.includes(item.id)
@@ -114,50 +114,56 @@
 </template>
 
 <script>
-import { filterMixin } from '../../mixins/filterMixin'
+import { filterMixin } from '../../../mixins/filterMixin'
 import { paginationMixin } from '~/mixins/paginationMixin'
-import {
-  fetchAllRepositories,
-  fetchPublicRepositoriesIDS
-} from '~/functions/repositories'
 import { fetchCategories } from '~/functions/language-technologies'
+import { fetchAllRepositories } from '~/functions/repositories'
+import { fetchUserByID } from '~/functions/users'
 export default {
-  name: 'Index',
+  name: 'Repositories',
   mixins: [filterMixin, paginationMixin],
-  transition: 'bounce',
   data() {
     return {
       pageSize: 10
     }
   },
   computed: {
+    userName() {
+      if (
+        this.userData.userInfo.info.first_name &&
+        this.userData.userInfo.info.last_name
+      ) {
+        return `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
+      } else {
+        return `${this.userData.profile}`
+      }
+    },
     checkedList() {
-      const publicListList = []
-      for (const i of this.publicRepositoriesIDS) {
+      const myListIDS = this.userData.lists.repositories
+      const myList = []
+      for (const i of myListIDS) {
         try {
-          const rep = this.allRepositories[i]
-          rep.id = i
-          publicListList.push(rep)
+          const art = this.basicList[i]
+          art.id = i
+          myList.push(art)
         } catch (e) {
           continue
         }
       }
-      return publicListList
+      return myList
     }
   },
   head: {
-    title: `Profiler - Public Repositories`
+    title: `Profiler - User Articles`
   },
-  async asyncData({ error }) {
+  async asyncData({ route }) {
     try {
       return {
-        allRepositories: await fetchAllRepositories(),
-        publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
+        userData: await fetchUserByID(route.params.id),
+        basicList: await fetchAllRepositories(),
         languages: await fetchCategories()
       }
-    } catch (e) {
-      error({ message: 'Repositories not found' })
-    }
+    } catch (e) {}
   },
   methods: {
     deleteFromMyList(id) {

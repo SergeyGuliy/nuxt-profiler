@@ -2,7 +2,7 @@
   <Page id="editProfile">
     <template #head>
       <PageHeader>
-        <template #title>Edite profile</template>
+        <template #title>Edit profile</template>
         <template #actions>
           <v-btn
             v-if="!$store.getters.user.isAdmin"
@@ -10,7 +10,7 @@
             mx-1
             color="green"
           >
-            Become admin
+            <v-icon>mdi-account-key</v-icon>
           </v-btn>
           <v-btn
             v-if="$store.getters.user.isAdmin"
@@ -18,15 +18,16 @@
             mx-1
             color="green"
           >
-            Stop to be admin
+            <v-icon>mdi-account-arrow-left</v-icon>
           </v-btn>
           <v-btn
             @click="submitUpdateInfo"
             :disabled="!formIsChanged"
             class="mx-1"
             color="green"
-            >Save</v-btn
           >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
         </template>
       </PageHeader>
     </template>
@@ -380,8 +381,18 @@ export default {
     'contacts.git_type'() {
       this.contacts.github = ''
     },
-    'work.work_languages'() {
-      this.work.work_technologies = ''
+    'work.work_languages'(val) {
+      const technologies = []
+      val.forEach((item) => {
+        try {
+          this.languages[item].technologies.forEach((value) => {
+            technologies.push(value)
+          })
+        } catch (e) {}
+      })
+      this.work.work_technologies = this.work.work_technologies.filter(
+        (value) => technologies.includes(value)
+      )
     }
   },
   async asyncData(context) {
@@ -484,17 +495,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#editProfile
-  .row
-    height: 86px
-    margin: 0 0 5px 0
-    .col
-      height: 86px
-      padding: 0
-      .v-input__append-inner
-        display: none
-  .v-input
-    margin-bottom: 5px
-</style>

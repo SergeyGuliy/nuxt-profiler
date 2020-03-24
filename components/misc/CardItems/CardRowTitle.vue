@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'LineTitle'
+  name: 'CardRowTitle'
 }
 </script>

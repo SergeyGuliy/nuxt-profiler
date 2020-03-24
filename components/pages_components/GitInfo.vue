@@ -1,12 +1,8 @@
 <template>
   <div>
-    <Header> GitHub Info</Header>
+    <CardTitle> GitHub Info</CardTitle>
     <div id="Git">
-      <img
-        src="https://avatars1.githubusercontent.com/u/43864245?v=4"
-        class="git__img"
-        alt="profile_img"
-      />
+      <img :src="gitApiInfo.avatar_url" class="git__img" alt="profile_img" />
       <div class="git__actions">
         <a
           :href="`${data.userInfo.contacts.github}/?tab=followers`"
@@ -54,7 +50,7 @@ export default {
     object-fit: cover
     width: 100%
     height: 100%
-    max-height: 350px
+    max-height: 300px
   .git__actions
     height: 30px
     display: flex
@@ -71,7 +67,8 @@ export default {
       cursor: pointer
       text-decoration: none
       .badge
-        background-color: #e0e0e0
+        background-color: #999999
+        color: black
         height: 19px
         width: 19px
         text-align: center

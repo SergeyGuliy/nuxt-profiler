@@ -1,73 +1,65 @@
 <template>
-  <v-navigation-drawer v-model="status" app clipped>
-    <v-list dense>
-      <v-list-item link>
-        <v-list-item-action>
-          <v-icon>mdi-login</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>
-            Most Popular
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-subheader class="mt-4 grey--text text--darken-1"
-        >SUBSCRIPTIONS</v-subheader
-      >
-      <v-list>
-        <v-list-item v-for="item in items2" :key="item.text" link>
-          <v-list-item-avatar>
-            <img
-              :src="
-                `https://randomuser.me/api/portraits/men/${item.picture}.jpg`
-              "
-              alt=""
-            />
-          </v-list-item-avatar>
-          <v-list-item-title v-text="item.text" />
-        </v-list-item>
+  <client-only>
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
+        <v-subheader class="mt-4 grey--text text--darken-1">
+          Lists:
+        </v-subheader>
+        <SideLink link="/users">
+          All users
+        </SideLink>
+        <SideLink link="/repositories">
+          All repositories
+        </SideLink>
+        <SideLink link="/articles">
+          All articles
+        </SideLink>
+        <v-subheader class="mt-4 grey--text text--darken-1">
+          User Panel
+        </v-subheader>
+        <SideLink :link="`/${$store.getters.user.profile}/edit_profile`">
+          Edit profile
+        </SideLink>
+        <SideLink
+          :link="`/${$store.getters.user.profile}/admin_panel`"
+          v-if="$store.getters.user.isAdmin"
+        >
+          Admin panel
+        </SideLink>
+        <SideLink :link="`/${$store.getters.user.profile}/my_friends`">
+          My friends
+        </SideLink>
+        <SideLink :link="`/${$store.getters.user.profile}/my_repositories`">
+          My repositories
+        </SideLink>
+        <SideLink :link="`/${$store.getters.user.profile}/my_articles`">
+          My articles
+        </SideLink>
+        <SideLink :link="`/${$store.getters.user.profile}/my_portfolio`">
+          My portfolio
+        </SideLink>
       </v-list>
-      <v-list-item class="mt-4" link>
-        <v-list-item-action>
-          <v-icon color="grey darken-1">mdi-plus-circle-outline</v-icon>
-        </v-list-item-action>
-        <v-list-item-title class="grey--text text--darken-1"
-          >Browse Channels</v-list-item-title
-        >
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-action>
-          <v-icon color="grey darken-1">mdi-settings</v-icon>
-        </v-list-item-action>
-        <v-list-item-title class="grey--text text--darken-1"
-          >Manage Subscriptions</v-list-item-title
-        >
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+    </v-navigation-drawer>
+  </client-only>
 </template>
 
 <script>
 export default {
   name: 'Sidebar',
-  props: ['status'],
+  props: ['sidebarStatus'],
   data: () => ({
-    drawer: null,
-    items: [
-      { icon: 'trending_up', text: 'Most Popular' },
-      { icon: 'subscriptions', text: 'Subscriptions' },
-      { icon: 'history', text: 'History' },
-      { icon: 'featured_play_list', text: 'Playlists' },
-      { icon: 'watch_later', text: 'Watch Later' }
-    ],
-    items2: [
-      { picture: 28, text: 'Joseph' },
-      { picture: 38, text: 'Apple' },
-      { picture: 48, text: 'Xbox Ahoy' },
-      { picture: 58, text: 'Nokia' },
-      { picture: 78, text: 'MKBHD' }
-    ]
-  })
+    drawer: true
+  }),
+  watch: {
+    sidebarStatus(val) {
+      this.drawer = val
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.drawer = !this.drawer
+    }
+  }
 }
 </script>
 

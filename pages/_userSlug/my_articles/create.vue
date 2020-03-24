@@ -89,7 +89,7 @@ export default {
         ],
         cite: [
           (v) => !!v || 'Link is required',
-          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => /http.+/.test(v) || 'Link must starts with "http"',
           (v) => v.length <= 200 || 'Link must be less than 100 characters'
         ],
         about: [
@@ -104,7 +104,7 @@ export default {
       return (
         !!this.name &&
         this.name.length <= 25 &&
-        /https:\/\/.+/.test(this.cite) &&
+        /http.+/.test(this.cite) &&
         this.cite.length <= 200
       )
     },

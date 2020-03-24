@@ -5,7 +5,9 @@ export const actions = {
     try {
       const cookie = app.$cookies.get('access_token')
       await dispatch('fetchUserInfo', cookie)
-    } catch (e) {}
+    } catch (e) {
+      await dispatch('logOut')
+    }
   },
   async fetchUserInfo({ commit }, uid) {
     try {
@@ -61,7 +63,8 @@ export const actions = {
           lists: {
             friends: ['empty'],
             articles: ['empty'],
-            repositories: ['empty']
+            repositories: ['empty'],
+            portfolio: ['empty']
           }
         })
       this.$cookies.set('access_token', uid)
@@ -124,6 +127,9 @@ export const mutations = {
   pushRepository(state, id) {
     state.user.lists.repositories.push(id)
   },
+  pushPortfolioWork(state, work) {
+    state.user.lists.portfolio.push(work)
+  },
   pushFriend(state, id) {
     state.user.lists.friends.push(id)
   },
@@ -144,6 +150,13 @@ export const mutations = {
       (idSearch) => idSearch === id
     )
     state.user.lists.friends.splice(IdToDelete, 1)
+  },
+  deletePortfolioWork(state, id) {
+    try {
+      state.user.lists.portfolio.splice(id + 1, 1)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

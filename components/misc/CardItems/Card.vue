@@ -1,8 +1,6 @@
 <template>
   <v-card id="Card" :dark="$vuetify.theme.dark">
-    <v-card-subtitle>
-      <slot />
-    </v-card-subtitle>
+    <slot />
   </v-card>
 </template>
 
@@ -14,7 +12,8 @@ export default {
 
 <style lang="sass">
 #Card
-  .v-card__subtitle
-    padding: 16px 20px
-    min-height: 100%
+  padding: 16px 20px
+  min-height: 100%
+  @media print
+    padding: 0 5px
 </style>

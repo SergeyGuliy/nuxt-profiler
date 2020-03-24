@@ -1,5 +1,5 @@
 <template>
-  <Page id="createRepository">
+  <Page id="createWork">
     <template #head>
       <PageHeader>
         <template #title>Create Repository</template>
@@ -98,7 +98,7 @@ export default {
         ],
         cite: [
           (v) => !!v || 'Link is required',
-          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => /http.+/.test(v) || 'Link must starts with "http"',
           (v) => v.length <= 200 || 'Link must be less than 200 characters'
         ],
         gitHub: [

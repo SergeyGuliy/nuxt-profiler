@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
-    <!--    <Sidebar :status="sidebarStatus" />-->
+    <Sidebar :sidebarStatus="sidebarStatus" v-if="$vuetify.breakpoint.xsOnly" />
     <Body>
       <nuxt />
     </Body>
@@ -10,11 +10,10 @@
 
 <script>
 import Navbar from '../components/layout_components/Navbar'
-// import Sidebar from '../components/layout_components/Sidebar'
+import Sidebar from '../components/layout_components/Sidebar'
 import Body from '../components/layout_components/Body'
 export default {
-  components: { Navbar, Body },
-  // components: { Navbar, Sidebar, Body },
+  components: { Navbar, Sidebar, Body },
   data() {
     return {
       sidebarStatus: false
@@ -24,3 +23,7 @@ export default {
   middleware: 'isNotLoggedIn'
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/styles.sass'
+</style>

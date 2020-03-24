@@ -2,24 +2,35 @@
   <Page id="ShowArticle">
     <template #head>
       <PageHeader>
-        <template #title>{{ data.name }}</template>
+        <template #title>
+          {{ data.name }}
+          <v-chip small class="title-chip">
+            {{ data.isPublic ? 'Public' : 'Private' }}
+          </v-chip>
+        </template>
         <template #actions>
-          <v-btn
-            @click="addTomMyList($route.params.id)"
-            v-if="
-              !$store.getters.user.lists.articles.includes($route.params.id)
-            "
-            class="mx-1"
-            color="green"
-            >Add to my list
-          </v-btn>
-          <v-btn
-            @click="deleteFromMyList($route.params.id)"
-            v-else
-            class="mx-1"
-            color="red"
-            >remove from my list
-          </v-btn>
+          <BtnPrint />
+          <BtnShare :link="`articles/${$route.params.id}`" />
+          <div v-if="data.isPublic">
+            <v-btn
+              @click="addTomMyList($route.params.id)"
+              v-if="
+                !$store.getters.user.lists.articles.includes($route.params.id)
+              "
+              class="mx-1"
+              color="green"
+            >
+              <v-icon>mdi-book-plus</v-icon>
+            </v-btn>
+            <v-btn
+              @click="deleteFromMyList($route.params.id)"
+              v-else
+              class="mx-1"
+              color="red"
+            >
+              <v-icon>mdi-book-minus</v-icon>
+            </v-btn>
+          </div>
         </template>
       </PageHeader>
     </template>
@@ -27,42 +38,40 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <CardContainer v-if="data.language">
-              <LineTitle>Language:</LineTitle>
+            <CardRow v-if="data.language">
+              <CardRowTitle>Language:</CardRowTitle>
               <span>{{ data.language }}</span>
-            </CardContainer>
-            <CardContainer v-if="data.technology">
-              <LineTitle>Technology:</LineTitle>
+            </CardRow>
+            <CardRow v-if="data.technology">
+              <CardRowTitle>Technology:</CardRowTitle>
               <span>{{ data.technology }}</span>
-            </CardContainer>
-            <CardContainer>
-              <LineTitle>Description:</LineTitle>
-            </CardContainer>
-            <CardContainer>
+            </CardRow>
+            <CardRow>
+              <CardRowTitle>Description:</CardRowTitle>
+            </CardRow>
+            <CardRow>
               <p v-if="data.about">{{ data.about }}</p>
-              <p v-else>
-                Description is empty.
-              </p>
-            </CardContainer>
+              <p v-else>Description is empty.</p>
+            </CardRow>
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <CardContainer>
-              <LineTitle>Creator:</LineTitle>
+            <CardRow>
+              <CardRowTitle>Creator:</CardRowTitle>
               <BtnRouter
                 :link="`/users/${data.creatorId}`"
                 :text="data.creatorName"
                 icon="mdi-face-profile"
               />
-            </CardContainer>
-            <CardContainer>
-              <LineTitle>Link to article:</LineTitle>
+            </CardRow>
+            <CardRow>
+              <CardRowTitle>Link to article:</CardRowTitle>
               <div>
                 <BtnOpenBlank :link="data.cite" />
                 <BtnCopy :copyValue="data.cite" />
               </div>
-            </CardContainer>
+            </CardRow>
           </Card>
         </template>
       </PageBody>
@@ -75,12 +84,18 @@ import { fetchArticleByID } from '~/functions/articles'
 export default {
   name: 'Id',
   transition: 'bounce',
-  async asyncData(route) {
+  async asyncData({ route, error }) {
     try {
-      return {
-        data: await fetchArticleByID(route.params.id)
+      const data = await fetchArticleByID(route.params.id)
+      if (data === null) {
+        error({ message: 'Article not found' })
       }
-    } catch (e) {}
+      return {
+        data
+      }
+    } catch (e) {
+      error({ message: 'Article not found' })
+    }
   },
   head: {
     title: `Profiler - Article Information`
@@ -109,9 +124,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#ShowArticle
-  p
-    margin: 0 5px 5px 5px
-</style>

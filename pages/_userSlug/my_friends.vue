@@ -8,6 +8,14 @@
           }}
         </template>
         <template #actions v-if="myList.length > 0">
+          <v-select
+            :items="[5, 10, 15]"
+            v-model="pageSize"
+            label="Page size"
+            outlined
+            dense
+            style="max-width: 56px;"
+          />
           <v-text-field
             v-model="searchKey"
             label="Search"
@@ -32,7 +40,7 @@
               </tr>
             </template>
             <template #table-body>
-              <tr v-for="item in listFiltered" :key="item.id">
+              <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
                   <TableLink :link="`/users/${item.id}`" :text="item.profile" />
                 </td>
@@ -49,11 +57,17 @@
                   <TableIcon
                     :item="item.id"
                     :action="deleteFromMyList"
-                    color="warning"
+                    color="red"
                     icon="mdi-minus-circle"
                   />
                 </td>
               </tr>
+            </template>
+            <template #table-pagination>
+              <v-pagination
+                v-model="pageCurrent"
+                :length="listPaginated.length"
+              />
             </template>
           </Table>
           <Card v-else>Поиск не дал результата</Card>
@@ -65,11 +79,14 @@
 
 <script>
 import { fetchAllUsers } from '~/functions/users'
+import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'MyFriends',
+  mixins: [paginationMixin],
   data() {
     return {
-      searchKey: null
+      searchKey: null,
+      pageSize: 10
     }
   },
   computed: {
@@ -107,7 +124,7 @@ export default {
     } catch (e) {}
   },
   head: {
-    title: `Profiler - User Friends`
+    title: `Profiler - My Friends`
   },
   methods: {
     deleteFromMyList(id) {
@@ -123,24 +140,3 @@ export default {
   }
 }
 </script>
-<style lang="sass">
-#myFriends
-  .v-input
-    margin: 2px
-    width: 32%
-    max-width: 200px
-  .v-input__slot
-    margin: 0
-    padding: 0 7px
-  .v-text-field__details
-    display: none
-  .v-select__selection.v-select__selection--comma, .v-label, .v-text-field__slot
-    font-size: 13px
-  .v-input__append-inner
-    padding: 0
-    height: 20px
-    width: 20px
-    .v-icon
-      height: 20px
-      width: 20px
-</style>

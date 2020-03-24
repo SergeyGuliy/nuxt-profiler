@@ -34,14 +34,16 @@ async function createRepository(data) {
   } catch (e) {}
 }
 async function fetchRepositoryByID(id) {
-  return (
-    (
+  try {
+    return (
       await firebase
         .database()
         .ref(`/3_repositories/${id}/`)
         .once('value')
-    ).val() || {}
-  )
+    ).val()
+  } catch (e) {
+    throw Error
+  }
 }
 async function fetchPublicRepositoriesIDS() {
   return (

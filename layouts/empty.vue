@@ -11,6 +11,9 @@
 <script>
 export default {
   name: 'Empty',
-  middleware: 'isLoggedIn'
+  middleware: 'isLoggedIn',
+  mounted() {
+    this.$cookies.remove('access_token')
+  }
 }
 </script>

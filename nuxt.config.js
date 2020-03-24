@@ -30,8 +30,8 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~plugins/global-components',
     '~/plugins/firebase',
-    '~/plugins/global-components',
     '~/plugins/mask'
   ],
   /*
@@ -51,7 +51,7 @@ export default {
       iconfont: 'mdi'
     },
     theme: {
-      dark: false
+      dark: true
     }
   },
   /*
@@ -63,7 +63,8 @@ export default {
     '@nuxtjs/vuetify',
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
-    'vuetify-dialog/nuxt'
+    'vuetify-dialog/nuxt',
+    'nuxt-lazy-load'
   ],
 
   /*

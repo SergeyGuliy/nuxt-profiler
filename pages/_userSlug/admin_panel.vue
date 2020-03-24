@@ -12,16 +12,17 @@
             <v-text-field
               v-model="newLanguage"
               @keypress.enter="addLanguage"
-              :counter="10"
+              :counter="20"
               :rules="rules.lang"
               label="Language"
               outlined
             />
             <v-btn
               @click="addLanguage"
-              :disabled="!(newLanguage.length >= 2 && newLanguage.length <= 10)"
+              :disabled="!(newLanguage.length >= 1 && newLanguage.length <= 20)"
               :loading="loading"
               block
+              color="green"
               >ADD language</v-btn
             >
             <v-list>
@@ -37,7 +38,7 @@
 
                 <v-list-item-action>
                   <v-btn @click.stop="deleteLanguage(item)" icon>
-                    <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                    <v-icon color="warning lighten-1">mdi-delete</v-icon>
                   </v-btn>
                 </v-list-item-action>
               </v-list-item>
@@ -49,7 +50,7 @@
             <v-text-field
               v-model="newTechnology"
               @keypress.enter="addTechnology"
-              :counter="10"
+              :counter="20"
               :rules="rules.tech"
               :disabled="!languageSelected"
               :label="
@@ -61,11 +62,12 @@
             />
             <v-btn
               :disabled="
-                !(newTechnology.length >= 2 && newTechnology.length <= 10) ||
+                !(newTechnology.length >= 2 && newTechnology.length <= 20) ||
                   loading
               "
               @click="addTechnology"
               :loading="loading"
+              color="green"
               block
               >ADD technology</v-btn
             >
@@ -80,7 +82,7 @@
 
                 <v-list-item-action>
                   <v-btn @click="deleteTechnology(item)" icon>
-                    <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                    <v-icon color="warning lighten-1">mdi-delete</v-icon>
                   </v-btn>
                 </v-list-item-action>
               </v-list-item>
@@ -113,21 +115,15 @@ export default {
       loading: false,
       rules: {
         lang: [
-          (v) => v.length <= 10 || 'Language must be less than 10 characters'
+          (v) => v.length <= 20 || 'Language must be less than 10 characters'
         ],
         tech: [
-          (v) => v.length <= 10 || 'Technology must be less than 10 characters'
+          (v) => v.length <= 20 || 'Technology must be less than 10 characters'
         ]
       }
     }
   },
   middleware: 'isNotAdmin',
-  watch: {
-    languages: {
-      deep: true,
-      handler: 'save'
-    }
-  },
   async asyncData() {
     try {
       return {
@@ -140,7 +136,10 @@ export default {
       this.loading = true
       try {
         await updateCategories(this.languages)
-      } catch (e) {}
+        console.log('e')
+      } catch (e) {
+        console.log(e)
+      }
       this.loading = false
     },
     selectLanguage(item) {
@@ -149,7 +148,7 @@ export default {
       }
       this.languageSelected = item
     },
-    addLanguage() {
+    async addLanguage() {
       if (this.languages[this.newLanguage]) {
         this.$dialog.message.error(
           `There is already ${this.newLanguage} in list of languages`,
@@ -168,9 +167,10 @@ export default {
         position: 'top-right',
         timeout: 3000
       })
+      await this.save()
       this.newLanguage = ''
     },
-    deleteLanguage(language) {
+    async deleteLanguage(language) {
       this.languageSelected = language.name
       if (this.languageSelected === language.name) {
         this.languageSelected = ''
@@ -180,8 +180,9 @@ export default {
         timeout: 3000
       })
       this.$delete(this.languages, language.name)
+      await this.save()
     },
-    addTechnology() {
+    async addTechnology() {
       if (this.languageSelected.technologies.includes(this.newTechnology)) {
         this.$dialog.message.error(
           `There is already ${this.newTechnology} in list of technologies`,
@@ -200,9 +201,10 @@ export default {
           timeout: 3000
         }
       )
+      await this.save()
       this.newTechnology = ''
     },
-    deleteTechnology(technology) {
+    async deleteTechnology(technology) {
       const id = this.languageSelected.technologies.findIndex((index) => {
         return index === technology
       })
@@ -211,16 +213,8 @@ export default {
         timeout: 3000
       })
       this.languageSelected.technologies.splice(id, 1)
+      await this.save()
     }
   }
 }
 </script>
-
-<style lang="sass">
-#adminPanel
-  button.v-btn.v-btn--block
-    margin-bottom: 15px
-  .activeLang
-    background-color: #e0e0e0
-    border-radius: 10px
-</style>

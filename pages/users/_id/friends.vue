@@ -1,15 +1,15 @@
 <template>
-  <Page id="allRepositories">
+  <Page id="userFriends">
     <template #head>
       <PageHeader>
         <template #title>
           {{
-            checkedList.length > 0
-              ? 'List of public repositories'
-              : 'There is no public repositories'
+            myList.length > 0
+              ? `${userName} friends`
+              : `${userName} don't have friends`
           }}
         </template>
-        <template #actions v-if="checkedList.length > 0">
+        <template #actions v-if="myList.length > 0">
           <v-select
             :items="[5, 10, 15]"
             v-model="pageSize"
@@ -18,24 +18,6 @@
             dense
             style="max-width: 56px;"
           />
-          <v-select
-            v-model="language"
-            :items="Object.keys(languages)"
-            label="Language"
-            outlined
-            clearable
-            dense
-          >
-          </v-select>
-          <v-select
-            v-model="technology"
-            :items="technologies"
-            label="Technology"
-            outlined
-            clearable
-            dense
-          >
-          </v-select>
           <v-text-field
             v-model="searchKey"
             label="Search"
@@ -46,44 +28,36 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="checkedList.length > 0">
+    <template #body v-if="myList.length > 0">
       <PageBody col="1">
         <template #c-1>
           <Table v-if="listFiltered.length > 0">
             <template #table-head>
               <tr>
                 <th>Name</th>
-                <th>Creator</th>
-                <th>Language</th>
-                <th>Technology</th>
+                <th>Repositories</th>
+                <th>Articles</th>
+                <th>Friends</th>
                 <th>Actions</th>
               </tr>
             </template>
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
-                  <TableLink
-                    :link="`/repositories/${item.id}`"
-                    :text="item.name"
-                  />
+                  <TableLink :link="`/users/${item.id}`" :text="item.profile" />
                 </td>
                 <td>
-                  <TableLink
-                    :link="`/users/${item.creatorId}`"
-                    :text="item.creatorName"
-                  />
+                  <TableText :text="`${item.lists.repositories.length - 1}`" />
                 </td>
                 <td>
-                  <TableText :text="item.language" />
+                  <TableText :text="`${item.lists.articles.length - 1}`" />
                 </td>
                 <td>
-                  <TableText :text="item.technology" />
+                  <TableText :text="`${item.lists.friends.length - 1}`" />
                 </td>
-                <td>
+                <td v-if="item.id !== $store.getters.user.id">
                   <TableIcon
-                    v-if="
-                      !$store.getters.user.lists.repositories.includes(item.id)
-                    "
+                    v-if="!$store.getters.user.lists.friends.includes(item.id)"
                     :item="item.id"
                     :action="addTomMyList"
                     color="green"
@@ -114,57 +88,72 @@
 </template>
 
 <script>
-import { filterMixin } from '../../mixins/filterMixin'
+import { fetchAllUsers, fetchUserByID } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
-import {
-  fetchAllRepositories,
-  fetchPublicRepositoriesIDS
-} from '~/functions/repositories'
-import { fetchCategories } from '~/functions/language-technologies'
+
 export default {
-  name: 'Index',
-  mixins: [filterMixin, paginationMixin],
-  transition: 'bounce',
+  name: 'Friends',
+  mixins: [paginationMixin],
   data() {
     return {
+      searchKey: null,
       pageSize: 10
     }
   },
   computed: {
-    checkedList() {
-      const publicListList = []
-      for (const i of this.publicRepositoriesIDS) {
+    userName() {
+      if (
+        this.userData.userInfo.info.first_name &&
+        this.userData.userInfo.info.last_name
+      ) {
+        return `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
+      } else {
+        return `${this.userData.profile}`
+      }
+    },
+    myList() {
+      const myListIDS = this.userData.lists.friends
+      const myList = []
+      for (const i of myListIDS) {
         try {
-          const rep = this.allRepositories[i]
-          rep.id = i
-          publicListList.push(rep)
+          const usr = this.allUsers[i]
+          usr.id = i
+          myList.push(usr)
         } catch (e) {
           continue
         }
       }
-      return publicListList
+      return myList
+    },
+    listFiltered() {
+      if (this.searchKey) {
+        return this.myList.filter((value) => {
+          return value.profile
+            .toLowerCase()
+            .includes(this.searchKey.toLowerCase())
+        })
+      } else {
+        return this.myList
+      }
     }
   },
-  head: {
-    title: `Profiler - Public Repositories`
-  },
-  async asyncData({ error }) {
+  async asyncData({ route }) {
     try {
       return {
-        allRepositories: await fetchAllRepositories(),
-        publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
-        languages: await fetchCategories()
+        userData: await fetchUserByID(route.params.id),
+        allUsers: await fetchAllUsers()
       }
-    } catch (e) {
-      error({ message: 'Repositories not found' })
-    }
+    } catch (e) {}
+  },
+  head: {
+    title: `Profiler - User Friends`
   },
   methods: {
     deleteFromMyList(id) {
       try {
-        this.$store.commit('deleteRepository', id)
+        this.$store.commit('deleteFriend', id)
         this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
+        this.$dialog.message.error(`You delete friend`, {
           position: 'top-right',
           timeout: 3000
         })
@@ -172,9 +161,9 @@ export default {
     },
     addTomMyList(id) {
       try {
-        this.$store.commit('pushRepository', id)
+        this.$store.commit('pushFriend', id)
         this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add repository`, {
+        this.$dialog.message.success(`You add friend`, {
           position: 'top-right',
           timeout: 3000
         })

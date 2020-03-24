@@ -2,24 +2,37 @@
   <Page id="ShowRepository">
     <template #head>
       <PageHeader>
-        <template #title>{{ data.name }}</template>
+        <template #title>
+          {{ data.name }}
+          <v-chip small class="title-chip">
+            {{ data.isPublic ? 'Public' : 'Private' }}
+          </v-chip>
+        </template>
         <template #actions>
-          <v-btn
-            @click="addTomMyList($route.params.id)"
-            v-if="
-              !$store.getters.user.lists.repositories.includes($route.params.id)
-            "
-            class="mx-1"
-            color="green"
-            >Add to my list
-          </v-btn>
-          <v-btn
-            @click="deleteFromMyList($route.params.id)"
-            v-else
-            class="mx-1"
-            color="red"
-            >remove from my list
-          </v-btn>
+          <BtnPrint />
+          <BtnShare :link="`repositories/${$route.params.id}`" />
+          <div v-if="data.isPublic">
+            <v-btn
+              @click="addTomMyList($route.params.id)"
+              v-if="
+                !$store.getters.user.lists.repositories.includes(
+                  $route.params.id
+                )
+              "
+              class="mx-1"
+              color="green"
+            >
+              <v-icon>mdi-vector-polyline-plus</v-icon>
+            </v-btn>
+            <v-btn
+              @click="deleteFromMyList($route.params.id)"
+              v-else
+              class="mx-1"
+              color="red"
+            >
+              <v-icon>mdi-vector-polyline-minus</v-icon>
+            </v-btn>
+          </div>
         </template>
       </PageHeader>
     </template>
@@ -27,51 +40,49 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <CardContainer v-if="data.language">
-              <LineTitle>Language:</LineTitle>
+            <CardRow v-if="data.language">
+              <CardRowTitle>Language:</CardRowTitle>
               <span>{{ data.language }}</span>
-            </CardContainer>
+            </CardRow>
 
-            <CardContainer v-if="data.technology">
-              <LineTitle>Technology:</LineTitle>
+            <CardRow v-if="data.technology">
+              <CardRowTitle>Technology:</CardRowTitle>
               <span>{{ data.technology }}</span>
-            </CardContainer>
+            </CardRow>
 
-            <CardContainer>
-              <LineTitle>Description:</LineTitle>
-            </CardContainer>
-            <CardContainer>
+            <CardRow>
+              <CardRowTitle>Description:</CardRowTitle>
+            </CardRow>
+            <CardRow>
               <p v-if="data.about">{{ data.about }}</p>
-              <p v-else>
-                Description is empty.
-              </p>
-            </CardContainer>
+              <p v-else>Description is empty.</p>
+            </CardRow>
           </Card>
         </template>
         <template #c-2>
           <Card>
-            <CardContainer>
-              <LineTitle>Creator:</LineTitle>
+            <CardRow>
+              <CardRowTitle>Creator:</CardRowTitle>
               <BtnRouter
                 :link="`/users/${data.creatorId}`"
                 :text="data.creatorName"
                 icon="mdi-face-profile"
               />
-            </CardContainer>
-            <CardContainer v-if="data.cite">
-              <LineTitle>Link to official site:</LineTitle>
+            </CardRow>
+            <CardRow v-if="data.cite">
+              <CardRowTitle>Link to official site:</CardRowTitle>
               <div>
                 <BtnOpenBlank :link="data.cite" />
                 <BtnCopy :copyValue="data.cite" />
               </div>
-            </CardContainer>
-            <CardContainer>
-              <LineTitle>Link to github repository:</LineTitle>
+            </CardRow>
+            <CardRow>
+              <CardRowTitle>Link to github repository:</CardRowTitle>
               <div>
                 <BtnOpenBlank :link="data.gitHub" icon="mdi-git" />
                 <BtnCopy :copyValue="data.gitHub" />
               </div>
-            </CardContainer>
+            </CardRow>
           </Card>
         </template>
       </PageBody>
@@ -84,15 +95,17 @@ import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
   transition: 'bounce',
-  async asyncData({ route, app }) {
+  async asyncData({ route, $axios, error }) {
     try {
       const data = await fetchRepositoryByID(route.params.id)
-      const gitApiInfo = (await app.$axios.get(data.gitApiKey)).data
+      const gitApiInfo = (await $axios.get(data.gitApiKey)).data
       return {
         data,
         gitApiInfo
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: 'Repository not found' })
+    }
   },
   head: {
     title: `Profiler - Repository Information`
@@ -121,9 +134,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass">
-#ShowRepository
-  p
-    margin: 0 5px 5px 5px
-</style>

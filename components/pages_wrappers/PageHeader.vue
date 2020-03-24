@@ -23,13 +23,25 @@ export default {
   align-items: center
   min-height: 44px
   flex-wrap: wrap
+  @media print
+    min-height: 15px
+    max-height: 15px
+  .title-chip
+    margin: 2px
+    padding: 0 5px
+    height: 25px
+    @media print
+      display: none
   .flex-left
     display: flex
     align-items: center
     justify-content: flex-end
+    @media print
+      display: none
   h3.headline
     font-size: 20px !important
     letter-spacing: 1px !important
+    text-transform: capitalize
     @media screen and (max-width: 700px)
       font-size: 18px !important
       letter-spacing: 0.9px !important

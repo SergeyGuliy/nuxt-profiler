@@ -3,13 +3,17 @@
     <v-simple-table :dark="$vuetify.theme.dark">
       <template v-slot:default>
         <thead>
-          <slot name="table-head"></slot>
+          <slot name="table-head" />
         </thead>
         <tbody>
-          <slot name="table-body"></slot>
+          <slot name="table-body" />
         </tbody>
       </template>
     </v-simple-table>
+
+    <client-only>
+      <slot name="table-pagination" />
+    </client-only>
   </div>
 </template>
 
@@ -21,8 +25,12 @@ export default {
 
 <style lang="sass">
 #Table
+  height: 100%
+  display: flex
+  flex-direction: column
+  justify-content: space-between
   td, th
-    width: 20%
+    width: 23%
     padding: 5px 0
     height: 100%
     text-align: center
