@@ -38,6 +38,9 @@ export default {
     justify-content: flex-end
     @media print
       display: none
+  .v-chip
+    @media print
+      display: none
   h3.headline
     font-size: 20px !important
     letter-spacing: 1px !important
