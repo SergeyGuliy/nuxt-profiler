@@ -4,7 +4,7 @@
       <v-expansion-panel :disabled="userFriends.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user.id === userId"
+            v-if="$store.getters.user && $store.getters.user.id === userId"
             @click.stop="
               $router.push(`${$store.getters.user.profile}/my_friends`)
             "
@@ -37,7 +37,7 @@
       <v-expansion-panel :disabled="userArticles.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user.id === userId"
+            v-if="$store.getters.user && $store.getters.user.id === userId"
             @click.stop="
               $router.push(`${$store.getters.user.profile}/my_articles`)
             "
@@ -70,7 +70,7 @@
       <v-expansion-panel :disabled="userRepositories.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user.id === userId"
+            v-if="$store.getters.user && $store.getters.user.id === userId"
             @click.stop="
               $router.push(`${$store.getters.user.profile}/my_repositories`)
             "
@@ -103,7 +103,7 @@
       <v-expansion-panel :disabled="checkedList.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user.id === userId"
+            v-if="$store.getters.user && $store.getters.user.id === userId"
             @click.stop="
               $router.push(`${$store.getters.user.profile}/my_portfolio`)
             "
@@ -154,9 +154,6 @@ export default {
         return item !== 'empty'
       })
     }
-  },
-  mounted() {
-    console.log(this.userId)
   }
 }
 </script>

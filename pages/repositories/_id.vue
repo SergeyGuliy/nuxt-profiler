@@ -11,7 +11,7 @@
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`repositories/${$route.params.id}`" />
-          <div v-if="data.isPublic">
+          <div v-if="data.isPublic && $store.getters.user">
             <v-btn
               @click="addTomMyList($route.params.id)"
               v-if="
@@ -40,9 +40,55 @@
       <PageBody col="2">
         <template #c-1>
           <Card>
-            <CardRow v-if="data.language">
+            <CardRow>
+              <CardRowTitle>GitHub Info:</CardRowTitle>
+              <v-chip-group column>
+                <v-chip
+                  class="mx-1"
+                  color="indigo"
+                  text-color="white"
+                  large
+                  pill
+                  label
+                >
+                  <v-chip left color="red" small pill label class="icon">
+                    {{ gitApiInfo.watchers_count }}
+                  </v-chip>
+                  Stars
+                </v-chip>
+                <v-chip
+                  class="mx-1"
+                  color="indigo"
+                  text-color="white"
+                  large
+                  pill
+                  label
+                >
+                  <v-chip left color="red" small pill label class="icon">
+                    {{ gitApiInfo.subscribers_count }}
+                  </v-chip>
+                  Watchers
+                </v-chip>
+                <v-chip
+                  class="mx-1"
+                  color="indigo"
+                  text-color="white"
+                  large
+                  pill
+                  label
+                >
+                  <v-chip left color="red" small pill label class="icon">
+                    {{ gitApiInfo.forks }}
+                  </v-chip>
+                  Forks
+                </v-chip>
+              </v-chip-group>
+            </CardRow>
+            <CardRow v-if="data.language || gitApiInfo.language">
               <CardRowTitle>Language:</CardRowTitle>
-              <span>{{ data.language }}</span>
+              <span>
+                {{ data.language ? data.language : gitApiInfo.language }}
+              </span>
             </CardRow>
 
             <CardRow v-if="data.technology">
@@ -54,7 +100,9 @@
               <CardRowTitle>Description:</CardRowTitle>
             </CardRow>
             <CardRow>
-              <p v-if="data.about">{{ data.about }}</p>
+              <p v-if="data.about || gitApiInfo.description">
+                {{ data.about ? data.about : gitApiInfo.description }}
+              </p>
               <p v-else>Description is empty.</p>
             </CardRow>
           </Card>
@@ -62,18 +110,33 @@
         <template #c-2>
           <Card>
             <CardRow>
-              <CardRowTitle>Creator:</CardRowTitle>
+              <CardRowTitle>Creator in Profiler:</CardRowTitle>
               <BtnRouter
                 :link="`/users/${data.creatorId}`"
                 :text="data.creatorName"
                 icon="mdi-face-profile"
               />
             </CardRow>
-            <CardRow v-if="data.cite">
+            <CardRow>
+              <CardRowTitle>Creator in GitHub:</CardRowTitle>
+              <div>
+                <BtnOpenBlank
+                  :link="gitApiInfo.owner.html_url"
+                  :text="gitApiInfo.owner.login"
+                  icon="mdi-github"
+                />
+                <BtnCopy :copyValue="gitApiInfo.owner.html_url" />
+              </div>
+            </CardRow>
+            <CardRow v-if="data.cite || gitApiInfo.html_url">
               <CardRowTitle>Link to official site:</CardRowTitle>
               <div>
-                <BtnOpenBlank :link="data.cite" />
-                <BtnCopy :copyValue="data.cite" />
+                <BtnOpenBlank
+                  :link="data.cite ? data.cite : gitApiInfo.html_url"
+                />
+                <BtnCopy
+                  :copyValue="data.cite ? data.cite : gitApiInfo.html_url"
+                />
               </div>
             </CardRow>
             <CardRow>
@@ -110,6 +173,10 @@ export default {
   head: {
     title: `Profiler - Repository Information`
   },
+  mounted() {
+    console.log(this.data.gitApiKey)
+    console.log(this.gitApiInfo)
+  },
   methods: {
     deleteFromMyList(id) {
       try {
@@ -134,3 +201,12 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+#ShowRepository
+  .v-chip--pill
+    height: 25px
+    padding: 0 5px
+  .icon
+    height: 15px
+</style>

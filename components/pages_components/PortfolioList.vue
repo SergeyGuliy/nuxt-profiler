@@ -9,7 +9,9 @@
       <v-card-title>
         {{ item.name }}
         <v-btn
-          v-if="item.creatorId === $store.getters.user.id"
+          v-if="
+            $store.getters.user && item.creatorId === $store.getters.user.id
+          "
           @click="deleteFromMyList(item, id)"
           color="red"
           icon
@@ -41,7 +43,6 @@ export default {
   methods: {
     async deleteFromMyList(item, id) {
       try {
-        console.log(id)
         const answer = await this.$dialog.confirm({
           text: `Do you want to delete ${item.name} form your portfolio?`,
           title: 'Warning'

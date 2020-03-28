@@ -56,7 +56,7 @@
                 <th>Creator</th>
                 <th>Language</th>
                 <th>Technology</th>
-                <th>Actions</th>
+                <th v-if="$store.getters.user">Actions</th>
               </tr>
             </template>
             <template #table-body>
@@ -76,7 +76,7 @@
                 <td>
                   <TableText :text="item.technology" />
                 </td>
-                <td>
+                <td v-if="$store.getters.user">
                   <TableIcon
                     v-if="!$store.getters.user.lists.articles.includes(item.id)"
                     :item="item.id"

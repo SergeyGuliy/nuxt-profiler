@@ -19,8 +19,7 @@ export default {
       sidebarStatus: false
     }
   },
-  transition: 'bounce',
-  middleware: 'isNotLoggedIn'
+  transition: 'bounce'
 }
 </script>
 

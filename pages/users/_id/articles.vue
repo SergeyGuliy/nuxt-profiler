@@ -8,9 +8,6 @@
               ? `${userName} articles`
               : `${userName} don't have articles`
           }}
-          <BtnCreate
-            :link="`/${$store.getters.user.profile}/my_articles/create`"
-          />
         </template>
         <template #actions v-if="checkedList.length > 0">
           <v-select
@@ -59,7 +56,7 @@
                 <th>Creator</th>
                 <th>Language</th>
                 <th>Technology</th>
-                <th>Actions</th>
+                <th v-if="$store.getters.user">Actions</th>
               </tr>
             </template>
             <template #table-body>
@@ -79,7 +76,7 @@
                 <td>
                   <TableText :text="item.technology" />
                 </td>
-                <td v-if="item.isPublic">
+                <td v-if="item.isPublic && $store.getters.user">
                   <TableIcon
                     v-if="!$store.getters.user.lists.articles.includes(item.id)"
                     :item="item.id"

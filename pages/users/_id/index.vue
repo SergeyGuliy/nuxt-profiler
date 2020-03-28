@@ -13,20 +13,22 @@
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #actions v-if="data.id !== $store.getters.user.id">
+        <template #actions>
           <BtnPrint />
           <BtnShare :link="`users/${$route.params.id}`" />
-          <v-btn
-            @click="addTomMyList(data.id)"
-            v-if="!$store.getters.user.lists.friends.includes(data.id)"
-            color="green"
-            class="mx-1"
-          >
-            <v-icon>mdi-account-plus</v-icon>
-          </v-btn>
-          <v-btn @click="deleteFromMyList()" v-else color="red" class="mx-1">
-            <v-icon>mdi-account-minus</v-icon>
-          </v-btn>
+          <div v-if="$store.getters.user">
+            <v-btn
+              @click="addTomMyList(data.id)"
+              v-if="!$store.getters.user.lists.friends.includes(data.id)"
+              color="green"
+              class="mx-1"
+            >
+              <v-icon>mdi-account-plus</v-icon>
+            </v-btn>
+            <v-btn @click="deleteFromMyList()" v-else color="red" class="mx-1">
+              <v-icon>mdi-account-minus</v-icon>
+            </v-btn>
+          </div>
         </template>
       </PageHeader>
     </template>

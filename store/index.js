@@ -69,6 +69,11 @@ export const actions = {
         })
       this.$cookies.set('access_token', uid)
       await dispatch('fetchUserInfo', uid)
+      this.$router.go()
+      this.$dialog.message.success(`You successfully registrated in base.`, {
+        position: 'top-right',
+        timeout: 3000
+      })
     } catch (e) {}
   },
   async logIn({ commit, dispatch }, data) {
@@ -79,15 +84,24 @@ export const actions = {
       const uid = await (await firebase.auth().currentUser).uid
       this.$cookies.set('access_token', uid)
       await dispatch('fetchUserInfo', uid)
+      this.$router.go()
     } catch (e) {}
   },
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
       this.$cookies.remove('access_token')
-      this.$router.push('/login')
       commit('cleanUser')
-    } catch (e) {}
+      this.$router.go()
+      this.$dialog.message.success(`You logged out from base.`, {
+        position: 'top-right',
+        timeout: 3000
+      })
+    } catch (e) {
+      this.$cookies.remove('access_token')
+      commit('cleanUser')
+      this.$router.go()
+    }
   },
   async updateUserInfo({ getters }) {
     try {
@@ -101,16 +115,15 @@ export const actions = {
 }
 
 export const getters = {
-  user: (s) => s.user,
-  uid: (s) => s.uid
+  user: (s) => s.user
 }
 
 export const mutations = {
-  setUser(state, user) {
-    state.user = user
-  },
   updateUserInfo(state, userInfo) {
     state.user.userInfo = userInfo
+  },
+  setUser(state, user) {
+    state.user = user
   },
   cleanUser(state) {
     state.user = ''
@@ -121,23 +134,23 @@ export const mutations = {
   unBecomeAdmin(state) {
     state.user.isAdmin = false
   },
-  pushArticle(state, id) {
-    state.user.lists.articles.push(id)
+  pushFriend(state, id) {
+    state.user.lists.friends.push(id)
   },
   pushRepository(state, id) {
     state.user.lists.repositories.push(id)
   },
+  pushArticle(state, id) {
+    state.user.lists.articles.push(id)
+  },
   pushPortfolioWork(state, work) {
     state.user.lists.portfolio.push(work)
   },
-  pushFriend(state, id) {
-    state.user.lists.friends.push(id)
-  },
-  deleteArticle(state, id) {
-    const IdToDelete = state.user.lists.articles.findIndex(
+  deleteFriend(state, id) {
+    const IdToDelete = state.user.lists.friends.findIndex(
       (idSearch) => idSearch === id
     )
-    state.user.lists.articles.splice(IdToDelete, 1)
+    state.user.lists.friends.splice(IdToDelete, 1)
   },
   deleteRepository(state, id) {
     const IdToDelete = state.user.lists.repositories.findIndex(
@@ -145,11 +158,11 @@ export const mutations = {
     )
     state.user.lists.repositories.splice(IdToDelete, 1)
   },
-  deleteFriend(state, id) {
-    const IdToDelete = state.user.lists.friends.findIndex(
+  deleteArticle(state, id) {
+    const IdToDelete = state.user.lists.articles.findIndex(
       (idSearch) => idSearch === id
     )
-    state.user.lists.friends.splice(IdToDelete, 1)
+    state.user.lists.articles.splice(IdToDelete, 1)
   },
   deletePortfolioWork(state, id) {
     try {

@@ -5,7 +5,8 @@
 <script>
 export default {
   name: 'UserSlug',
-  transition: 'bounce'
+  transition: 'bounce',
+  middleware: 'isNotLoggedIn'
 }
 </script>
 

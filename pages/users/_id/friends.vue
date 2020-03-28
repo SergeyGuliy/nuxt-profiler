@@ -38,7 +38,7 @@
                 <th>Repositories</th>
                 <th>Articles</th>
                 <th>Friends</th>
-                <th>Actions</th>
+                <th v-if="$store.getters.user">Actions</th>
               </tr>
             </template>
             <template #table-body>
@@ -55,7 +55,11 @@
                 <td>
                   <TableText :text="`${item.lists.friends.length - 1}`" />
                 </td>
-                <td v-if="item.id !== $store.getters.user.id">
+                <td
+                  v-if="
+                    $store.getters.user && item.id !== $store.getters.user.id
+                  "
+                >
                   <TableIcon
                     v-if="!$store.getters.user.lists.friends.includes(item.id)"
                     :item="item.id"

@@ -14,30 +14,32 @@
         <SideLink link="/articles">
           All articles
         </SideLink>
-        <v-subheader class="mt-4 grey--text text--darken-1">
-          User Panel
-        </v-subheader>
-        <SideLink :link="`/${$store.getters.user.profile}/edit_profile`">
-          Edit profile
-        </SideLink>
-        <SideLink
-          :link="`/${$store.getters.user.profile}/admin_panel`"
-          v-if="$store.getters.user.isAdmin"
-        >
-          Admin panel
-        </SideLink>
-        <SideLink :link="`/${$store.getters.user.profile}/my_friends`">
-          My friends
-        </SideLink>
-        <SideLink :link="`/${$store.getters.user.profile}/my_repositories`">
-          My repositories
-        </SideLink>
-        <SideLink :link="`/${$store.getters.user.profile}/my_articles`">
-          My articles
-        </SideLink>
-        <SideLink :link="`/${$store.getters.user.profile}/my_portfolio`">
-          My portfolio
-        </SideLink>
+        <div v-if="$store.getters.user">
+          <v-subheader class="mt-4 grey--text text--darken-1">
+            User Panel
+          </v-subheader>
+          <SideLink :link="`/${$store.getters.user.profile}/edit_profile`">
+            Edit profile
+          </SideLink>
+          <SideLink
+            :link="`/${$store.getters.user.profile}/admin_panel`"
+            v-if="$store.getters.user.isAdmin"
+          >
+            Admin panel
+          </SideLink>
+          <SideLink :link="`/${$store.getters.user.profile}/my_friends`">
+            My friends
+          </SideLink>
+          <SideLink :link="`/${$store.getters.user.profile}/my_repositories`">
+            My repositories
+          </SideLink>
+          <SideLink :link="`/${$store.getters.user.profile}/my_articles`">
+            My articles
+          </SideLink>
+          <SideLink :link="`/${$store.getters.user.profile}/my_portfolio`">
+            My portfolio
+          </SideLink>
+        </div>
       </v-list>
     </v-navigation-drawer>
   </client-only>
@@ -54,13 +56,6 @@ export default {
     sidebarStatus(val) {
       this.drawer = val
     }
-  },
-  methods: {
-    toggleSidebar() {
-      this.drawer = !this.drawer
-    }
   }
 }
 </script>
-
-<style scoped></style>

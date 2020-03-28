@@ -11,7 +11,7 @@
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`articles/${$route.params.id}`" />
-          <div v-if="data.isPublic">
+          <div v-if="data.isPublic && $store.getters.user">
             <v-btn
               @click="addTomMyList($route.params.id)"
               v-if="

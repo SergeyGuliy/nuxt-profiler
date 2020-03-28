@@ -36,7 +36,7 @@
                 <th>Repositories</th>
                 <th>Articles</th>
                 <th>Friends</th>
-                <th>Actions</th>
+                <th v-if="$store.getters.user">Actions</th>
               </tr>
             </template>
             <template #table-body>
@@ -53,7 +53,7 @@
                 <td>
                   <TableText :text="`${item.lists.friends.length - 1}`" />
                 </td>
-                <td>
+                <td v-if="$store.getters.user">
                   <TableIcon
                     v-if="!$store.getters.user.lists.friends.includes(item.id)"
                     :item="item.id"
@@ -104,11 +104,17 @@ export default {
       for (const i in this.allUsers) {
         try {
           const usr = this.allUsers[i]
-          if (usr.id === this.$store.getters.user.id) {
-            continue
+          console.log(Boolean(this.$store.getters.user))
+          if (this.$store.getters.user) {
+            if (usr.id === this.$store.getters.user.id) {
+              continue
+            }
+            usr.id = i
+            list.push(usr)
+          } else {
+            usr.id = i
+            list.push(usr)
           }
-          usr.id = i
-          list.push(usr)
         } catch (e) {
           continue
         }
