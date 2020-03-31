@@ -24,6 +24,7 @@ export default {
   min-height: 44px
   flex-wrap: wrap
   @media print
+    margin: 0!important
     min-height: 15px
     max-height: 15px
   .title-chip

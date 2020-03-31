@@ -1,5 +1,5 @@
 <template>
-  <v-btn id="BtnCreate" @click="$router.push(link)" color="green" fab small>
+  <v-btn @click="$router.push(link)" class="BtnCreate" color="green" fab small>
     <v-icon>mdi-plus</v-icon>
   </v-btn>
 </template>
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="sass">
-#BtnCreate
+.BtnCreate
   position: fixed
   bottom: 5px
   right: 5px

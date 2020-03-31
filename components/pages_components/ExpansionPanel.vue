@@ -12,6 +12,7 @@
             link
           >
             Open List Of My Friends
+            <v-chip small label>{{ userFriends.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
@@ -20,8 +21,8 @@
             link
           >
             Open List Of User Friends
+            <v-chip small label>{{ userFriends.length }}</v-chip>
           </v-btn>
-          <v-chip small label>{{ userFriends.length }}</v-chip>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-btn
@@ -45,6 +46,7 @@
             link
           >
             Open List Of My Articles
+            <v-chip small label>{{ userArticles.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
@@ -53,8 +55,8 @@
             link
           >
             Open List Of User Articles
+            <v-chip small label>{{ userArticles.length }}</v-chip>
           </v-btn>
-          <v-chip small label>{{ userArticles.length }}</v-chip>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-btn
@@ -78,6 +80,7 @@
             link
           >
             Open List Of My Repositories
+            <v-chip small label>{{ userRepositories.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
@@ -86,8 +89,8 @@
             link
           >
             Open List Of User Repositories
+            <v-chip small label>{{ userRepositories.length }}</v-chip>
           </v-btn>
-          <v-chip small label>{{ userRepositories.length }}</v-chip>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-btn
@@ -100,7 +103,7 @@
           >
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel :disabled="checkedList.length === 0">
+      <v-expansion-panel :disabled="userPortfolio.length === 0">
         <v-expansion-panel-header>
           <v-btn
             v-if="$store.getters.user && $store.getters.user.id === userId"
@@ -111,6 +114,7 @@
             link
           >
             Open my portfolio
+            <v-chip small label>{{ userPortfolio.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
@@ -119,16 +123,19 @@
             link
           >
             Open user portfolio
+            <v-chip small label>{{ userPortfolio.length }}</v-chip>
           </v-btn>
-          <v-chip small label>{{ checkedList.length }}</v-chip>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-btn
-            v-for="item in checkedList"
+            v-for="item in userPortfolio"
             :key="item.id"
+            :href="item.cite"
             block
             small
             class="my-1"
+            link
+            target="_blank"
           >
             {{ item.name }}
           </v-btn>
@@ -147,22 +154,23 @@ export default {
     userRepositories: Array,
     userPortfolio: Array,
     userId: String
-  },
-  computed: {
-    checkedList() {
-      return this.userPortfolio.filter((item) => {
-        return item !== 'empty'
-      })
-    }
   }
 }
 </script>
 <style lang="sass">
 #ExpansionPanel
-  .v-expansion-panel-header--active
+  .v-expansion-panel-header
     min-height: 48px
+    .v-btn--contained
+      padding: 0 0 0 5px
+      justify-content: space-between
+      @media screen and (max-width: 510px)
+        font-size: 13px
+        letter-spacing: 0.8px
+        font-weight: 400
   .v-chip
     max-width: 35px
+    min-width: 20px
     margin-left: 5px
     justify-content: center
     padding: 0

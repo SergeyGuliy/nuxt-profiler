@@ -1,5 +1,5 @@
 <template>
-  <v-card id="Card" :dark="$vuetify.theme.dark">
+  <v-card :dark="$vuetify.theme.dark" class="Card">
     <slot />
   </v-card>
 </template>
@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="sass">
-#Card
+.Card
   padding: 16px 20px
   min-height: 100%
   @media print

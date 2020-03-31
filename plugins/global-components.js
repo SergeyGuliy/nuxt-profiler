@@ -17,10 +17,11 @@ import TableText from '~/components/misc/TableItems/TableText'
 import TableIcon from '~/components/misc/TableItems/TableIcon'
 import BtnCreate from '~/components/misc/BtnCreate'
 import UserShowingData from '~/components/pages_components/UserShowingData'
-import SideLink from '~/components/misc/CardItems/SideLink'
+import SideLink from '~/components/misc/SideLink'
 import PortfolioList from '~/components/pages_components/PortfolioList'
 import BtnPrint from '~/components/misc/BtnPrint'
 import BtnShare from '~/components/misc/BtnShare'
+
 const components = {
   Page,
   PageHeader,

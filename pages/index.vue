@@ -67,16 +67,18 @@ export default {
             allUsers,
             allRepositories,
             allArticles,
-            gitApiInfo: (await app.$axios.get(data.userInfo.contacts.gitApi))
-              .data
+            gitApiInfo:
+              (await app.$axios.get(data.userInfo.contacts.gitApi)).data ||
+              false
           }
-        }
-        return {
-          data,
-          allUsers,
-          allRepositories,
-          allArticles,
-          gitApiInfo: false
+        } else {
+          return {
+            data,
+            allUsers,
+            allRepositories,
+            allArticles,
+            gitApiInfo: false
+          }
         }
       } catch (e) {
         error({ message: "Can't fetch your data." })

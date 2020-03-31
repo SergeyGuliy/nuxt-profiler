@@ -19,7 +19,6 @@
                   $route.params.id
                 )
               "
-              class="mx-1"
               color="green"
             >
               <v-icon>mdi-vector-polyline-plus</v-icon>
@@ -27,7 +26,6 @@
             <v-btn
               @click="deleteFromMyList($route.params.id)"
               v-else
-              class="mx-1"
               color="red"
             >
               <v-icon>mdi-vector-polyline-minus</v-icon>
@@ -43,40 +41,19 @@
             <CardRow>
               <CardRowTitle>GitHub Info:</CardRowTitle>
               <v-chip-group column>
-                <v-chip
-                  class="mx-1"
-                  color="indigo"
-                  text-color="white"
-                  large
-                  pill
-                  label
-                >
+                <v-chip color="indigo" text-color="white" large pill label>
                   <v-chip left color="red" small pill label class="icon">
                     {{ gitApiInfo.watchers_count }}
                   </v-chip>
                   Stars
                 </v-chip>
-                <v-chip
-                  class="mx-1"
-                  color="indigo"
-                  text-color="white"
-                  large
-                  pill
-                  label
-                >
+                <v-chip color="indigo" text-color="white" large pill label>
                   <v-chip left color="red" small pill label class="icon">
                     {{ gitApiInfo.subscribers_count }}
                   </v-chip>
                   Watchers
                 </v-chip>
-                <v-chip
-                  class="mx-1"
-                  color="indigo"
-                  text-color="white"
-                  large
-                  pill
-                  label
-                >
+                <v-chip color="indigo" text-color="white" large pill label>
                   <v-chip left color="red" small pill label class="icon">
                     {{ gitApiInfo.forks }}
                   </v-chip>
@@ -204,9 +181,15 @@ export default {
 
 <style lang="sass">
 #ShowRepository
-  .v-chip--pill
-    height: 25px
-    padding: 0 5px
+  .v-slide-group__content
+    padding: 0
+    .v-chip--pill
+      height: 25px
+      padding: 0 2px
+      margin: 0 2px !important
+      .v-chip--pill
+        height: 18px
+        padding: 0 2px
   .icon
     height: 15px
 </style>

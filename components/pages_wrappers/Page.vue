@@ -15,6 +15,7 @@ export default {
   name: 'BodyCard'
 }
 </script>
+card__title
 
 <style lang="sass">
 .Page.v-card
@@ -23,10 +24,12 @@ export default {
   display: flex
   flex-direction: column
   .v-card__title
-    padding: 16px 10px
     flex: 0 1 auto
+    @media print
+      padding-top: 8px
+      padding-bottom: 12px
   .v-card__subtitle
-    padding: 16px 10px
+    padding: 0 10px
     flex: 1 1 auto
   .print
     @media print

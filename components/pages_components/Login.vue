@@ -84,7 +84,15 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {}
+      } catch (e) {
+        this.$dialog.message.error(`${e.message}`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+        this.email = ''
+        this.password = ''
+        this.loading = false
+      }
     }
   }
 }

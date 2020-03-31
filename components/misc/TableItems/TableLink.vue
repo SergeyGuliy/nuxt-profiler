@@ -1,5 +1,5 @@
 <template>
-  <v-btn id="TableLink" @click="$router.push(link)" text>
+  <v-btn @click="$router.push(link)" class="TableLink" text>
     {{ text }}
     <v-icon color="green">{{ icon }}</v-icon>
   </v-btn>
@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style lang="sass">
-#TableLink
+#Table .TableLink
   padding: 0 5px
   min-width: 90%
   text-transform: none

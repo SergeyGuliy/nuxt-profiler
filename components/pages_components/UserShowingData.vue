@@ -22,28 +22,31 @@
           }}</span>
         </CardRow>
         <CardRow>
+          <CardRowTitle>Education:</CardRowTitle>
+          <span>{{
+            data.userInfo.info.education
+              ? data.userInfo.info.education
+              : 'Not indicated'
+          }}</span>
+        </CardRow>
+        <CardRow>
           <CardRowTitle>About:</CardRowTitle>
         </CardRow>
         <CardRow>
-          <p>
-            {{
-              data.userInfo.info.about
-                ? data.userInfo.info.about
-                : 'Not indicated'
-            }}
-          </p>
+          <p class="about_user" />
         </CardRow>
       </Card>
     </template>
     <template #c-2>
       <Card>
         <CardTitle>Contacts</CardTitle>
-        <CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.email }">
           <CardRowTitle>E-mail:</CardRowTitle>
 
           <div v-if="data.userInfo.contacts.email">
             <BtnOpenBlank
-              :link="`mailto:${data.userInfo.contacts.email}`"
+              :link="data.userInfo.contacts.email"
+              type="email"
               icon="mdi-at"
               text="mail"
             />
@@ -51,13 +54,14 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.phone }">
           <CardRowTitle>Phone:</CardRowTitle>
           <div v-if="data.userInfo.contacts.phone">
             <BtnOpenBlank
               :link="
-                `tel:${data.userInfo.contacts.phone_code}-${data.userInfo.contacts.phone}`
+                `${data.userInfo.contacts.phone_code}-${data.userInfo.contacts.phone}`
               "
+              type="tel"
               icon="mdi-phone"
               text="Call"
             />
@@ -69,13 +73,35 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
-          <CardRowTitle v-if="data.userInfo.contacts.git_type === 'GitHub'"
-            >GitHub:</CardRowTitle
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.skype }">
+          <CardRowTitle>Skype:</CardRowTitle>
+
+          <div v-if="data.userInfo.contacts.skype">
+            <BtnOpenBlank
+              :link="`${data.userInfo.contacts.skype.split('live:')[1]}`"
+              type="skype"
+              icon="mdi-skype"
+              text="call"
+            />
+            <BtnCopy
+              :copyValue="
+                `skype:${
+                  data.userInfo.contacts.skype.split('live:')[1]
+                }?userinfo`
+              "
+            />
+          </div>
+          <span v-else>Not indicated</span>
+        </CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.github }">
+          <CardRowTitle v-if="data.userInfo.contacts.git_type === 'GitHub'">
+            GitHub:
+          </CardRowTitle>
+          <CardRowTitle
+            v-else-if="data.userInfo.contacts.git_type === 'GitLab'"
           >
-          <CardRowTitle v-else-if="data.userInfo.contacts.git_type === 'GitLab'"
-            >GitLab:</CardRowTitle
-          >
+            GitLab:
+          </CardRowTitle>
           <CardRowTitle v-else>Git:</CardRowTitle>
           <div v-if="data.userInfo.contacts.github">
             <BtnOpenBlank
@@ -86,7 +112,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.linkedIn }">
           <CardRowTitle>LinkedIn:</CardRowTitle>
           <div v-if="data.userInfo.contacts.linkedIn">
             <BtnOpenBlank
@@ -97,7 +123,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.facebook }">
           <CardRowTitle>Facebook:</CardRowTitle>
           <div v-if="data.userInfo.contacts.facebook">
             <BtnOpenBlank
@@ -109,7 +135,7 @@
 
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.site }">
           <CardRowTitle>Your site:</CardRowTitle>
           <div v-if="data.userInfo.contacts.site">
             <BtnOpenBlank :link="data.userInfo.contacts.site" />
@@ -136,6 +162,14 @@
           }}</span>
         </CardRow>
         <CardRow>
+          <CardRowTitle>Work Scope:</CardRowTitle>
+          <span>{{
+            data.userInfo.work.work_scope
+              ? data.userInfo.work.work_scope
+              : 'Not indicated'
+          }}</span>
+        </CardRow>
+        <CardRow>
           <CardRowTitle>Work Position:</CardRowTitle>
           <span>{{
             data.userInfo.work.work_position
@@ -153,7 +187,7 @@
           <span v-else>Not indicated</span>
         </CardRow>
         <CardRow>
-          <CardRowTitle>Working Languages:</CardRowTitle>
+          <CardRowTitle>Working Technologies:</CardRowTitle>
           <v-chip-group v-if="!workTechnologies.length == 0" column>
             <v-chip v-for="item in workTechnologies" :key="item" label small>
               {{ item }}
@@ -161,6 +195,13 @@
           </v-chip-group>
           <span v-else>Not indicated</span>
         </CardRow>
+        <div v-if="checkedList.length > 0" class="PortfolioLinks">
+          <CardTitle>Portfolio links</CardTitle>
+          <CardRow v-for="item in checkedList" :key="item.id">
+            <CardRowTitle>{{ item.name }}:</CardRowTitle>
+            <span>{{ item.cite }}</span>
+          </CardRow>
+        </div>
       </Card>
     </template>
     <template #c-3>
@@ -170,7 +211,7 @@
           :userFriends="userFriends"
           :userArticles="userArticles"
           :userRepositories="userRepositories"
-          :userPortfolio="data.lists.portfolio"
+          :userPortfolio="checkedList"
           :userId="data.id"
         />
       </Card>
@@ -191,6 +232,11 @@ export default {
     gitApiInfo: [Object, Boolean]
   },
   computed: {
+    checkedList() {
+      return this.data.lists.portfolio.filter((item) => {
+        return item !== 'empty'
+      })
+    },
     workLanguages() {
       const workLanguages = []
       this.data.userInfo.work.work_languages.forEach((item) => {
@@ -251,6 +297,16 @@ export default {
       }
       return myList
     }
+  },
+  mounted() {
+    const aboutUser = document.querySelector('.about_user')
+    let formatedString
+    if (this.data.userInfo.info.about.length > 0) {
+      formatedString = this.data.userInfo.info.about.split('///').join('<br />')
+    } else {
+      formatedString = 'Not indicated'
+    }
+    aboutUser.innerHTML = formatedString
   }
 }
 </script>
@@ -260,4 +316,14 @@ p
   display: block
   min-width: 100%
   min-height: 100%
+.PortfolioLinks
+  display: none
+  @media print
+    display: block
+.v-chip--no-color
+  padding: 0 5px
+  margin: 0 3px 0 0 !important
+.hide-on-print
+  @media print
+    display: none
 </style>

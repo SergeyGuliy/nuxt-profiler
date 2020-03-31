@@ -1,8 +1,8 @@
 <template>
   <v-btn
-    id="NavLink"
     :to="link"
     :class="{ 'full-width': sidebar }"
+    class="NavLink"
     text
     exact-active-class="outlined"
   >
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style lang="sass">
-#NavLink
+.NavLink
   margin: 0 2px
   span
     font-size: 14px

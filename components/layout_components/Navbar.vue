@@ -23,11 +23,7 @@
     </v-toolbar-title>
     <v-spacer />
     <!--    <v-btn icon><v-icon>mdi-translate</v-icon></v-btn>-->
-    <v-btn
-      @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-      icon
-      class="active"
-    >
+    <v-btn @click="changeTheme" icon class="active">
       <v-icon>mdi-invert-colors</v-icon>
     </v-btn>
     <v-btn @click="logOut" v-if="$store.getters.user" icon class="mr-1">
@@ -84,6 +80,12 @@ export default {
     async logOut() {
       try {
         await this.$store.dispatch('logOut')
+      } catch (e) {}
+    },
+    async changeTheme() {
+      try {
+        await this.$store.dispatch('changeTheme')
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       } catch (e) {}
     }
   }

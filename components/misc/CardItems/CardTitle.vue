@@ -1,5 +1,5 @@
 <template>
-  <span id="Title" class="headline my-2">
+  <span class="headline my-2 Title">
     <slot />
   </span>
 </template>
@@ -11,10 +11,10 @@ export default {
 </script>
 
 <style lang="sass">
-#Title
+#PageBody .Title
   display: block
   text-align: center
-  margin: auto
+  margin: 4px auto !important
   span
     margin-bottom: 3px
 </style>

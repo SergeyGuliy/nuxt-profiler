@@ -1,5 +1,10 @@
 <template>
-  <v-btn @click="copyLink" color="green" class="mx-1">
+  <v-btn
+    @click="copyLink"
+    v-tooltip.bottom-start="'Copy link to page.'"
+    color="green"
+    class="mx-1"
+  >
     <v-icon>mdi-share-variant</v-icon>
   </v-btn>
 </template>

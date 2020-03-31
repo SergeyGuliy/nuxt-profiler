@@ -48,9 +48,9 @@
 <script>
 export default {
   name: 'Sidebar',
-  props: ['sidebarStatus'],
+  props: { sidebarStatus: Boolean },
   data: () => ({
-    drawer: true
+    drawer: false
   }),
   watch: {
     sidebarStatus(val) {

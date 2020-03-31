@@ -1,5 +1,5 @@
 <template>
-  <v-chip id="TableText" v-if="text" small label>
+  <v-chip v-if="text" class="TableText" small label>
     {{ text }}
   </v-chip>
 </template>
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="sass">
-#TableText
+#Table .TableText
   padding: 0 3px
   font-size: 14px
   letter-spacing: 0.1px

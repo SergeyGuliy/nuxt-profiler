@@ -1,5 +1,5 @@
 <template>
-  <v-btn id="BtnCopy" @click="copy(copyValue)" color="blue" small outlined>
+  <v-btn @click="copy(copyValue)" class="BtnCopy" color="blue" small outlined>
     Copy
     <v-icon dense class="mx-1">mdi-content-copy</v-icon>
   </v-btn>
@@ -23,8 +23,11 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-#BtnCopy
+<style lang="sass">
+.Card .CardRow .BtnCopy
+  padding: 0 5px
+  letter-spacing: 0.7px
+  height: 23px
   @media print
     display: none
 </style>

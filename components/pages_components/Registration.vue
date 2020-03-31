@@ -97,7 +97,20 @@ export default {
           password: this.password
         })
         this.loading = false
-      } catch (e) {}
+        this.$dialog.message.success(`You successfully registrated in base.`, {
+          position: 'top-right',
+          timeout: 3000
+        })
+      } catch (e) {
+        this.$dialog.message.error(`${e.message}`, {
+          position: 'top-right',
+          timeout: 5000
+        })
+        this.email = ''
+        this.password = ''
+        this.passwordRepeat = ''
+        this.loading = false
+      }
     }
   }
 }

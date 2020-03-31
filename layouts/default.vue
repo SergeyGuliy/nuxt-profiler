@@ -19,10 +19,18 @@ export default {
       sidebarStatus: false
     }
   },
-  transition: 'bounce'
+  transition: 'bounce',
+  created() {
+    if (this.$store.getters.user) {
+      this.$vuetify.theme.dark = this.$store.getters.user.themeDark
+    } else {
+      this.$vuetify.theme.dark = true
+    }
+  }
 }
 </script>
 
 <style lang="sass">
 @import '~/assets/styles.sass'
+@import '~/assets/tooltip.scss'
 </style>

@@ -21,11 +21,10 @@
               @click="addTomMyList(data.id)"
               v-if="!$store.getters.user.lists.friends.includes(data.id)"
               color="green"
-              class="mx-1"
             >
               <v-icon>mdi-account-plus</v-icon>
             </v-btn>
-            <v-btn @click="deleteFromMyList()" v-else color="red" class="mx-1">
+            <v-btn @click="deleteFromMyList()" v-else color="red">
               <v-icon>mdi-account-minus</v-icon>
             </v-btn>
           </div>

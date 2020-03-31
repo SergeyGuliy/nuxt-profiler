@@ -7,6 +7,7 @@
           <v-btn
             v-if="!$store.getters.user.isAdmin"
             @click="submitBecomeAdmin"
+            v-tooltip.bottom-start="'Become admin.'"
             mx-1
             color="green"
           >
@@ -14,6 +15,7 @@
           </v-btn>
           <v-btn
             v-if="$store.getters.user.isAdmin"
+            v-tooltip.bottom-start="'Become casual user.'"
             @click="submitBecomeUser"
             mx-1
             color="green"
@@ -23,6 +25,7 @@
           <v-btn
             @click="submitUpdateInfo"
             :disabled="!formIsChanged"
+            v-tooltip.bottom-start="'Update your information.'"
             class="mx-1"
             color="green"
           >
@@ -81,11 +84,18 @@
                 min="1950-01-01"
               />
             </v-menu>
+            <v-text-field
+              v-model="info.education"
+              :rules="rules.education"
+              :counter="40"
+              label="Your higher education"
+              outlined
+            />
             <v-textarea
               v-model="info.about"
               :rules="rules.about"
               :counter="200"
-              label="Tell about yourself"
+              label="Tell about yourself. (Use /// to break line.)"
               outlined
               auto-grow
               rows="1"
@@ -106,6 +116,13 @@
               v-model="work.work_type"
               :items="work_type"
               label="Working type"
+              outlined
+              height="56px"
+            />
+            <v-select
+              v-model="work.work_scope"
+              :items="work_scope"
+              label="Work scope"
               outlined
               height="56px"
             />
@@ -187,6 +204,15 @@
               </v-col>
             </v-row>
             <v-text-field
+              v-model="contacts.skype"
+              :rules="rules.skype"
+              :counter="20"
+              label="Your Skype link"
+              outlined
+              type="url"
+              placeholder="live:SKYPE_USER_PROFILE"
+            />
+            <v-text-field
               v-model="contacts.site"
               :rules="rules.cite"
               :counter="100"
@@ -240,6 +266,11 @@ export default {
         'Human resources',
         'Quality assurance'
       ],
+      work_scope: [
+        'Web development',
+        'Game development',
+        'Artificial Intelligence'
+      ],
       codes: [
         '+380',
         '+971',
@@ -259,13 +290,16 @@ export default {
         name: [
           (v) => v.length <= 15 || 'Input must be less than 15 characters'
         ],
+        education: [
+          (v) => v.length <= 40 || 'Input must be less than 40 characters'
+        ],
         about: [
           (v) =>
             v.length <= 200 || 'Description must be less than 200 characters'
         ],
         phone: [(v) => v.length === 12 || 'Phone length must be 12'],
         cite: [
-          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => /http.+/.test(v) || 'Link must starts with "http"',
           (v) => v.length <= 100 || 'Link must be less than 100 characters'
         ],
         linkedIn: [
@@ -279,6 +313,10 @@ export default {
             /https:\/\/www.facebook.com\/.+/.test(v) ||
             'Link must starts with "https://www.facebook.com/"',
           (v) => v.length <= 100 || 'Link must be less than 100 characters'
+        ],
+        skype: [
+          (v) => /live:.+/.test(v) || 'Link must starts with "live:"',
+          (v) => v.length <= 20 || 'Link must be less than 20 characters'
         ],
         git: [
           (v) => {
@@ -309,9 +347,11 @@ export default {
         this.user.info.last_name !== this.info.last_name ||
         this.user.info.about !== this.info.about ||
         this.user.info.location !== this.info.location ||
+        this.user.info.education !== this.info.education ||
         this.user.info.date_of_birth !== this.info.date_of_birth ||
         this.user.work.work_languages !== this.work.work_languages ||
         this.user.work.work_position !== this.work.work_position ||
+        this.user.work.work_scope !== this.work.work_scope ||
         this.user.work.work_status.toString() !==
           this.work.work_status.toString() ||
         this.user.work.work_technologies.toString() !==
@@ -322,7 +362,8 @@ export default {
         this.user.contacts.github !== this.contacts.github ||
         this.user.contacts.site !== this.contacts.site ||
         this.user.contacts.linkedIn !== this.contacts.linkedIn ||
-        this.user.contacts.facebook !== this.contacts.facebook
+        this.user.contacts.facebook !== this.contacts.facebook ||
+        this.user.contacts.skype !== this.contacts.skype
       )
     },
     technologies() {
@@ -483,7 +524,9 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     save(date) {
       this.$refs.menu.save(date)

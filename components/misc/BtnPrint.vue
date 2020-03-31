@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="print" color="blue">
+  <v-btn @click="print" v-tooltip.bottom-start="'Print page.'" color="blue">
     <v-icon>mdi-printer</v-icon>
   </v-btn>
 </template>

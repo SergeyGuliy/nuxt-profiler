@@ -17,7 +17,6 @@
               v-if="
                 !$store.getters.user.lists.articles.includes($route.params.id)
               "
-              class="mx-1"
               color="green"
             >
               <v-icon>mdi-book-plus</v-icon>
@@ -25,7 +24,6 @@
             <v-btn
               @click="deleteFromMyList($route.params.id)"
               v-else
-              class="mx-1"
               color="red"
             >
               <v-icon>mdi-book-minus</v-icon>
