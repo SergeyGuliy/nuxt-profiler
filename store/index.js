@@ -26,7 +26,7 @@ export const actions = {
       await dispatch('logOut')
     }
   },
-  async createNewUser({ commit, dispatch }, data) {
+  async createNewUser({ commit, dispatch, getters }, data) {
     try {
       await firebase
         .auth()
@@ -84,7 +84,7 @@ export const actions = {
         })
       this.$cookies.set('access_token', uid)
       await dispatch('fetchUserInfo', uid)
-      this.$router.go()
+      this.$router.push(`/${getters.user.profile}/edit_profile`)
     } catch (e) {
       console.log(e)
       throw e

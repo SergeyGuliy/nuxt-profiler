@@ -1,6 +1,9 @@
 .tooltip {
   display: block !important;
   z-index: 10000;
+  @media print {
+    display: none;
+  }
 
   .tooltip-inner {
     background: black;

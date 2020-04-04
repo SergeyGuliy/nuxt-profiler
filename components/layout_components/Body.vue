@@ -18,5 +18,5 @@ export default {
     padding: 0 !important
   .container.fill-height
     align-items: start
-    padding: 12px 5px
+    padding: 5px
 </style>

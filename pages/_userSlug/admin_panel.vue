@@ -19,7 +19,15 @@
             />
             <v-btn
               @click="addLanguage"
-              :disabled="!(newLanguage.length >= 1 && newLanguage.length <= 20)"
+              :disabled="
+                !(newLanguage.length >= 1 && newLanguage.length <= 20) ||
+                  newLanguage.includes('.') ||
+                  newLanguage.includes('#') ||
+                  newLanguage.includes('$') ||
+                  newLanguage.includes('/') ||
+                  newLanguage.includes('[') ||
+                  newLanguage.includes(']')
+              "
               :loading="loading"
               block
               color="green"
@@ -115,7 +123,16 @@ export default {
       loading: false,
       rules: {
         lang: [
-          (v) => v.length <= 20 || 'Language must be less than 10 characters'
+          (v) => v.length <= 20 || 'Language must be less than 10 characters',
+          (v) =>
+            !(
+              v.includes('.') ||
+              v.includes('#') ||
+              v.includes('$') ||
+              v.includes('/') ||
+              v.includes('[') ||
+              v.includes(']')
+            ) || 'Language can\'t contain ".", "#", "$", "/", "[", or "]"'
         ],
         tech: [
           (v) => v.length <= 20 || 'Technology must be less than 10 characters'
@@ -136,11 +153,11 @@ export default {
       this.loading = true
       try {
         await updateCategories(this.languages)
-        console.log('e')
       } catch (e) {
-        console.log(e)
+        throw e
+      } finally {
+        this.loading = false
       }
-      this.loading = false
     },
     selectLanguage(item) {
       if (item && !item.technologies) {
@@ -149,26 +166,37 @@ export default {
       this.languageSelected = item
     },
     async addLanguage() {
-      if (this.languages[this.newLanguage]) {
-        this.$dialog.message.error(
-          `There is already ${this.newLanguage} in list of languages`,
+      try {
+        if (this.languages[this.newLanguage]) {
+          this.$dialog.message.error(
+            `There is already ${this.newLanguage} in list of languages`,
+            {
+              position: 'top-right',
+              timeout: 3000
+            }
+          )
+          return
+        }
+        this.$set(this.languages, this.newLanguage, {
+          name: this.newLanguage,
+          technologies: []
+        })
+        this.$dialog.message.success(
+          `Created new language ${this.newLanguage}`,
           {
             position: 'top-right',
             timeout: 3000
           }
         )
-        return
+        await this.save()
+        this.newLanguage = ''
+      } catch (e) {
+        console.log(e.message)
+        this.$dialog.message.error(`${e.message}`, {
+          position: 'top-right',
+          timeout: 3000
+        })
       }
-      this.$set(this.languages, this.newLanguage, {
-        name: this.newLanguage,
-        technologies: []
-      })
-      this.$dialog.message.success(`Created new language ${this.newLanguage}`, {
-        position: 'top-right',
-        timeout: 3000
-      })
-      await this.save()
-      this.newLanguage = ''
     },
     async deleteLanguage(language) {
       this.languageSelected = language.name

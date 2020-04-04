@@ -10,9 +10,15 @@
             class="switch"
             inset
           />
-          <v-btn @click="save" :disabled="!formIsValid" class="mx-1"
-            >Save</v-btn
+          <v-btn
+            @click="save"
+            :disabled="!formIsValid"
+            v-tooltip.bottom-start="'Create repository.'"
+            class="mx-1"
+            color="green"
           >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
         </template>
       </PageHeader>
     </template>

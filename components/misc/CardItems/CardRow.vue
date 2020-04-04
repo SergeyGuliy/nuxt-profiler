@@ -13,7 +13,7 @@ export default {
 <style lang="sass">
 .CardRow
   display: flex
-  min-height: 29px
+  min-height: 27px
   justify-content: space-between
   align-items: center
   flex-wrap: wrap

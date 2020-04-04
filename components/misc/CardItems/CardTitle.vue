@@ -1,5 +1,5 @@
 <template>
-  <span class="headline my-2 Title">
+  <span class="my-2 Title">
     <slot />
   </span>
 </template>
@@ -14,7 +14,9 @@ export default {
 #PageBody .Title
   display: block
   text-align: center
-  margin: 4px auto !important
+  margin: 0 auto !important
+  font-size: 18px
+  letter-spacing: -0.5px
   span
     margin-bottom: 3px
 </style>

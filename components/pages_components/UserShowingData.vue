@@ -4,7 +4,7 @@
       <Card>
         <GitInfo v-if="gitApiInfo" :gitApiInfo="gitApiInfo" :data="data" />
 
-        <CardTitle>User Info</CardTitle>
+        <CardTitle class="d-print-none">User Info</CardTitle>
         <CardRow>
           <CardRowTitle>Location:</CardRowTitle>
           <span>{{
@@ -40,7 +40,7 @@
     <template #c-2>
       <Card>
         <CardTitle>Contacts</CardTitle>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.email }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.email }">
           <CardRowTitle>E-mail:</CardRowTitle>
 
           <div v-if="data.userInfo.contacts.email">
@@ -54,7 +54,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.phone }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.phone }">
           <CardRowTitle>Phone:</CardRowTitle>
           <div v-if="data.userInfo.contacts.phone">
             <BtnOpenBlank
@@ -73,7 +73,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.skype }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.skype }">
           <CardRowTitle>Skype:</CardRowTitle>
 
           <div v-if="data.userInfo.contacts.skype">
@@ -93,7 +93,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.github }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.github }">
           <CardRowTitle v-if="data.userInfo.contacts.git_type === 'GitHub'">
             GitHub:
           </CardRowTitle>
@@ -112,7 +112,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.linkedIn }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.linkedIn }">
           <CardRowTitle>LinkedIn:</CardRowTitle>
           <div v-if="data.userInfo.contacts.linkedIn">
             <BtnOpenBlank
@@ -123,7 +123,7 @@
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.facebook }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.facebook }">
           <CardRowTitle>Facebook:</CardRowTitle>
           <div v-if="data.userInfo.contacts.facebook">
             <BtnOpenBlank
@@ -135,7 +135,7 @@
 
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow :class="{ 'hide-on-print': !data.userInfo.contacts.site }">
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.site }">
           <CardRowTitle>Your site:</CardRowTitle>
           <div v-if="data.userInfo.contacts.site">
             <BtnOpenBlank :link="data.userInfo.contacts.site" />
@@ -145,15 +145,15 @@
         </CardRow>
 
         <CardTitle>Working Info</CardTitle>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': !data.userInfo.work.work_status }">
           <CardRowTitle>Work Status:</CardRowTitle>
           <span>{{
-            data.userInfo.work_status
-              ? data.userInfo.work_status
+            data.userInfo.work.work_status
+              ? data.userInfo.work.work_status
               : 'Not indicated'
           }}</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': !data.userInfo.work.work_type }">
           <CardRowTitle>Work Type:</CardRowTitle>
           <span>{{
             data.userInfo.work.work_type
@@ -161,7 +161,7 @@
               : 'Not indicated'
           }}</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': !data.userInfo.work.work_scope }">
           <CardRowTitle>Work Scope:</CardRowTitle>
           <span>{{
             data.userInfo.work.work_scope
@@ -169,7 +169,7 @@
               : 'Not indicated'
           }}</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': !data.userInfo.work.work_position }">
           <CardRowTitle>Work Position:</CardRowTitle>
           <span>{{
             data.userInfo.work.work_position
@@ -177,7 +177,7 @@
               : 'Not indicated'
           }}</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': workLanguages.length === 0 }">
           <CardRowTitle>Working Languages:</CardRowTitle>
           <v-chip-group v-if="!workLanguages.length == 0" column>
             <v-chip v-for="item in workLanguages" :key="item" label small>
@@ -186,7 +186,7 @@
           </v-chip-group>
           <span v-else>Not indicated</span>
         </CardRow>
-        <CardRow>
+        <CardRow :class="{ 'd-print-none': workTechnologies.length === 0 }">
           <CardRowTitle>Working Technologies:</CardRowTitle>
           <v-chip-group v-if="!workTechnologies.length == 0" column>
             <v-chip v-for="item in workTechnologies" :key="item" label small>
@@ -199,7 +199,7 @@
           <CardTitle>Portfolio links</CardTitle>
           <CardRow v-for="item in checkedList" :key="item.id">
             <CardRowTitle>{{ item.name }}:</CardRowTitle>
-            <span>{{ item.cite }}</span>
+            <span>{{ item.cite.split('//')[1] }}</span>
           </CardRow>
         </div>
       </Card>
@@ -323,7 +323,4 @@ p
 .v-chip--no-color
   padding: 0 5px
   margin: 0 3px 0 0 !important
-.hide-on-print
-  @media print
-    display: none
 </style>

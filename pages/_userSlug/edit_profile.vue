@@ -257,7 +257,12 @@ export default {
     return {
       menu: false,
       git_types: ['GitHub', 'GitLab'],
-      work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
+      work_status: [
+        'Unemployed (searching)',
+        'Unemployed (not searching)',
+        'Full employment',
+        'Part-time employment'
+      ],
       work_type: ['Office worker', 'Freelancer'],
       work_position: [
         'Developer',
@@ -352,12 +357,12 @@ export default {
         this.user.work.work_languages !== this.work.work_languages ||
         this.user.work.work_position !== this.work.work_position ||
         this.user.work.work_scope !== this.work.work_scope ||
-        this.user.work.work_status.toString() !==
-          this.work.work_status.toString() ||
-        this.user.work.work_technologies.toString() !==
-          this.work.work_technologies.toString() ||
-        this.user.work.work_type.toString() !==
-          this.work.work_type.toString() ||
+        JSON.stringify(this.user.work.work_status) !==
+          JSON.stringify(this.work.work_status) ||
+        JSON.stringify(this.user.work.work_technologies) !==
+          JSON.stringify(this.work.work_technologies) ||
+        JSON.stringify(this.user.work.work_type) !==
+          JSON.stringify(this.work.work_type) ||
         this.user.contacts.phone !== this.contacts.phone ||
         this.user.contacts.github !== this.contacts.github ||
         this.user.contacts.site !== this.contacts.site ||
@@ -434,6 +439,9 @@ export default {
       this.work.work_technologies = this.work.work_technologies.filter(
         (value) => technologies.includes(value)
       )
+      if (this.work.work_technologies.length === 0) {
+        this.work.work_technologies.push('empty')
+      }
     }
   },
   async asyncData(context) {
@@ -453,8 +461,9 @@ export default {
     async submitBecomeAdmin() {
       try {
         const res = await this.$dialog.confirm({
-          text: 'Do you really want to become Admin?',
-          title: 'Warning'
+          text:
+            "It will give you opportunity to access Admin Panel Page. Where you cant change Languages and technologies items. (Please don't delete existing categories! But you can create new.)",
+          title: 'You want to become Admin? '
         })
         if (res) {
           this.$store.commit('becomeAdmin')
@@ -474,8 +483,8 @@ export default {
     async submitBecomeUser() {
       try {
         const res = await this.$dialog.confirm({
-          text: 'Do you really want to become casual User?',
-          title: 'Warning'
+          text: 'You will lose access to admin page',
+          title: 'You want to become casual User?'
         })
         if (res) {
           this.$store.commit('unBecomeAdmin')

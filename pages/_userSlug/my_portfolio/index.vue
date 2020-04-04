@@ -14,11 +14,9 @@
         </template>
         <template #actions v-if="listFiltered.length > 0">
           <v-select
-            :items="[1, 3, 6]"
+            :items="[3, 5, 7, 9]"
             v-model="pageSize"
             label="Page size"
-            outlined
-            dense
             style="max-width: 56px;"
           />
         </template>

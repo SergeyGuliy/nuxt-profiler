@@ -28,7 +28,9 @@
 
       <v-card-actions>
         <v-btn :href="item.cite" link target="_blank">Link to site</v-btn>
-        <v-btn :href="item.gitHub" link target="_blank">link to github</v-btn>
+        <v-btn v-if="item.gitHub" :href="item.gitHub" link target="_blank">
+          link to github
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>

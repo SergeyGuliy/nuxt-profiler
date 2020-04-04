@@ -51,7 +51,7 @@
         admin panel
       </NavLink>
       <NavLink :link="`/${$store.getters.user.profile}/my_friends`">
-        my friends
+        followings
       </NavLink>
       <NavLink :link="`/${$store.getters.user.profile}/my_repositories`">
         my repositories

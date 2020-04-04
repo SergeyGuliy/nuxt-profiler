@@ -28,7 +28,7 @@
             Admin panel
           </SideLink>
           <SideLink :link="`/${$store.getters.user.profile}/my_friends`">
-            My friends
+            followings
           </SideLink>
           <SideLink :link="`/${$store.getters.user.profile}/my_repositories`">
             My repositories

@@ -4,9 +4,15 @@
       <PageHeader>
         <template #title>Create Portfolio work</template>
         <template #actions>
-          <v-btn @click="save" :disabled="!formIsValid" class="mx-1"
-            >Save</v-btn
+          <v-btn
+            @click="save"
+            :disabled="!formIsValid"
+            v-tooltip.bottom-start="'Create portfolio work.'"
+            class="mx-1"
+            color="green"
           >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
         </template>
       </PageHeader>
     </template>
@@ -59,7 +65,7 @@ export default {
         ],
         cite: [
           (v) => !!v || 'Link is required',
-          (v) => /http.+/.test(v) || 'Link must starts with "https://"',
+          (v) => /http.+/.test(v) || 'Link must starts with "http"',
           (v) => v.length <= 200 || 'Link must be less than 200 characters'
         ],
         gitHub: [

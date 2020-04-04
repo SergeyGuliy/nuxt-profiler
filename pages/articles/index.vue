@@ -14,35 +14,23 @@
             :items="[5, 10, 15]"
             v-model="pageSize"
             label="Page size"
-            outlined
-            dense
-            style="max-width: 56px;"
+            style="max-width: 43px;"
           />
           <v-select
             v-model="language"
             :items="Object.keys(languages)"
             label="Language"
-            outlined
             clearable
-            dense
           >
           </v-select>
           <v-select
             v-model="technology"
             :items="technologies"
             label="Technology"
-            outlined
             clearable
-            dense
           >
           </v-select>
-          <v-text-field
-            v-model="searchKey"
-            label="Search"
-            outlined
-            clearable
-            dense
-          />
+          <v-text-field v-model="searchKey" label="Search" clearable />
         </template>
       </PageHeader>
     </template>
