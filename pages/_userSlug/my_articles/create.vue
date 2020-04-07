@@ -131,12 +131,14 @@ export default {
       this.technology = ''
     }
   },
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
   },
   head: {
     title: `Profiler - Create Article`
@@ -155,14 +157,15 @@ export default {
           creatorId: this.$store.getters.user.id
         }
         const id = await createArticle(data)
-        this.$store.commit('pushArticle', id)
-        await this.$store.dispatch('updateUserInfo')
+        await this.$store.dispatch('updateArticlesList', { type: 'add', id })
         this.$dialog.message.success(`Created Article: ${this.name}`, {
           position: 'top-right',
           timeout: 3000
         })
         this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

@@ -147,12 +147,14 @@ export default {
       this.technology = ''
     }
   },
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
   },
   head: {
     title: `Profiler - Create Repository`
@@ -177,8 +179,10 @@ export default {
           creatorId: this.$store.getters.user.id
         }
         const id = await createRepository(data)
-        this.$store.commit('pushRepository', id)
-        await this.$store.dispatch('updateUserInfo')
+        await this.$store.dispatch('updateRepositoriesList', {
+          type: 'add',
+          id
+        })
         this.$dialog.message.success(`Created Repository: ${this.name}`, {
           position: 'top-right',
           timeout: 3000

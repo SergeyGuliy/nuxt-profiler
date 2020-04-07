@@ -13,10 +13,8 @@ const firebaseConfig = {
   measurementId: 'G-QFMBYRP2J7'
 }
 
-let app = null
 if (!firebase.apps.length) {
-  app = firebase.initializeApp(firebaseConfig)
+  firebase.initializeApp(firebaseConfig)
 }
-console.log(app)
 
 export default firebase

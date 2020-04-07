@@ -141,12 +141,14 @@ export default {
     }
   },
   middleware: 'isNotAdmin',
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         languages: await fetchCategories()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch languages/technologies list." })
+    }
   },
   methods: {
     async save() {

@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 export const strict = false
 export const actions = {
   async nuxtServerInit({ dispatch }, { app }) {
-    // Fetching user info in server side
     try {
       // I am using cookies to be able fetch user info while server rendering.
       // Because 'firebase.auth().currentUser.uid' can't be invoked in server side.
@@ -12,6 +11,7 @@ export const actions = {
       await dispatch('logOut')
     }
   },
+
   async fetchUserInfo({ commit, dispatch, getters }, uid) {
     try {
       const userInfo = (
@@ -22,10 +22,14 @@ export const actions = {
       ).val()
       commit('setUser', userInfo)
     } catch (e) {
-      // If fetching user info will thow an error, will be invoked logging out user from base
+      // If fetching user info will throw an error, will be invoked logging out user from base
+      console.log(
+        'ALLARM!!! Something wrong while fetching user info. Check store!!!'
+      )
       await dispatch('logOut')
     }
   },
+
   async createNewUser({ commit, dispatch, getters }, data) {
     try {
       await firebase
@@ -90,6 +94,7 @@ export const actions = {
       throw e
     }
   },
+
   async logIn({ commit, dispatch }, data) {
     try {
       await firebase
@@ -103,6 +108,7 @@ export const actions = {
       throw e
     }
   },
+
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
@@ -119,18 +125,93 @@ export const actions = {
       this.$router.go()
     }
   },
-  async updateUserInfo({ getters }) {
+
+  async updateUserInfo({ getters, commit }, newUserInfo) {
     try {
+      commit('updateUserInfo', newUserInfo)
       const uid = this.$cookies.get('access_token')
       await firebase
         .database()
-        .ref(`/1_users/${uid}`)
-        .update(getters.user)
+        .ref(`/1_users/${uid}/userInfo`)
+        .set(getters.userInfo)
     } catch (e) {
       console.log('Error Updating User info')
       console.log(e)
     }
   },
+
+  async updateFriendsList({ getters, commit }, { type, id }) {
+    try {
+      if (type === 'add') {
+        commit('pushFriend', id)
+      } else if (type === 'remove') {
+        commit('deleteFriend', id)
+      }
+      const uid = this.$cookies.get('access_token')
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}/lists/friends`)
+        .set(getters.userFriends)
+    } catch (e) {
+      console.log('Error Updating User Friends List')
+      console.log(e)
+    }
+  },
+
+  async updateArticlesList({ getters, commit }, { type, id }) {
+    try {
+      if (type === 'add') {
+        commit('pushArticle', id)
+      } else if (type === 'remove') {
+        commit('deleteArticle', id)
+      }
+      const uid = this.$cookies.get('access_token')
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}/lists/articles`)
+        .set(getters.userArticles)
+    } catch (e) {
+      console.log('Error Updating User Articles List')
+      console.log(e)
+    }
+  },
+
+  async updateRepositoriesList({ getters, commit }, { type, id }) {
+    try {
+      if (type === 'add') {
+        commit('pushRepository', id)
+      } else if (type === 'remove') {
+        commit('deleteRepository', id)
+      }
+      const uid = this.$cookies.get('access_token')
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}/lists/repositories`)
+        .set(getters.userRepositories)
+    } catch (e) {
+      console.log('Error Updating User Repositories List')
+      console.log(e)
+    }
+  },
+
+  async updatePortfolio({ getters, commit, state }, { type, work }) {
+    try {
+      if (type === 'add') {
+        commit('pushPortfolioWork', work)
+      } else if (type === 'remove') {
+        commit('deletePortfolioWork', work)
+      }
+      const uid = this.$cookies.get('access_token')
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}/lists/portfolio`)
+        .set(getters.userPortfolio)
+    } catch (e) {
+      console.log('Error Updating User Portfolio')
+      console.log(e)
+    }
+  },
+
   async changeTheme({ getters, commit }) {
     try {
       commit('toggleTheme')
@@ -140,7 +221,21 @@ export const actions = {
         .ref(`/1_users/${uid}/themeDark`)
         .set(getters.user.themeDark)
     } catch (e) {
-      console.log('Error Updating User info')
+      console.log('Error Changing theme')
+      console.log(e)
+    }
+  },
+
+  async changeAdminStatus({ getters, commit }, status) {
+    try {
+      commit('changeAdminStatus', status)
+      const uid = this.$cookies.get('access_token')
+      await firebase
+        .database()
+        .ref(`/1_users/${uid}/isAdmin`)
+        .set(getters.user.isAdmin)
+    } catch (e) {
+      console.log('Error Changing admin status')
       console.log(e)
     }
   }
@@ -150,8 +245,8 @@ export const mutations = {
   toggleTheme(state) {
     state.user.themeDark = !state.user.themeDark
   },
-  updateUserInfo(state, userInfo) {
-    state.user.userInfo = userInfo
+  updateUserInfo(state, newUserInfo) {
+    state.user.userInfo = Object.assign({}, newUserInfo)
   },
   setUser(state, user) {
     state.user = user
@@ -159,11 +254,8 @@ export const mutations = {
   cleanUser(state) {
     state.user = ''
   },
-  becomeAdmin(state) {
-    state.user.isAdmin = true
-  },
-  unBecomeAdmin(state) {
-    state.user.isAdmin = false
+  changeAdminStatus(state, status) {
+    state.user.isAdmin = status
   },
   pushFriend(state, id) {
     state.user.lists.friends.push(id)
@@ -195,9 +287,12 @@ export const mutations = {
     )
     state.user.lists.articles.splice(IdToDelete, 1)
   },
-  deletePortfolioWork(state, id) {
+  deletePortfolioWork(state, key) {
     try {
-      state.user.lists.portfolio.splice(id + 1, 1)
+      const IdToDelete = state.user.lists.portfolio.findIndex(
+        (idSearch) => idSearch.key === key
+      )
+      state.user.lists.portfolio.splice(IdToDelete, 1)
     } catch (e) {
       console.log(e)
     }
@@ -209,5 +304,10 @@ export const state = () => ({
 })
 
 export const getters = {
-  user: (s) => s.user
+  user: (state) => state.user,
+  userInfo: (state) => state.user.userInfo,
+  userArticles: (state) => state.user.lists.articles,
+  userRepositories: (state) => state.user.lists.repositories,
+  userFriends: (state) => state.user.lists.friends,
+  userPortfolio: (state) => state.user.lists.portfolio
 }

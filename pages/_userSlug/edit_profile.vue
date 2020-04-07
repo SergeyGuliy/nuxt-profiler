@@ -348,38 +348,25 @@ export default {
     },
     formIsChanged() {
       return (
-        this.user.info.first_name !== this.info.first_name ||
-        this.user.info.last_name !== this.info.last_name ||
-        this.user.info.about !== this.info.about ||
-        this.user.info.location !== this.info.location ||
-        this.user.info.education !== this.info.education ||
-        this.user.info.date_of_birth !== this.info.date_of_birth ||
-        this.user.work.work_languages !== this.work.work_languages ||
-        this.user.work.work_position !== this.work.work_position ||
-        this.user.work.work_scope !== this.work.work_scope ||
-        JSON.stringify(this.user.work.work_status) !==
-          JSON.stringify(this.work.work_status) ||
-        JSON.stringify(this.user.work.work_technologies) !==
-          JSON.stringify(this.work.work_technologies) ||
-        JSON.stringify(this.user.work.work_type) !==
-          JSON.stringify(this.work.work_type) ||
-        this.user.contacts.phone !== this.contacts.phone ||
-        this.user.contacts.github !== this.contacts.github ||
-        this.user.contacts.site !== this.contacts.site ||
-        this.user.contacts.linkedIn !== this.contacts.linkedIn ||
-        this.user.contacts.facebook !== this.contacts.facebook ||
-        this.user.contacts.skype !== this.contacts.skype
+        JSON.stringify(this.$store.getters.user.userInfo) !==
+        JSON.stringify({
+          contacts: this.contacts,
+          info: this.info,
+          work: this.work
+        })
       )
     },
     technologies() {
       const technolies = []
-      for (const i of this.work.work_languages) {
+      this.work.work_languages.forEach((lang) => {
         try {
-          this.languages[i].technologies.forEach((item) => {
+          this.languages[lang].technologies.forEach((item) => {
             technolies.push(item)
           })
-        } catch (e) {}
-      }
+        } catch (e) {
+          // it's ok. i muted catching.
+        }
+      })
       return technolies
     },
     git_type_placeholder() {
@@ -434,7 +421,9 @@ export default {
           this.languages[item].technologies.forEach((value) => {
             technologies.push(value)
           })
-        } catch (e) {}
+        } catch (e) {
+          // it's ok. i muted catching.
+        }
       })
       this.work.work_technologies = this.work.work_technologies.filter(
         (value) => technologies.includes(value)
@@ -444,18 +433,17 @@ export default {
       }
     }
   },
-  async asyncData(context) {
+  async asyncData({ store, error }) {
     try {
       return {
-        contacts: Object.assign(
-          {},
-          context.store.getters.user.userInfo.contacts
-        ),
-        info: Object.assign({}, context.store.getters.user.userInfo.info),
-        work: Object.assign({}, context.store.getters.user.userInfo.work),
+        contacts: Object.assign({}, store.getters.user.userInfo.contacts),
+        info: Object.assign({}, store.getters.user.userInfo.info),
+        work: Object.assign({}, store.getters.user.userInfo.work),
         languages: await fetchCategories()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: 'Error while trying to load page.' })
+    }
   },
   methods: {
     async submitBecomeAdmin() {
@@ -466,8 +454,7 @@ export default {
           title: 'You want to become Admin? '
         })
         if (res) {
-          this.$store.commit('becomeAdmin')
-          await this.$store.dispatch('updateUserInfo')
+          await this.$store.dispatch('changeAdminStatus', true)
           this.$dialog.message.success(`You had become Admin`, {
             position: 'top-right',
             timeout: 3000
@@ -478,7 +465,9 @@ export default {
             timeout: 3000
           })
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     async submitBecomeUser() {
       try {
@@ -487,8 +476,7 @@ export default {
           title: 'You want to become casual User?'
         })
         if (res) {
-          this.$store.commit('unBecomeAdmin')
-          await this.$store.dispatch('updateUserInfo')
+          await this.$store.dispatch('changeAdminStatus', false)
           this.$dialog.message.success(`You had become casual user`, {
             position: 'top-right',
             timeout: 3000
@@ -499,7 +487,9 @@ export default {
             timeout: 3000
           })
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     async submitUpdateInfo() {
       try {
@@ -509,8 +499,9 @@ export default {
               this.contacts.github.split('https://github.com/')[1]
             }`
             const checkingGitApi = (await this.$axios.get(gitApiKey)).data
-            console.log(checkingGitApi)
-            this.contacts.gitApi = gitApiKey
+            if (checkingGitApi.login) {
+              this.contacts.gitApi = gitApiKey
+            }
           } catch (e) {
             this.$dialog.message.error(
               `You had write wrong link to GiHub profile`,
@@ -523,16 +514,16 @@ export default {
         } else {
           this.contacts.gitApi = ''
         }
-        this.$store.commit('updateUserInfo', {
+        await this.$store.dispatch('updateUserInfo', {
           contacts: this.contacts,
           info: this.info,
           work: this.work
         })
-        await this.$store.dispatch('updateUserInfo')
         this.$dialog.message.success(`You had update your info`, {
           position: 'top-right',
           timeout: 3000
         })
+        this.$router.push('/')
       } catch (e) {
         console.log(e)
       }

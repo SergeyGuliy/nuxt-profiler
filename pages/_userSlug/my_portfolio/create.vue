@@ -97,9 +97,10 @@ export default {
           creatorId: this.$store.getters.user.id,
           key: new Date().getTime()
         }
-        this.$store.commit('pushPortfolioWork', data)
-        console.log(this.$store.getters.user.lists.portfolio)
-        await this.$store.dispatch('updateUserInfo')
+        await this.$store.dispatch('updatePortfolio', {
+          type: 'add',
+          work: data
+        })
         this.$dialog.message.success(`Created portfolio work: ${this.name}`, {
           position: 'top-right',
           timeout: 3000
