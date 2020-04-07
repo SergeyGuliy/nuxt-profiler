@@ -78,11 +78,12 @@
 </template>
 
 <script>
+import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'Index',
-  mixins: [paginationMixin],
+  mixins: [controlFriends, paginationMixin],
   transition: 'bounce',
   data() {
     return {
@@ -93,13 +94,12 @@ export default {
   computed: {
     list() {
       const list = []
-      for (const i in this.allUsers) {
+      Object.keys(this.allUsers).forEach((i) => {
         try {
           const usr = this.allUsers[i]
-          console.log(Boolean(this.$store.getters.user))
           if (this.$store.getters.user) {
             if (usr.id === this.$store.getters.user.id) {
-              continue
+              return
             }
             usr.id = i
             list.push(usr)
@@ -108,9 +108,11 @@ export default {
             list.push(usr)
           }
         } catch (e) {
-          continue
+          // it's ok. i muted catching.
+          // i decide to do this because i am creating filtered array based on allUsers.
+          // and if user id will not be exists in allUsers it will not be added to filtered list.
         }
-      }
+      })
       return list
     },
     listFiltered() {
@@ -136,38 +138,6 @@ export default {
   },
   head: {
     title: `Profiler - All Users`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    print() {
-      const printContents = document.getElementById('PageBody').innerHTML
-      const originalContents = document.body.innerHTML
-
-      document.body.innerHTML = printContents
-
-      window.print()
-
-      document.body.innerHTML = originalContents
-    }
   }
 }
 </script>

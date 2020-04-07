@@ -84,12 +84,13 @@
 </template>
 
 <script>
+import { controlFriends } from '../../../mixins/controlFriends'
 import { fetchAllUsers, fetchUserByID } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 
 export default {
   name: 'Friends',
-  mixins: [paginationMixin],
+  mixins: [controlFriends, paginationMixin],
   data() {
     return {
       searchKey: null,
@@ -108,17 +109,18 @@ export default {
       }
     },
     myList() {
-      const myListIDS = this.userData.lists.friends
       const myList = []
-      for (const i of myListIDS) {
+      this.userData.lists.friends.forEach((i) => {
         try {
           const usr = this.allUsers[i]
           usr.id = i
           myList.push(usr)
         } catch (e) {
-          continue
+          // it's ok. i muted catching.
+          // i decide to do this because i am creating filtered array based on allUsers.
+          // and if user id will not be exists in allUsers it will not be added to filtered list.
         }
-      }
+      })
       return myList
     },
     listFiltered() {
@@ -133,38 +135,18 @@ export default {
       }
     }
   },
-  async asyncData({ route }) {
+  async asyncData({ route, error }) {
     try {
       return {
         userData: await fetchUserByID(route.params.id),
         allUsers: await fetchAllUsers()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
   },
   head: {
     title: `Profiler - User Friends`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    }
   }
 }
 </script>

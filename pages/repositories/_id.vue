@@ -131,10 +131,12 @@
 </template>
 
 <script>
+import { controlRepositories } from '../../mixins/controlRepositories'
 import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
   transition: 'bounce',
+  mixins: [controlRepositories],
   async asyncData({ route, $axios, error }) {
     try {
       const data = await fetchRepositoryByID(route.params.id)
@@ -149,32 +151,6 @@ export default {
   },
   head: {
     title: `Profiler - Repository Information`
-  },
-  mounted() {
-    console.log(this.data.gitApiKey)
-    console.log(this.gitApiInfo)
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    }
   }
 }
 </script>

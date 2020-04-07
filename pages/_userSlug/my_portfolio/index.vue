@@ -48,27 +48,17 @@ export default {
       })
     }
   },
-  asyncData({ store }) {
+  asyncData({ store, error }) {
     try {
       return {
         allWorks: store.getters.user.lists.portfolio
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch your portfolio." })
+    }
   },
   head: {
     title: `Profiler - My Portfolio`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deletePortfolioWork', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    }
   }
 }
 </script>

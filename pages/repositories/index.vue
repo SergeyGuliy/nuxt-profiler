@@ -103,6 +103,7 @@
 
 <script>
 import { filterMixin } from '../../mixins/filterMixin'
+import { controlRepositories } from '../../mixins/controlRepositories'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import {
   fetchAllRepositories,
@@ -111,7 +112,7 @@ import {
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Index',
-  mixins: [filterMixin, paginationMixin],
+  mixins: [controlRepositories, filterMixin, paginationMixin],
   transition: 'bounce',
   data() {
     return {
@@ -144,29 +145,7 @@ export default {
         languages: await fetchCategories()
       }
     } catch (e) {
-      error({ message: 'Repositories not found' })
-    }
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
+      error({ message: 'Cannot fetch Repositories list' })
     }
   }
 }

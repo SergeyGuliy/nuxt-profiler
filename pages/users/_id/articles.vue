@@ -98,13 +98,14 @@
 
 <script>
 import { filterMixin } from '../../../mixins/filterMixin'
+import { controlArticles } from '../../../mixins/controlArticles'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchUserByID } from '~/functions/users'
 export default {
   name: 'Articles',
-  mixins: [filterMixin, paginationMixin],
+  mixins: [controlArticles, filterMixin, paginationMixin],
   data() {
     return {
       pageSize: 10
@@ -139,35 +140,15 @@ export default {
   head: {
     title: `Profiler - User Articles`
   },
-  async asyncData({ route }) {
+  async asyncData({ route, error }) {
     try {
       return {
         userData: await fetchUserByID(route.params.id),
         basicList: await fetchAllArticles(),
         languages: await fetchCategories()
       }
-    } catch (e) {}
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteArticle', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete article`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushArticle', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add article`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch user articles." })
     }
   }
 }

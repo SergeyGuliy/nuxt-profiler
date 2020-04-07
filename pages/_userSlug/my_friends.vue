@@ -70,11 +70,12 @@
 </template>
 
 <script>
+import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'MyFriends',
-  mixins: [paginationMixin],
+  mixins: [controlFriends, paginationMixin],
   data() {
     return {
       searchKey: null,
@@ -83,17 +84,18 @@ export default {
   },
   computed: {
     myList() {
-      const myListIDS = this.$store.getters.user.lists.friends
       const myList = []
-      for (const i of myListIDS) {
+      this.$store.getters.user.lists.friends.forEach((i) => {
         try {
           const usr = this.allUsers[i]
           usr.id = i
           myList.push(usr)
         } catch (e) {
-          continue
+          // it's ok. i muted catching.
+          // i decide to do this because i am creating filtered array based on allUsers.
+          // and if user id will not be exists in allUsers it will not be added to filtered list.
         }
-      }
+      })
       return myList
     },
     listFiltered() {
@@ -108,27 +110,17 @@ export default {
       }
     }
   },
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         allUsers: await fetchAllUsers()
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch my followings list." })
+    }
   },
   head: {
     title: `Profiler - My Friends`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    }
   }
 }
 </script>

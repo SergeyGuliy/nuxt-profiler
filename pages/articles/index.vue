@@ -97,13 +97,14 @@
 </template>
 
 <script>
+import { controlArticles } from '../../mixins/controlArticles'
 import { filterMixin } from '~/mixins/filterMixin'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchAllArticles, fetchPublicArticlesIDS } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Index',
-  mixins: [filterMixin, paginationMixin],
+  mixins: [controlArticles, filterMixin, paginationMixin],
   transition: 'bounce',
   data() {
     return {
@@ -128,35 +129,15 @@ export default {
   head: {
     title: `Profiler - Public Articles`
   },
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         basicList: await fetchAllArticles(),
         publicArticlesIDS: await fetchPublicArticlesIDS(),
         languages: await fetchCategories()
       }
-    } catch (e) {}
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteArticle', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete article`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushArticle', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add article`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
+    } catch (e) {
+      error({ message: 'Cannot fetch Articles list' })
     }
   }
 }

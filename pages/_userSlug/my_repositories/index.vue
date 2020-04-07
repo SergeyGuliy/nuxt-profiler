@@ -96,12 +96,13 @@
 
 <script>
 import { filterMixin } from '../../../mixins/filterMixin'
+import { controlRepositories } from '../../../mixins/controlRepositories'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllRepositories } from '~/functions/repositories'
 export default {
   name: 'MyRepositories',
-  mixins: [filterMixin, paginationMixin],
+  mixins: [controlRepositories, filterMixin, paginationMixin],
   data() {
     return {
       pageSize: 10
@@ -126,24 +127,14 @@ export default {
   head: {
     title: `Profiler - My Repositories`
   },
-  async asyncData() {
+  async asyncData({ error }) {
     try {
       return {
         allRepositories: await fetchAllRepositories(),
         languages: await fetchCategories()
       }
-    } catch (e) {}
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
     }
   }
 }

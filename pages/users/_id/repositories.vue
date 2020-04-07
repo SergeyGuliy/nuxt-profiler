@@ -103,13 +103,14 @@
 
 <script>
 import { filterMixin } from '../../../mixins/filterMixin'
+import { controlRepositories } from '../../../mixins/controlRepositories'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchUserByID } from '~/functions/users'
 export default {
   name: 'Repositories',
-  mixins: [filterMixin, paginationMixin],
+  mixins: [controlRepositories, filterMixin, paginationMixin],
   data() {
     return {
       pageSize: 10
@@ -144,35 +145,15 @@ export default {
   head: {
     title: `Profiler - User Articles`
   },
-  async asyncData({ route }) {
+  async asyncData({ route, error }) {
     try {
       return {
         userData: await fetchUserByID(route.params.id),
         basicList: await fetchAllRepositories(),
         languages: await fetchCategories()
       }
-    } catch (e) {}
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushRepository', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add repository`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch user repositories." })
     }
   }
 }

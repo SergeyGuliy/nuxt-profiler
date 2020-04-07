@@ -24,7 +24,7 @@
             >
               <v-icon>mdi-account-plus</v-icon>
             </v-btn>
-            <v-btn @click="deleteFromMyList()" v-else color="red">
+            <v-btn @click="deleteFromMyList(data.id)" v-else color="red">
               <v-icon>mdi-account-minus</v-icon>
             </v-btn>
           </div>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { controlFriends } from '../../../mixins/controlFriends'
 import { fetchUserByID, fetchAllUsers } from '~/functions/users'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
@@ -51,6 +52,7 @@ import { fetchAllRepositories } from '~/functions/repositories'
 export default {
   name: 'Id',
   transition: 'bounce',
+  mixins: [controlFriends],
   async asyncData({ route, app, error }) {
     try {
       const data = await fetchUserByID(route.params.id)
@@ -74,33 +76,11 @@ export default {
         gitApiInfo: false
       }
     } catch (e) {
-      error({ message: 'User not found' })
+      error({ message: 'User not found.' })
     }
   },
   head: {
     title: `Profiler - User Information`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.error(`You delete friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    },
-    addTomMyList(id) {
-      try {
-        this.$store.commit('pushFriend', id)
-        this.$store.dispatch('updateUserInfo')
-        this.$dialog.message.success(`You add friend`, {
-          position: 'top-right',
-          timeout: 3000
-        })
-      } catch (e) {}
-    }
   }
 }
 </script>

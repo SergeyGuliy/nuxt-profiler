@@ -57,12 +57,14 @@ export default {
       }
     }
   },
-  async asyncData({ route }) {
+  async asyncData({ route, error }) {
     try {
       return {
         userData: await fetchUserByID(route.params.id)
       }
-    } catch (e) {}
+    } catch (e) {
+      error({ message: "Can't fetch user portfolio." })
+    }
   },
   head: {
     title: `Profiler - User Portfolio`
