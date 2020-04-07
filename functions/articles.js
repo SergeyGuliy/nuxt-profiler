@@ -31,7 +31,9 @@ async function createArticle(data) {
         .set(item)
     }
     return push.key
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }
 async function fetchArticleByID(id) {
   try {

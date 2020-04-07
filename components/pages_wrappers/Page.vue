@@ -34,5 +34,5 @@ card__title
     flex: 1 1 auto
   .print
     @media print
-      padding: 1px
+      padding: 11px
 </style>

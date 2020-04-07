@@ -1,10 +1,9 @@
 <template>
   <div id="GitInfo">
-    <CardTitle class="d-print-none"> GitHub Info</CardTitle>
+    <CardTitle class="hide-on-print"> GitHub Info</CardTitle>
     <div class="Git">
-      <a :href="`${data.userInfo.contacts.github}/`" target="_blank">
-        <img :src="gitApiInfo.avatar_url" class="git__img" alt="profile_img" />
-      </a>
+      <a :href="`${data.userInfo.contacts.github}/`"></a>
+      <img :src="gitApiInfo.avatar_url" class="git__img" alt="profile_img" />
       <div class="git__actions">
         <a
           :href="`${data.userInfo.contacts.github}/?tab=followers`"
@@ -44,6 +43,9 @@ export default {
 
 <style lang="sass">
 #GitInfo
+  .hide-on-print.headline
+    @media print
+      display: none
   .Git
     display: flex
     flex-direction: column
@@ -61,7 +63,7 @@ export default {
       @media print
         margin: 10px auto 0 auto
         width: 70%
-        height: 280px
+        height: 250px
         border: 2px solid #999999
         border-radius: 5px
     .git__actions

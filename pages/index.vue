@@ -99,9 +99,8 @@ export default {
             allUsers,
             allRepositories,
             allArticles,
-            gitApiInfo:
-              (await app.$axios.get(data.userInfo.contacts.gitApi)).data ||
-              false
+            gitApiInfo: (await app.$axios.get(data.userInfo.contacts.gitApi))
+              .data
           }
         } else {
           return {

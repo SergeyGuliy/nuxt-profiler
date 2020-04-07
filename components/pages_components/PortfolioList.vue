@@ -1,18 +1,13 @@
 <template>
   <div id="PortfolioList">
-    <v-card
-      v-for="(item, id) in checkedList"
-      :key="item.key"
-      raised
-      elevation="20"
-    >
+    <v-card v-for="item in checkedList" :key="item.key" raised elevation="20">
       <v-card-title>
         {{ item.name }}
         <v-btn
           v-if="
             $store.getters.user && item.creatorId === $store.getters.user.id
           "
-          @click="deleteFromMyList(item, id)"
+          @click="deleteFromMyList(item.key)"
           color="red"
           icon
         >
@@ -43,15 +38,17 @@ export default {
   mixins: [paginationMixin],
   props: { checkedList: Array },
   methods: {
-    async deleteFromMyList(item, id) {
+    async deleteFromMyList(item) {
       try {
         const answer = await this.$dialog.confirm({
           text: `Do you want to delete ${item.name} form your portfolio?`,
           title: 'Warning'
         })
         if (answer) {
-          this.$store.commit('deletePortfolioWork', id)
-          this.$store.dispatch('updateUserInfo')
+          await this.$store.dispatch('updatePortfolio', {
+            type: 'remove',
+            work: item
+          })
           this.$dialog.message.error(`You delete work from portfolio`, {
             position: 'top-right',
             timeout: 3000

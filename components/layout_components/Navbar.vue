@@ -80,13 +80,17 @@ export default {
     async logOut() {
       try {
         await this.$store.dispatch('logOut')
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     async changeTheme() {
       try {
         await this.$store.dispatch('changeTheme')
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

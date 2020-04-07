@@ -3,5 +3,7 @@ export default function({ store, redirect }) {
     if (!store.getters.user) {
       return redirect('/')
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }

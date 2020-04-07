@@ -17,7 +17,9 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

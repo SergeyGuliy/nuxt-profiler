@@ -3,5 +3,7 @@ export default function({ $cookies, redirect }) {
     if ($cookies.get('access_token')) {
       return redirect('/')
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }
