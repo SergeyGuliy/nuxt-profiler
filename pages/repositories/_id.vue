@@ -11,22 +11,22 @@
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`repositories/${$route.params.id}`" />
-          <div v-if="data.isPublic && $store.getters.user">
+          <div v-if="data.isPublic && $store.getters.loggedIn">
             <v-btn
-              @click="addTomMyList($route.params.id)"
               v-if="
-                !$store.getters.user.lists.repositories.includes(
+                !$store.getters['repositories/repositories'].includes(
                   $route.params.id
                 )
               "
               color="green"
+              @click="addTomMyList($route.params.id)"
             >
               <v-icon>mdi-vector-polyline-plus</v-icon>
             </v-btn>
             <v-btn
-              @click="deleteFromMyList($route.params.id)"
               v-else
               color="red"
+              @click="deleteFromMyList($route.params.id)"
             >
               <v-icon>mdi-vector-polyline-minus</v-icon>
             </v-btn>
@@ -102,7 +102,7 @@
                   :text="gitApiInfo.owner.login"
                   icon="mdi-github"
                 />
-                <BtnCopy :copyValue="gitApiInfo.owner.html_url" />
+                <BtnCopy :copy-value="gitApiInfo.owner.html_url" />
               </div>
             </CardRow>
             <CardRow v-if="data.cite || gitApiInfo.html_url">
@@ -112,7 +112,7 @@
                   :link="data.cite ? data.cite : gitApiInfo.html_url"
                 />
                 <BtnCopy
-                  :copyValue="data.cite ? data.cite : gitApiInfo.html_url"
+                  :copy-value="data.cite ? data.cite : gitApiInfo.html_url"
                 />
               </div>
             </CardRow>
@@ -120,7 +120,7 @@
               <CardRowTitle>Link to github repository:</CardRowTitle>
               <div>
                 <BtnOpenBlank :link="data.gitHub" icon="mdi-git" />
-                <BtnCopy :copyValue="data.gitHub" />
+                <BtnCopy :copy-value="data.gitHub" />
               </div>
             </CardRow>
           </Card>

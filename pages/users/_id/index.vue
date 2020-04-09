@@ -3,28 +3,32 @@
     <template #head>
       <PageHeader>
         <template
-          #title
           v-if="data.userInfo.info.first_name && data.userInfo.info.last_name"
+          #title
           >{{ data.userInfo.info.first_name }}
           {{ data.userInfo.info.last_name }}
           <v-chip v-if="data.isAdmin" small class="title-chip">Admin</v-chip>
         </template>
-        <template #title v-else>
+        <template v-else #title>
           {{ data.profile }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`users/${$route.params.id}`" />
-          <div v-if="$store.getters.user">
+          <div
+            v-if="
+              $store.getters.loggedIn && $store.getters.id !== $route.params.id
+            "
+          >
             <v-btn
-              @click="addTomMyList(data.id)"
-              v-if="!$store.getters.user.lists.friends.includes(data.id)"
+              v-if="!$store.getters['friends/friends'].includes(data.id)"
               color="green"
+              @click="addTomMyList(data.id)"
             >
               <v-icon>mdi-account-plus</v-icon>
             </v-btn>
-            <v-btn @click="deleteFromMyList(data.id)" v-else color="red">
+            <v-btn v-else color="red" @click="deleteFromMyList(data.id)">
               <v-icon>mdi-account-minus</v-icon>
             </v-btn>
           </div>
@@ -34,10 +38,10 @@
     <template #body>
       <UserShowingData
         :data="data"
-        :allUsers="allUsers"
-        :allRepositories="allRepositories"
-        :allArticles="allArticles"
-        :gitApiInfo="gitApiInfo"
+        :all-users="allUsers"
+        :all-repositories="allRepositories"
+        :all-articles="allArticles"
+        :git-api-info="gitApiInfo"
       />
     </template>
   </Page>

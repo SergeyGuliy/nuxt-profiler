@@ -2,7 +2,7 @@ export const controlFriends = {
   methods: {
     async deleteFromMyList(id) {
       try {
-        await this.$store.dispatch('updateFriendsList', {
+        await this.$store.dispatch('friends/updateFriendsList', {
           type: 'remove',
           id
         })
@@ -16,7 +16,7 @@ export const controlFriends = {
     },
     async addTomMyList(id) {
       try {
-        await this.$store.dispatch('updateFriendsList', {
+        await this.$store.dispatch('friends/updateFriendsList', {
           type: 'add',
           id
         })

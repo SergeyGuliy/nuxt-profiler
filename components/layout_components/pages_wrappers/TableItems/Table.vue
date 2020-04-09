@@ -3,7 +3,10 @@
     <v-simple-table :dark="$vuetify.theme.dark">
       <template v-slot:default>
         <thead>
-          <slot name="table-head" />
+          <tr>
+            <th v-for="header in headers" :key="header">{{ header }}</th>
+            <th v-if="loggedIn">Actions</th>
+          </tr>
         </thead>
         <tbody>
           <slot name="table-body" />
@@ -19,7 +22,13 @@
 
 <script>
 export default {
-  name: 'Table'
+  name: 'Table',
+  props: { headers: Array },
+  computed: {
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    }
+  }
 }
 </script>
 

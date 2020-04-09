@@ -2,7 +2,7 @@ export const controlRepositories = {
   methods: {
     async deleteFromMyList(id) {
       try {
-        await this.$store.dispatch('updateRepositoriesList', {
+        await this.$store.dispatch('repositories/updateRepositoriesList', {
           type: 'remove',
           id
         })
@@ -16,7 +16,7 @@ export const controlRepositories = {
     },
     async addTomMyList(id) {
       try {
-        await this.$store.dispatch('updateRepositoriesList', {
+        await this.$store.dispatch('repositories/updateRepositoriesList', {
           type: 'add',
           id
         })

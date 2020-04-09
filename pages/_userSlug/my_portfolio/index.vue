@@ -8,23 +8,21 @@
               ? 'List of my Works'
               : 'Your portfolio is empty'
           }}
-          <BtnCreate
-            :link="`/${$store.getters.user.profile}/my_portfolio/create`"
-          />
+          <BtnCreate :link="`/${$store.getters.profile}/my_portfolio/create`" />
         </template>
-        <template #actions v-if="listFiltered.length > 0">
+        <template v-if="listFiltered.length > 0" #actions>
           <v-select
-            :items="[3, 5, 7, 9]"
             v-model="pageSize"
+            :items="[3, 5, 7, 9]"
             label="Page size"
             style="max-width: 56px;"
           />
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="listFiltered.length > 0">
+    <template v-if="listFiltered.length > 0" #body>
       <div class="flex-portfolio">
-        <PortfolioList :checkedList="listPaginated[pageCurrent - 1]" />
+        <PortfolioList :checked-list="listPaginated[pageCurrent - 1]" />
         <v-pagination v-model="pageCurrent" :length="listPaginated.length" />
       </div>
     </template>
@@ -36,6 +34,15 @@ import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'MyPortfolio',
   mixins: [paginationMixin],
+  asyncData({ store, error }) {
+    try {
+      return {
+        allWorks: store.getters.user.lists.portfolio
+      }
+    } catch (e) {
+      error({ message: "Can't fetch your portfolio." })
+    }
+  },
   data() {
     return {
       pageSize: 3
@@ -46,15 +53,6 @@ export default {
       return this.allWorks.filter((item) => {
         return item !== 'empty'
       })
-    }
-  },
-  asyncData({ store, error }) {
-    try {
-      return {
-        allWorks: store.getters.user.lists.portfolio
-      }
-    } catch (e) {
-      error({ message: "Can't fetch your portfolio." })
     }
   },
   head: {

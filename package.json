@@ -10,7 +10,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "jest",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "config": {
     "nuxt": {
@@ -34,7 +35,7 @@
     "vuetify-dialog": "^2.0.1"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-config": "^2.0.2",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/vuetify": "^1.10.3",
     "babel-eslint": "^10.0.1",
@@ -43,9 +44,13 @@
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^25.2.7",
+    "jsdoc": "^3.6.4",
+    "jsdoc-vue": "^1.0.0",
     "material-design-icons-iconfont": "^5.0.1",
     "node-sass": "^4.13.1",
     "prettier": "^1.16.4",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "tui-jsdoc-template": "^1.2.2",
+    "vue-template-compiler": "^2.6.11"
   }
 }

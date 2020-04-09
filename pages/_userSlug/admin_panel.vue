@@ -11,14 +11,13 @@
           <Card>
             <v-text-field
               v-model="newLanguage"
-              @keypress.enter="addLanguage"
               :counter="20"
               :rules="rules.lang"
               label="Language"
               outlined
+              @keypress.enter="addLanguage"
             />
             <v-btn
-              @click="addLanguage"
               :disabled="
                 !(newLanguage.length >= 1 && newLanguage.length <= 20) ||
                   newLanguage.includes('.') ||
@@ -31,21 +30,22 @@
               :loading="loading"
               block
               color="green"
+              @click="addLanguage"
               >ADD language</v-btn
             >
             <v-list>
               <v-list-item
                 v-for="item in languages"
                 :key="item.name"
-                @click="selectLanguage(item)"
                 :class="{ activeLang: item === languageSelected }"
+                @click="selectLanguage(item)"
               >
                 <v-list-item-content>
                   <v-list-item-title v-text="item.name" />
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn @click.stop="deleteLanguage(item)" icon>
+                  <v-btn icon @click.stop="deleteLanguage(item)">
                     <v-icon color="warning lighten-1">mdi-delete</v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -57,7 +57,6 @@
           <Card>
             <v-text-field
               v-model="newTechnology"
-              @keypress.enter="addTechnology"
               :counter="20"
               :rules="rules.tech"
               :disabled="!languageSelected"
@@ -67,16 +66,17 @@
                   : `Select language`
               "
               outlined
+              @keypress.enter="addTechnology"
             />
             <v-btn
               :disabled="
                 !(newTechnology.length >= 2 && newTechnology.length <= 20) ||
                   loading
               "
-              @click="addTechnology"
               :loading="loading"
               color="green"
               block
+              @click="addTechnology"
               >ADD technology</v-btn
             >
             <v-list v-if="languageSelected">
@@ -89,7 +89,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn @click="deleteTechnology(item)" icon>
+                  <v-btn icon @click="deleteTechnology(item)">
                     <v-icon color="warning lighten-1">mdi-delete</v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -109,11 +109,14 @@ import {
 } from '~/functions/language-technologies'
 export default {
   name: 'MyAdminPanel',
-  head: {
-    title: `Profiler - Admin Panel`
-  },
-  validate({ store }) {
-    return store.getters.user.isAdmin
+  async asyncData({ error }) {
+    try {
+      return {
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch languages/technologies list." })
+    }
   },
   data() {
     return {
@@ -140,23 +143,12 @@ export default {
       }
     }
   },
-  middleware: 'isNotAdmin',
-  async asyncData({ error }) {
-    try {
-      return {
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: "Can't fetch languages/technologies list." })
-    }
-  },
   methods: {
     async save() {
       this.loading = true
       try {
         await updateCategories(this.languages)
       } catch (e) {
-        throw e
       } finally {
         this.loading = false
       }
@@ -245,6 +237,13 @@ export default {
       this.languageSelected.technologies.splice(id, 1)
       await this.save()
     }
-  }
+  },
+  head: {
+    title: `Profiler - Admin Panel`
+  },
+  validate({ store }) {
+    return store.getters.isAdmin
+  },
+  middleware: 'isNotAdmin'
 }
 </script>

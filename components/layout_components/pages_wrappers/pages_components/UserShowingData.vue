@@ -2,7 +2,7 @@
   <PageBody col="3">
     <template #c-1>
       <Card>
-        <GitInfo v-if="gitApiInfo" :gitApiInfo="gitApiInfo" :data="data" />
+        <GitInfo v-if="gitApiInfo" :git-api-info="gitApiInfo" :data="data" />
 
         <CardTitle class="d-print-none">User Info</CardTitle>
         <CardRow>
@@ -50,7 +50,7 @@
               icon="mdi-at"
               text="mail"
             />
-            <BtnCopy :copyValue="data.userInfo.contacts.email" />
+            <BtnCopy :copy-value="data.userInfo.contacts.email" />
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
@@ -66,7 +66,7 @@
               text="Call"
             />
             <BtnCopy
-              :copyValue="
+              :copy-value="
                 `${data.userInfo.contacts.phone_code}-${data.userInfo.contacts.phone}`
               "
             />
@@ -84,7 +84,7 @@
               text="call"
             />
             <BtnCopy
-              :copyValue="
+              :copy-value="
                 `skype:${
                   data.userInfo.contacts.skype.split('live:')[1]
                 }?userinfo`
@@ -108,7 +108,7 @@
               :link="data.userInfo.contacts.github"
               icon="mdi-git"
             />
-            <BtnCopy :copyValue="data.userInfo.contacts.github" />
+            <BtnCopy :copy-value="data.userInfo.contacts.github" />
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
@@ -119,7 +119,7 @@
               :link="data.userInfo.contacts.linkedIn"
               icon="mdi-linkedin"
             />
-            <BtnCopy :copyValue="data.userInfo.contacts.linkedIn" />
+            <BtnCopy :copy-value="data.userInfo.contacts.linkedIn" />
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
@@ -130,7 +130,7 @@
               :link="data.userInfo.contacts.facebook"
               icon="mdi-facebook"
             />
-            <BtnCopy :copyValue="data.userInfo.contacts.facebook" />
+            <BtnCopy :copy-value="data.userInfo.contacts.facebook" />
           </div>
 
           <span v-else>Not indicated</span>
@@ -139,7 +139,7 @@
           <CardRowTitle>Your site:</CardRowTitle>
           <div v-if="data.userInfo.contacts.site">
             <BtnOpenBlank :link="data.userInfo.contacts.site" />
-            <BtnCopy :copyValue="data.userInfo.contacts.site" />
+            <BtnCopy :copy-value="data.userInfo.contacts.site" />
           </div>
           <span v-else>Not indicated</span>
         </CardRow>
@@ -208,11 +208,11 @@
       <Card>
         <CardTitle>Your lists</CardTitle>
         <ExpansionPanel
-          :userFriends="userFriends"
-          :userArticles="userArticles"
-          :userRepositories="userRepositories"
-          :userPortfolio="checkedList"
-          :userId="data.id"
+          :user-friends="userFriends"
+          :user-articles="userArticles"
+          :user-repositories="userRepositories"
+          :user-portfolio="checkedList"
+          :user-id="data.id"
         />
       </Card>
     </template>
@@ -232,11 +232,6 @@ export default {
     gitApiInfo: [Object, Boolean]
   },
   computed: {
-    checkedList() {
-      return this.data.lists.portfolio.filter((item) => {
-        return item !== 'empty'
-      })
-    },
     workLanguages() {
       const workLanguages = []
       this.data.userInfo.work.work_languages.forEach((item) => {
@@ -254,6 +249,11 @@ export default {
         }
       })
       return workTechnologies
+    },
+    checkedList() {
+      return this.data.lists.portfolio.filter((item) => {
+        return item !== 'empty'
+      })
     },
     userArticles() {
       const myListIDS = this.data.lists.articles
@@ -299,6 +299,8 @@ export default {
     }
   },
   mounted() {
+    console.log(this.data.lists.portfolio)
+    console.log(this.checkedList)
     const aboutUser = document.querySelector('.about_user')
     let formatedString
     if (this.data.userInfo.info.about.length > 0) {

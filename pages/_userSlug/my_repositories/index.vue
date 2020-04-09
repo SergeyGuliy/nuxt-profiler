@@ -9,13 +9,13 @@
               : "You don't have repositories"
           }}
           <BtnCreate
-            :link="`/${$store.getters.user.profile}/my_repositories/create`"
+            :link="`/${$store.getters.profile}/my_repositories/create`"
           />
         </template>
-        <template #actions v-if="checkedList.length > 0">
+        <template v-if="checkedList.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 56px;"
           />
@@ -37,19 +37,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="checkedList.length > 0">
+    <template v-if="checkedList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Language</th>
-                <th>Technology</th>
-                <th>Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Creator', 'Language', 'Technology']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -103,6 +97,16 @@ import { fetchAllRepositories } from '~/functions/repositories'
 export default {
   name: 'MyRepositories',
   mixins: [controlRepositories, filterMixin, paginationMixin],
+  async asyncData({ error }) {
+    try {
+      return {
+        allRepositories: await fetchAllRepositories(),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
+  },
   data() {
     return {
       pageSize: 10
@@ -110,7 +114,7 @@ export default {
   },
   computed: {
     checkedList() {
-      const myListIDS = this.$store.getters.user.lists.repositories
+      const myListIDS = this.$store.getters['repositories/repositories']
       const myList = []
       for (const i of myListIDS) {
         try {
@@ -126,16 +130,6 @@ export default {
   },
   head: {
     title: `Profiler - My Repositories`
-  },
-  async asyncData({ error }) {
-    try {
-      return {
-        allRepositories: await fetchAllRepositories(),
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: "Can't fetch your data." })
-    }
   }
 }
 </script>

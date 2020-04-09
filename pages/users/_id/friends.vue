@@ -2,17 +2,11 @@
   <Page id="userFriends">
     <template #head>
       <PageHeader>
-        <template #title>
-          {{
-            myList.length > 0
-              ? `${userName} friends`
-              : `${userName} don't have friends`
-          }}
-        </template>
-        <template #actions v-if="myList.length > 0">
+        <template #title>{{ headerText }}</template>
+        <template v-if="checkedList.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 43px;"
           />
@@ -20,19 +14,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="myList.length > 0">
+    <template v-if="checkedList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Repositories</th>
-                <th>Articles</th>
-                <th>Friends</th>
-                <th v-if="$store.getters.user">Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Repositories', 'Articles', 'Friends']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -49,11 +37,11 @@
                 </td>
                 <td
                   v-if="
-                    $store.getters.user && item.id !== $store.getters.user.id
+                    $store.getters.loggedIn && item.id !== $store.getters.id
                   "
                 >
                   <TableIcon
-                    v-if="!$store.getters.user.lists.friends.includes(item.id)"
+                    v-if="!$store.getters['friends/friends'].includes(item.id)"
                     :item="item.id"
                     :action="addTomMyList"
                     color="green"
@@ -91,50 +79,6 @@ import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'Friends',
   mixins: [controlFriends, paginationMixin],
-  data() {
-    return {
-      searchKey: null,
-      pageSize: 10
-    }
-  },
-  computed: {
-    userName() {
-      if (
-        this.userData.userInfo.info.first_name &&
-        this.userData.userInfo.info.last_name
-      ) {
-        return `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
-      } else {
-        return `${this.userData.profile}`
-      }
-    },
-    myList() {
-      const myList = []
-      this.userData.lists.friends.forEach((i) => {
-        try {
-          const usr = this.allUsers[i]
-          usr.id = i
-          myList.push(usr)
-        } catch (e) {
-          // it's ok. i muted catching.
-          // i decide to do this because i am creating filtered array based on allUsers.
-          // and if user id will not be exists in allUsers it will not be added to filtered list.
-        }
-      })
-      return myList
-    },
-    listFiltered() {
-      if (this.searchKey) {
-        return this.myList.filter((value) => {
-          return value.profile
-            .toLowerCase()
-            .includes(this.searchKey.toLowerCase())
-        })
-      } else {
-        return this.myList
-      }
-    }
-  },
   async asyncData({ route, error }) {
     try {
       return {
@@ -143,6 +87,51 @@ export default {
       }
     } catch (e) {
       error({ message: "Can't fetch your data." })
+    }
+  },
+  data() {
+    return {
+      searchKey: null,
+      pageSize: 10
+    }
+  },
+  computed: {
+    headerText() {
+      return this.checkedList.length > 0
+        ? `${this.userName} friends`
+        : `${this.userName} don't have friends`
+    },
+    userName() {
+      return this.userData.userInfo.info.first_name &&
+        this.userData.userInfo.info.last_name
+        ? `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
+        : `${this.userData.profile}`
+    },
+    checkedList() {
+      const checkedList = []
+      this.userData.lists.friends.forEach((i) => {
+        try {
+          const usr = this.allUsers[i]
+          usr.id = i
+          checkedList.push(usr)
+        } catch (e) {
+          // it's ok. i muted catching.
+          // i decide to do this because i am creating filtered array based on allUsers.
+          // and if user id will not be exists in allUsers it will not be added to filtered list.
+        }
+      })
+      return checkedList
+    },
+    listFiltered() {
+      if (this.searchKey) {
+        return this.checkedList.filter((value) => {
+          return value.profile
+            .toLowerCase()
+            .includes(this.searchKey.toLowerCase())
+        })
+      } else {
+        return this.checkedList
+      }
     }
   },
   head: {

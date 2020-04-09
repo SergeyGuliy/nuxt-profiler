@@ -14,29 +14,26 @@
         <SideLink link="/articles">
           All articles
         </SideLink>
-        <div v-if="$store.getters.user">
+        <div v-if="loggedIn">
           <v-subheader class="mt-4 grey--text text--darken-1">
             User Panel
           </v-subheader>
-          <SideLink :link="`/${$store.getters.user.profile}/edit_profile`">
+          <SideLink :link="`/${profile}/edit_profile`">
             Edit profile
           </SideLink>
-          <SideLink
-            :link="`/${$store.getters.user.profile}/admin_panel`"
-            v-if="$store.getters.user.isAdmin"
-          >
+          <SideLink v-if="isAdmin" :link="`/${profile}/admin_panel`">
             Admin panel
           </SideLink>
-          <SideLink :link="`/${$store.getters.user.profile}/my_friends`">
-            followings
+          <SideLink :link="`/${profile}/my_friends`">
+            My friends
           </SideLink>
-          <SideLink :link="`/${$store.getters.user.profile}/my_repositories`">
+          <SideLink :link="`/${profile}/my_repositories`">
             My repositories
           </SideLink>
-          <SideLink :link="`/${$store.getters.user.profile}/my_articles`">
+          <SideLink :link="`/${profile}/my_articles`">
             My articles
           </SideLink>
-          <SideLink :link="`/${$store.getters.user.profile}/my_portfolio`">
+          <SideLink :link="`/${profile}/my_portfolio`">
             My portfolio
           </SideLink>
         </div>
@@ -46,12 +43,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Sidebar',
   props: { sidebarStatus: Boolean },
   data: () => ({
     drawer: false
   }),
+  computed: {
+    ...mapGetters(['profile', 'loggedIn', 'isAdmin'])
+  },
   watch: {
     sidebarStatus(val) {
       this.drawer = val

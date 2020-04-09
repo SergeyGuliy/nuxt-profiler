@@ -11,11 +11,11 @@
             inset
           />
           <v-btn
-            @click="save"
-            :disabled="!formIsValid"
             v-tooltip.bottom-start="'Create article.'"
+            :disabled="!formIsValid"
             class="mx-1"
             color="green"
+            @click="save"
           >
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
@@ -46,15 +46,15 @@
         <template #c-2>
           <Card>
             <v-select
-              :items="Object.keys(languages)"
               v-model="language"
+              :items="Object.keys(languages)"
               label="Stack languages"
               outlined
             >
             </v-select>
             <v-select
-              :items="technologies"
               v-model="technology"
+              :items="technologies"
               label="Stack technologies"
               outlined
             >
@@ -80,6 +80,15 @@ import { createArticle } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Create',
+  async asyncData({ error }) {
+    try {
+      return {
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
+  },
   data() {
     return {
       name: '',
@@ -131,18 +140,6 @@ export default {
       this.technology = ''
     }
   },
-  async asyncData({ error }) {
-    try {
-      return {
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: "Can't fetch your data." })
-    }
-  },
-  head: {
-    title: `Profiler - Create Article`
-  },
   methods: {
     async save() {
       try {
@@ -153,20 +150,26 @@ export default {
           language: this.language,
           technology: this.technology,
           isPublic: this.isPublic,
-          creatorName: this.$store.getters.user.profile,
-          creatorId: this.$store.getters.user.id
+          creatorName: this.$store.getters.profile,
+          creatorId: this.$store.getters.id
         }
         const id = await createArticle(data)
-        await this.$store.dispatch('updateArticlesList', { type: 'add', id })
+        await this.$store.dispatch('articles/updateArticlesList', {
+          type: 'add',
+          id
+        })
         this.$dialog.message.success(`Created Article: ${this.name}`, {
           position: 'top-right',
           timeout: 3000
         })
-        this.$router.push(`/${this.$store.getters.user.profile}/my_articles`)
+        this.$router.push(`/${this.$store.getters.profile}/my_articles`)
       } catch (e) {
         console.log(e)
       }
     }
+  },
+  head: {
+    title: `Profiler - Create Article`
   }
 }
 </script>

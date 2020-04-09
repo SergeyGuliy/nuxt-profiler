@@ -8,14 +8,12 @@
               ? 'List of my articles'
               : "You don't have articles"
           }}
-          <BtnCreate
-            :link="`/${$store.getters.user.profile}/my_articles/create`"
-          />
+          <BtnCreate :link="`/${$store.getters.profile}/my_articles/create`" />
         </template>
-        <template #actions v-if="checkedList.length > 0">
+        <template v-if="checkedList.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 43px;"
           />
@@ -37,19 +35,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="checkedList.length > 0">
+    <template v-if="checkedList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Language</th>
-                <th>Technology</th>
-                <th>Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Creator', 'Language', 'Technology']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -100,6 +92,16 @@ import { fetchAllArticles } from '~/functions/articles'
 export default {
   name: 'MyArticles',
   mixins: [controlArticles, filterMixin, paginationMixin],
+  async asyncData({ error }) {
+    try {
+      return {
+        basicList: await fetchAllArticles(),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch your articles." })
+    }
+  },
   data() {
     return {
       pageSize: 10
@@ -107,7 +109,7 @@ export default {
   },
   computed: {
     checkedList() {
-      const myListIDS = this.$store.getters.user.lists.articles
+      const myListIDS = this.$store.getters['articles/articles']
       const myList = []
       for (const i of myListIDS) {
         try {
@@ -123,16 +125,6 @@ export default {
   },
   head: {
     title: `Profiler - My Articles`
-  },
-  async asyncData({ error }) {
-    try {
-      return {
-        basicList: await fetchAllArticles(),
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: "Can't fetch your articles." })
-    }
   }
 }
 </script>

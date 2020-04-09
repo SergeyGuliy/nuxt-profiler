@@ -11,20 +11,20 @@
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`articles/${$route.params.id}`" />
-          <div v-if="data.isPublic && $store.getters.user">
+          <div v-if="data.isPublic && $store.getters.loggedIn">
             <v-btn
-              @click="addTomMyList($route.params.id)"
               v-if="
-                !$store.getters.user.lists.articles.includes($route.params.id)
+                !$store.getters['articles/articles'].includes($route.params.id)
               "
               color="green"
+              @click="addTomMyList($route.params.id)"
             >
               <v-icon>mdi-book-plus</v-icon>
             </v-btn>
             <v-btn
-              @click="deleteFromMyList($route.params.id)"
               v-else
               color="red"
+              @click="deleteFromMyList($route.params.id)"
             >
               <v-icon>mdi-book-minus</v-icon>
             </v-btn>
@@ -67,7 +67,7 @@
               <CardRowTitle>Link to article:</CardRowTitle>
               <div>
                 <BtnOpenBlank :link="data.cite" />
-                <BtnCopy :copyValue="data.cite" />
+                <BtnCopy :copy-value="data.cite" />
               </div>
             </CardRow>
           </Card>

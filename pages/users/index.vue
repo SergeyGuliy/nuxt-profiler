@@ -7,10 +7,10 @@
             list.length > 0 ? 'List of all Users' : 'There is no users in base'
           }}
         </template>
-        <template #actions v-if="list.length > 0">
+        <template v-if="list.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 43px;"
           />
@@ -18,19 +18,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="list.length > 0">
+    <template v-if="list.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Repositories</th>
-                <th>Articles</th>
-                <th>Friends</th>
-                <th v-if="$store.getters.user">Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Repositories', 'Articles', 'Friends']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -45,9 +39,9 @@
                 <td>
                   <TableText :text="`${item.lists.friends.length - 1}`" />
                 </td>
-                <td v-if="$store.getters.user">
+                <td v-if="loggedIn">
                   <TableIcon
-                    v-if="!$store.getters.user.lists.friends.includes(item.id)"
+                    v-if="!$store.getters['friends/friends'].includes(item.id)"
                     :item="item.id"
                     :action="addTomMyList"
                     color="green"
@@ -78,6 +72,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
@@ -85,6 +80,15 @@ export default {
   name: 'Index',
   mixins: [controlFriends, paginationMixin],
   transition: 'bounce',
+  async asyncData({ error }) {
+    try {
+      return {
+        allUsers: await fetchAllUsers()
+      }
+    } catch (e) {
+      error({ message: 'Cannot fetch Users list' })
+    }
+  },
   data() {
     return {
       searchKey: null,
@@ -92,21 +96,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['id', 'loggedIn']),
     list() {
       const list = []
       Object.keys(this.allUsers).forEach((i) => {
         try {
           const usr = this.allUsers[i]
-          if (this.$store.getters.user) {
-            if (usr.id === this.$store.getters.user.id) {
-              return
-            }
-            usr.id = i
-            list.push(usr)
-          } else {
-            usr.id = i
-            list.push(usr)
+          if (this.loggedIn && usr.id === this.id) {
+            return
           }
+          list.push(usr)
         } catch (e) {
           // it's ok. i muted catching.
           // i decide to do this because i am creating filtered array based on allUsers.
@@ -125,15 +124,6 @@ export default {
       } else {
         return this.list
       }
-    }
-  },
-  async asyncData({ error }) {
-    try {
-      return {
-        allUsers: await fetchAllUsers()
-      }
-    } catch (e) {
-      error({ message: 'Cannot fetch Users list' })
     }
   },
   head: {

@@ -9,10 +9,10 @@
               : 'There is no public repositories'
           }}
         </template>
-        <template #actions v-if="checkedList.length > 0">
+        <template v-if="checkedList.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 43px;"
           />
@@ -34,19 +34,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="checkedList.length > 0">
+    <template v-if="checkedList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Language</th>
-                <th>Technology</th>
-                <th v-if="$store.getters.user">Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Creator', 'Language', 'Technology']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -67,10 +61,12 @@
                 <td>
                   <TableText :text="item.technology" />
                 </td>
-                <td v-if="$store.getters.user">
+                <td v-if="$store.getters.loggedIn">
                   <TableIcon
                     v-if="
-                      !$store.getters.user.lists.repositories.includes(item.id)
+                      !$store.getters['repositories/repositories'].includes(
+                        item.id
+                      )
                     "
                     :item="item.id"
                     :action="addTomMyList"
@@ -114,6 +110,17 @@ export default {
   name: 'Index',
   mixins: [controlRepositories, filterMixin, paginationMixin],
   transition: 'bounce',
+  async asyncData({ error }) {
+    try {
+      return {
+        allRepositories: await fetchAllRepositories(),
+        publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: 'Cannot fetch Repositories list' })
+    }
+  },
   data() {
     return {
       pageSize: 10
@@ -136,17 +143,6 @@ export default {
   },
   head: {
     title: `Profiler - Public Repositories`
-  },
-  async asyncData({ error }) {
-    try {
-      return {
-        allRepositories: await fetchAllRepositories(),
-        publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: 'Cannot fetch Repositories list' })
-    }
   }
 }
 </script>

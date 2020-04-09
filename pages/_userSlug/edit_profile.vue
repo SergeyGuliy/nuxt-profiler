@@ -5,29 +5,29 @@
         <template #title>Edit profile</template>
         <template #actions>
           <v-btn
-            v-if="!$store.getters.user.isAdmin"
-            @click="submitBecomeAdmin"
+            v-if="!isAdmin"
             v-tooltip.bottom-start="'Become admin.'"
             mx-1
             color="green"
+            @click="submitBecomeAdmin"
           >
             <v-icon>mdi-account-key</v-icon>
           </v-btn>
           <v-btn
-            v-if="$store.getters.user.isAdmin"
+            v-if="isAdmin"
             v-tooltip.bottom-start="'Become casual user.'"
-            @click="submitBecomeUser"
             mx-1
             color="green"
+            @click="submitBecomeUser"
           >
             <v-icon>mdi-account-arrow-left</v-icon>
           </v-btn>
           <v-btn
-            @click="submitUpdateInfo"
-            :disabled="!formIsChanged"
             v-tooltip.bottom-start="'Update your information.'"
+            :disabled="!formIsChanged"
             class="mx-1"
             color="green"
+            @click="submitUpdateInfo"
           >
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
@@ -70,18 +70,18 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="info.date_of_birth"
-                  v-on="on"
                   label="Birthday date"
                   readonly
                   outlined
+                  v-on="on"
                 />
               </template>
               <v-date-picker
                 ref="picker"
                 v-model="info.date_of_birth"
                 :max="new Date().toISOString().substr(0, 10)"
-                @change="save"
                 min="1950-01-01"
+                @change="save"
               />
             </v-menu>
             <v-text-field
@@ -167,9 +167,9 @@
               </v-col>
               <v-col cols="9">
                 <v-text-field
-                  :disabled="!contacts.phone_code"
                   v-model="contacts.phone"
                   v-mask="'##-###-##-##'"
+                  :disabled="!contacts.phone_code"
                   :counter="12"
                   :rules="rules.phone"
                   :label="phone_label"
@@ -247,11 +247,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'EditProfile',
-  head: {
-    title: `Profiler - Edit Profile`
+  async asyncData({ store, error }) {
+    try {
+      return {
+        contacts: Object.assign({}, store.getters.user.userInfo.contacts),
+        info: Object.assign({}, store.getters.user.userInfo.info),
+        work: Object.assign({}, store.getters.user.userInfo.work),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: 'Error while trying to load page.' })
+    }
   },
   data() {
     return {
@@ -343,12 +353,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo', 'isAdmin']),
     user() {
-      return this.$store.getters.user.userInfo
+      return this.userInfo
     },
     formIsChanged() {
       return (
-        JSON.stringify(this.$store.getters.user.userInfo) !==
+        JSON.stringify(this.userInfo) !==
         JSON.stringify({
           contacts: this.contacts,
           info: this.info,
@@ -431,18 +442,6 @@ export default {
       if (this.work.work_technologies.length === 0) {
         this.work.work_technologies.push('empty')
       }
-    }
-  },
-  async asyncData({ store, error }) {
-    try {
-      return {
-        contacts: Object.assign({}, store.getters.user.userInfo.contacts),
-        info: Object.assign({}, store.getters.user.userInfo.info),
-        work: Object.assign({}, store.getters.user.userInfo.work),
-        languages: await fetchCategories()
-      }
-    } catch (e) {
-      error({ message: 'Error while trying to load page.' })
     }
   },
   methods: {
@@ -535,6 +534,9 @@ export default {
       const index = this.friends.indexOf(item.name)
       if (index >= 0) this.friends.splice(index, 1)
     }
+  },
+  head: {
+    title: `Profiler - Edit Profile`
   }
 }
 </script>

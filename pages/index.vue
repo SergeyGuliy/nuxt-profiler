@@ -1,21 +1,15 @@
 <template>
   <Page id="userHomePage">
     <template #head>
-      <PageHeader v-if="$store.getters.user">
-        <template
-          #title
-          v-if="data.userInfo.info.first_name && data.userInfo.info.last_name"
-        >
-          {{ data.userInfo.info.first_name }} {{ data.userInfo.info.last_name }}
+      <PageHeader v-if="loggedIn">
+        <template #title>
+          {{ headerText }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
-        <template #title v-else>
-          {{ data.profile }}
-          <v-chip v-if="data.isAdmin" small>Admin</v-chip>
-        </template>
+
         <template #actions>
           <BtnPrint />
-          <BtnShare :link="`users/${$store.getters.user.id}`" />
+          <BtnShare :link="`users/${id}`" />
         </template>
       </PageHeader>
       <PageHeader v-else>
@@ -27,69 +21,31 @@
     </template>
     <template #body>
       <UserShowingData
-        v-if="$store.getters.user"
+        v-if="loggedIn"
         :data="data"
-        :allUsers="allUsers"
-        :allRepositories="allRepositories"
-        :allArticles="allArticles"
-        :gitApiInfo="gitApiInfo"
+        :all-users="allUsers"
+        :all-repositories="allRepositories"
+        :all-articles="allArticles"
+        :git-api-info="gitApiInfo"
       />
-      <PageBody v-else col="3">
-        <template #c-1>
-          <Card>
-            <br />
-            <CardTitle>You have ability to manage your profile.</CardTitle>
-            <br />
-            <img src="~/static/user.png" alt="user" class="info_img" />
-            <br />
-            <CardTitle>And print your profile as CV.</CardTitle>
-            <br />
-            <img src="~/static/user_print.png" alt="print" class="info_img" />
-          </Card>
-        </template>
-        <template #c-2>
-          <Card>
-            <br />
-            <CardTitle>
-              Also you can fill your portfolio with preview.
-            </CardTitle>
-            <br />
-            <img src="~/static/portfolio.png" alt="portf" class="info_img" />
-            <br />
-            <CardTitle>
-              And become admin to manage languages items.
-            </CardTitle>
-            <br />
-            <img src="~/static/admin.png" alt="admin" class="info_img" />
-          </Card>
-        </template>
-        <template #c-3>
-          <Card>
-            <br />
-            <CardTitle>You can create new articles or repositories.</CardTitle>
-            <br />
-            <img src="~/static/save.png" alt="save" class="info_img" />
-            <br />
-            <CardTitle>Or add from public lists.</CardTitle>
-            <br />
-            <img src="~/static/rep_list.png" alt="lists" class="info_img" />
-          </Card>
-        </template>
-      </PageBody>
+      <UserEmptyData v-else />
     </template>
   </Page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import UserEmptyData from '../components/layout_components/pages_wrappers/pages_components/UserEmptyData'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
-import { fetchAllUsers } from '~/functions/users'
+import { fetchUserByID, fetchAllUsers } from '~/functions/users'
 export default {
   transition: 'bounce',
+  components: { UserEmptyData },
   async asyncData({ app, store, error }) {
-    if (store.getters.user) {
+    if (store.getters.loggedIn) {
       try {
-        const data = store.getters.user
+        const data = await fetchUserByID(store.getters.id)
         const allUsers = await fetchAllUsers()
         const allRepositories = await fetchAllRepositories()
         const allArticles = await fetchAllArticles()
@@ -114,6 +70,15 @@ export default {
       } catch (e) {
         error({ message: "Can't fetch your data." })
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['id', 'loggedIn']),
+    headerText() {
+      return this.data.userInfo.info.first_name &&
+        this.data.userInfo.info.last_name
+        ? `${this.data.userInfo.info.first_name} ${this.data.userInfo.info.last_name}`
+        : `${this.data.profile}`
     }
   }
 }

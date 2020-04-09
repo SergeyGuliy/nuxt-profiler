@@ -7,10 +7,10 @@
             myList.length > 0 ? 'List of my Friends' : "You don't have friends"
           }}
         </template>
-        <template #actions v-if="myList.length > 0">
+        <template v-if="myList.length > 0" #actions>
           <v-select
-            :items="[5, 10, 15]"
             v-model="pageSize"
+            :items="[5, 10, 15]"
             label="Page size"
             style="max-width: 43px;"
           />
@@ -18,19 +18,13 @@
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="myList.length > 0">
+    <template v-if="myList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table v-if="listFiltered.length > 0">
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Repositories</th>
-                <th>Articles</th>
-                <th>Friends</th>
-                <th>Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Repositories', 'Articles', 'Friends']"
+          >
             <template #table-body>
               <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
@@ -76,6 +70,15 @@ import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'MyFriends',
   mixins: [controlFriends, paginationMixin],
+  async asyncData({ error }) {
+    try {
+      return {
+        allUsers: await fetchAllUsers()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch my followings list." })
+    }
+  },
   data() {
     return {
       searchKey: null,
@@ -85,7 +88,7 @@ export default {
   computed: {
     myList() {
       const myList = []
-      this.$store.getters.user.lists.friends.forEach((i) => {
+      this.$store.getters['friends/friends'].forEach((i) => {
         try {
           const usr = this.allUsers[i]
           usr.id = i
@@ -108,15 +111,6 @@ export default {
       } else {
         return this.myList
       }
-    }
-  },
-  async asyncData({ error }) {
-    try {
-      return {
-        allUsers: await fetchAllUsers()
-      }
-    } catch (e) {
-      error({ message: "Can't fetch my followings list." })
     }
   },
   head: {

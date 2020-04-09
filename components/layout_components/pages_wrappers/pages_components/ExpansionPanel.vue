@@ -4,21 +4,19 @@
       <v-expansion-panel :disabled="userFriends.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user && $store.getters.user.id === userId"
-            @click.stop="
-              $router.push(`${$store.getters.user.profile}/my_friends`)
-            "
+            v-if="loggedIn && id === userId"
             height="26px"
             link
+            @click.stop="$router.push(`${profile}/my_friends`)"
           >
             Open List Of My Friends
             <v-chip small label>{{ userFriends.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
-            @click.stop="$router.push(`/users/${userId}/friends`)"
             height="26px"
             link
+            @click.stop="$router.push(`/users/${userId}/friends`)"
           >
             Open List Of User Friends
             <v-chip small label>{{ userFriends.length }}</v-chip>
@@ -28,9 +26,9 @@
           <v-btn
             v-for="item in userFriends"
             :key="item.id"
-            @click="$router.push(`/users/${item.id}`)"
             block
             small
+            @click="$router.push(`/users/${item.id}`)"
             >{{ item.profile }}</v-btn
           >
         </v-expansion-panel-content>
@@ -38,21 +36,19 @@
       <v-expansion-panel :disabled="userArticles.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user && $store.getters.user.id === userId"
-            @click.stop="
-              $router.push(`${$store.getters.user.profile}/my_articles`)
-            "
+            v-if="loggedIn && id === userId"
             height="26px"
             link
+            @click.stop="$router.push(`${profile}/my_articles`)"
           >
             Open List Of My Articles
             <v-chip small label>{{ userArticles.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
-            @click.stop="$router.push(`/users/${userId}/articles`)"
             height="26px"
             link
+            @click.stop="$router.push(`/users/${userId}/articles`)"
           >
             Open List Of User Articles
             <v-chip small label>{{ userArticles.length }}</v-chip>
@@ -62,9 +58,9 @@
           <v-btn
             v-for="item in userArticles"
             :key="item.id"
-            @click="$router.push(`/articles/${item.id}`)"
             block
             small
+            @click="$router.push(`/articles/${item.id}`)"
             >{{ item.name }}</v-btn
           >
         </v-expansion-panel-content>
@@ -72,21 +68,19 @@
       <v-expansion-panel :disabled="userRepositories.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user && $store.getters.user.id === userId"
-            @click.stop="
-              $router.push(`${$store.getters.user.profile}/my_repositories`)
-            "
+            v-if="loggedIn && id === userId"
             height="26px"
             link
+            @click.stop="$router.push(`${profile}/my_repositories`)"
           >
             Open List Of My Repositories
             <v-chip small label>{{ userRepositories.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
-            @click.stop="$router.push(`/users/${userId}/repositories`)"
             height="26px"
             link
+            @click.stop="$router.push(`/users/${userId}/repositories`)"
           >
             Open List Of User Repositories
             <v-chip small label>{{ userRepositories.length }}</v-chip>
@@ -96,9 +90,9 @@
           <v-btn
             v-for="item in userRepositories"
             :key="item.id"
-            @click="$router.push(`/repositories/${item.id}`)"
             block
             small
+            @click="$router.push(`/repositories/${item.id}`)"
             >{{ item.name }}</v-btn
           >
         </v-expansion-panel-content>
@@ -106,21 +100,19 @@
       <v-expansion-panel :disabled="userPortfolio.length === 0">
         <v-expansion-panel-header>
           <v-btn
-            v-if="$store.getters.user && $store.getters.user.id === userId"
-            @click.stop="
-              $router.push(`${$store.getters.user.profile}/my_portfolio`)
-            "
+            v-if="loggedIn && id === userId"
             height="26px"
             link
+            @click.stop="$router.push(`${profile}/my_portfolio`)"
           >
             Open my portfolio
             <v-chip small label>{{ userPortfolio.length }}</v-chip>
           </v-btn>
           <v-btn
             v-else
-            @click.stop="$router.push(`/users/${userId}/portfolio`)"
             height="26px"
             link
+            @click.stop="$router.push(`/users/${userId}/portfolio`)"
           >
             Open user portfolio
             <v-chip small label>{{ userPortfolio.length }}</v-chip>
@@ -146,6 +138,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'ExpansionPanel',
   props: {
@@ -154,6 +147,9 @@ export default {
     userRepositories: Array,
     userPortfolio: Array,
     userId: String
+  },
+  computed: {
+    ...mapGetters(['id', 'loggedIn', 'profile'])
   }
 }
 </script>

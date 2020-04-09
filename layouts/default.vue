@@ -1,7 +1,10 @@
 <template>
   <v-app id="inspire">
     <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
-    <Sidebar :sidebarStatus="sidebarStatus" v-if="$vuetify.breakpoint.xsOnly" />
+    <Sidebar
+      v-if="$vuetify.breakpoint.xsOnly"
+      :sidebar-status="sidebarStatus"
+    />
     <Body>
       <nuxt />
     </Body>
@@ -21,8 +24,8 @@ export default {
   },
   transition: 'bounce',
   created() {
-    if (this.$store.getters.user) {
-      this.$vuetify.theme.dark = this.$store.getters.user.themeDark
+    if (this.$store.getters.loggedIn) {
+      this.$vuetify.theme.dark = this.$store.getters.themeDark
     } else {
       this.$vuetify.theme.dark = true
     }

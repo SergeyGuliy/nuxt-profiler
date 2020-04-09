@@ -2,26 +2,20 @@
   <Page id="userPortfolio">
     <template #head>
       <PageHeader>
-        <template #title>
-          {{
-            listFiltered.length > 0
-              ? `${userName} portfolio`
-              : `${userName} portfolio is empty`
-          }}
-        </template>
-        <template #actions v-if="listFiltered.length > 0">
+        <template #title>{{ headerText }}</template>
+        <template v-if="checkedList.length > 0" #actions>
           <v-select
-            :items="[3, 5, 7, 9]"
             v-model="pageSize"
+            :items="[3, 5, 7, 9]"
             label="Page size"
             style="max-width: 56px;"
           />
         </template>
       </PageHeader>
     </template>
-    <template #body v-if="listFiltered.length > 0">
+    <template v-if="checkedList.length > 0" #body>
       <div class="flex-portfolio">
-        <PortfolioList :checkedList="listPaginated[pageCurrent - 1]" />
+        <PortfolioList :checked-list="listPaginated[pageCurrent - 1]" />
         <v-pagination v-model="pageCurrent" :length="listPaginated.length" />
       </div>
     </template>
@@ -35,28 +29,6 @@ import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'Portfolio',
   mixins: [paginationMixin],
-  data() {
-    return {
-      pageSize: 3
-    }
-  },
-  computed: {
-    listFiltered() {
-      return this.userData.lists.portfolio.filter((item) => {
-        return item !== 'empty'
-      })
-    },
-    userName() {
-      if (
-        this.userData.userInfo.info.first_name &&
-        this.userData.userInfo.info.last_name
-      ) {
-        return `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
-      } else {
-        return `${this.userData.profile}`
-      }
-    }
-  },
   async asyncData({ route, error }) {
     try {
       return {
@@ -64,6 +36,29 @@ export default {
       }
     } catch (e) {
       error({ message: "Can't fetch user portfolio." })
+    }
+  },
+  data() {
+    return {
+      pageSize: 3
+    }
+  },
+  computed: {
+    checkedList() {
+      return this.userData.lists.portfolio.filter((item) => {
+        return item !== 'empty'
+      })
+    },
+    headerText() {
+      return this.checkedList.length > 0
+        ? `${this.userName} portfolio works`
+        : `${this.userName} don't have portfolio works`
+    },
+    userName() {
+      return this.userData.userInfo.info.first_name &&
+        this.userData.userInfo.info.last_name
+        ? `${this.userData.userInfo.info.first_name} ${this.userData.userInfo.info.last_name}`
+        : `${this.userData.profile}`
     }
   },
   head: {

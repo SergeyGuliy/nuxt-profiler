@@ -5,11 +5,11 @@
         <template #title>Create Portfolio work</template>
         <template #actions>
           <v-btn
-            @click="save"
-            :disabled="!formIsValid"
             v-tooltip.bottom-start="'Create portfolio work.'"
+            :disabled="!formIsValid"
             class="mx-1"
             color="green"
+            @click="save"
           >
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
@@ -78,9 +78,6 @@ export default {
       }
     }
   },
-  head: {
-    title: `Profiler - Create work`
-  },
   computed: {
     formIsValid() {
       return !!this.name && this.name.length <= 25
@@ -93,11 +90,11 @@ export default {
           name: this.name,
           cite: this.cite,
           gitHub: this.gitHub,
-          creatorName: this.$store.getters.user.profile,
-          creatorId: this.$store.getters.user.id,
+          creatorName: this.$store.getters.profile,
+          creatorId: this.$store.getters.id,
           key: new Date().getTime()
         }
-        await this.$store.dispatch('updatePortfolio', {
+        await this.$store.dispatch('portfolio/updatePortfolio', {
           type: 'add',
           work: data
         })
@@ -105,7 +102,7 @@ export default {
           position: 'top-right',
           timeout: 3000
         })
-        this.$router.push(`/${this.$store.getters.user.profile}/my_portfolio`)
+        this.$router.push(`/${this.$store.getters.profile}/my_portfolio`)
       } catch (e) {
         console.log(e)
         this.$dialog.message.error(
@@ -117,6 +114,9 @@ export default {
         )
       }
     }
+  },
+  head: {
+    title: `Profiler - Create work`
   }
 }
 </script>

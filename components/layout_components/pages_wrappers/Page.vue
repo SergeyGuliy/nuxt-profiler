@@ -1,7 +1,7 @@
 <template>
   <v-card class="Page">
     <v-card-title class="headline">
-      <slot name="head" class="print">ERROR!!!!</slot>
+      <slot name="head" />
     </v-card-title>
     <v-divider />
     <v-card-subtitle class="print">
@@ -15,7 +15,6 @@ export default {
   name: 'BodyCard'
 }
 </script>
-card__title
 
 <style lang="sass">
 .Page.v-card

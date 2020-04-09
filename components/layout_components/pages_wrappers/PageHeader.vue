@@ -4,7 +4,9 @@
       <slot name="title" />
     </h3>
     <div class="flex-left">
-      <slot name="actions" />
+      <client-only>
+        <slot name="actions" />
+      </client-only>
     </div>
   </div>
 </template>

@@ -4,12 +4,10 @@
       <v-card-title>
         {{ item.name }}
         <v-btn
-          v-if="
-            $store.getters.user && item.creatorId === $store.getters.user.id
-          "
-          @click="deleteFromMyList(item.key)"
+          v-if="loggedIn && item.creatorId === id"
           color="red"
           icon
+          @click="deleteFromMyList(item.key)"
         >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
@@ -32,6 +30,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'PortfolioList',
@@ -45,7 +44,7 @@ export default {
           title: 'Warning'
         })
         if (answer) {
-          await this.$store.dispatch('updatePortfolio', {
+          await this.$store.dispatch('portfolio/updatePortfolio', {
             type: 'remove',
             work: item
           })
@@ -61,6 +60,9 @@ export default {
         })
       }
     }
+  },
+  computed: {
+    ...mapGetters(['id', 'loggedIn'])
   }
 }
 </script>
