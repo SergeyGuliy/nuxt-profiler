@@ -1,17 +1,17 @@
 <template>
-  <Page id="createWork">
+  <Page id="Edit">
     <template #head>
       <PageHeader>
         <template #title>Create Repository</template>
         <template #actions>
           <v-switch
-            v-model="isPublic"
-            :label="isPublic ? 'Public article' : 'Private article'"
+            v-model="data.isPublic"
+            :label="data.isPublic ? 'Public article' : 'Private article'"
             class="switch"
             inset
           />
           <v-btn
-            v-tooltip.bottom-start="'Create repository.'"
+            v-tooltip.bottom-start="'Update repository.'"
             class="headerButton"
             outlined
             :disabled="!formIsValid"
@@ -28,14 +28,14 @@
         <template #c-1>
           <Card>
             <v-text-field
-              v-model="name"
+              v-model="data.name"
               :rules="rules.name"
               :counter="25"
               label="Repository name"
               outlined
             />
             <v-text-field
-              v-model="cite"
+              v-model="data.cite"
               :rules="rules.cite"
               :counter="100"
               placeholder="https://....."
@@ -43,7 +43,7 @@
               outlined
             />
             <v-text-field
-              v-model="gitHub"
+              v-model="data.gitHub"
               :rules="rules.gitHub"
               :counter="100"
               placeholder="https://github.com/....."
@@ -55,21 +55,21 @@
         <template #c-2>
           <Card>
             <v-select
-              v-model="language"
+              v-model="data.language"
               :items="Object.keys(languages)"
               label="Stack languages"
               outlined
             >
             </v-select>
             <v-select
-              v-model="technology"
+              v-model="data.technology"
               :items="technologies"
               label="Stack technologies"
               outlined
             >
             </v-select>
             <v-textarea
-              v-model="about"
+              v-model="data.about"
               :rules="rules.about"
               :counter="200"
               label="Description"
@@ -85,28 +85,26 @@
 </template>
 
 <script>
-import { createRepository } from '~/functions/repositories'
+import { fetchRepositoryByID, updateRepository } from '~/functions/repositories'
+
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
-  name: 'Create',
-  async asyncData({ error }) {
+  name: 'Edit',
+  async asyncData({ error, route }) {
+    const data = await fetchRepositoryByID(route.params.id)
     try {
       return {
+        data,
+        oldData: Object.assign({}, data),
         languages: await fetchCategories()
       }
     } catch (e) {
-      error({ message: "Can't fetch your data." })
+      error({ message: "Can't fetch repository." })
     }
   },
+
   data() {
     return {
-      name: '',
-      about: '',
-      cite: '',
-      gitHub: '',
-      language: '',
-      technology: '',
-      isPublic: true,
       rules: {
         name: [
           (v) => !!v || 'Name is required',
@@ -134,16 +132,17 @@ export default {
   computed: {
     formIsValid() {
       return (
-        !!this.name &&
-        this.name.length <= 25 &&
-        /https:\/\/github.com\/.+/.test(this.gitHub) &&
-        this.cite.length <= 200
+        !!this.data.name &&
+        this.data.name.length <= 25 &&
+        /https:\/\/github.com\/.+/.test(this.data.gitHub) &&
+        this.data.cite.length <= 200 &&
+        JSON.stringify(this.data) !== JSON.stringify(this.oldData)
       )
     },
     technologies() {
       try {
         const technologies = []
-        this.languages[this.language].technologies.forEach((item) => {
+        this.languages[this.data.language].technologies.forEach((item) => {
           technologies.push(item)
         })
         return technologies
@@ -153,39 +152,35 @@ export default {
     }
   },
   watch: {
-    language() {
-      this.technology = ''
+    'data.language'() {
+      this.data.technology = ''
     }
   },
   methods: {
     async save() {
       try {
         const gitApiKey = `https://api.github.com/repos/${
-          this.gitHub.split(`https://github.com/`)[1]
+          this.data.gitHub.split(`https://github.com/`)[1]
         }`
         await this.$axios.get(`${gitApiKey}`)
-        const data = {
-          name: this.name,
-          about: this.about,
-          cite: this.cite,
-          gitHub: this.gitHub,
+        const updatedData = {
+          name: this.data.name,
+          about: this.data.about,
+          cite: this.data.cite,
+          gitHub: this.data.gitHub,
           gitApiKey,
-          language: this.language,
-          technology: this.technology,
-          isPublic: this.isPublic,
-          creatorName: this.$store.getters.profile,
-          creatorId: this.$store.getters.id
+          language: this.data.language,
+          technology: this.data.technology,
+          isPublic: this.data.isPublic,
+          creatorName: this.data.creatorName,
+          creatorId: this.data.creatorId
         }
-        const id = await createRepository(data)
-        await this.$store.dispatch('repositories/updateReposList', {
-          type: 'add',
-          id
-        })
-        this.$dialog.message.success(`Created Repository: ${this.name}`, {
+        await updateRepository(updatedData, this.$route.params.id)
+        this.$dialog.message.success(`Updated Repository: ${this.data.name}`, {
           position: 'top-right',
           timeout: 5000
         })
-        this.$router.push(`/${this.$store.getters.profile}/my_repositories`)
+        this.$router.push(`/repositories/${this.$route.params.id}`)
       } catch (e) {
         if (e.message === 'Request failed with status code 404') {
           this.$dialog.message.error(
@@ -206,7 +201,7 @@ export default {
 </script>
 
 <style lang="sass">
-#createRepository
+#Edit
   .v-input.switch
     margin: 3px
     height: 36px

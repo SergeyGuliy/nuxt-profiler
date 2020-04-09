@@ -18,6 +18,7 @@ export const actions = {
       const cookie = app.$cookies.get('access_token')
       await dispatch('fetchUserInfo', cookie)
     } catch (e) {
+      console.log(`Error in store action 'nuxtServerInit': ${e}`)
       await dispatch('logOut')
     }
   },
@@ -30,7 +31,6 @@ export const actions = {
           .ref(`/1_users/${uid}/`)
           .once('value')
       ).val()
-      console.log(userInfo)
       commit('setUser', {
         id: userInfo.id,
         isAdmin: userInfo.isAdmin,
@@ -44,9 +44,7 @@ export const actions = {
     } catch (e) {
       // If fetching user info will throw an error,
       // will be invoked logging out user from base
-      console.log(
-        'ALLARM!!! Something wrong while fetching user info. Check store!!!'
-      )
+      console.log(`Error in store action 'fetchUserInfo': ${e}`)
       await dispatch('logOut')
     }
   },
@@ -111,7 +109,7 @@ export const actions = {
       await dispatch('fetchUserInfo', uid)
       this.$router.push(`/${getters.user.profile}/edit_profile`)
     } catch (e) {
-      console.log(e)
+      console.log(`Error in store action 'createNewUser': ${e}`)
       throw e
     }
   },
@@ -125,7 +123,8 @@ export const actions = {
       this.$cookies.set('access_token', uid)
       await dispatch('fetchUserInfo', uid)
     } catch (e) {
-      console.log(e)
+      console.log(`Error in store action 'logIn': ${e}`)
+      throw e
     }
   },
 
@@ -138,10 +137,6 @@ export const actions = {
       commit('portfolio/cleanUserPortfolio')
       commit('friends/cleanUserFriends')
       commit('articles/cleanUserArticles')
-      this.$dialog.message.success(`You logged out from base.`, {
-        position: 'top-right',
-        timeout: 3000
-      })
     } catch (e) {
       this.$cookies.remove('access_token')
       commit('cleanUser')
@@ -161,8 +156,7 @@ export const actions = {
         .ref(`/1_users/${uid}/userInfo`)
         .set(getters.userInfo)
     } catch (e) {
-      console.log('Error Updating User info')
-      console.log(e)
+      console.log(`Error in store action 'updateUserInfo': ${e}`)
     }
   },
 
@@ -175,8 +169,7 @@ export const actions = {
         .ref(`/1_users/${uid}/themeDark`)
         .set(getters.user.themeDark)
     } catch (e) {
-      console.log('Error Changing theme')
-      console.log(e)
+      console.log(`Error in store action 'changeTheme': ${e}`)
     }
   },
   async changeAdminStatus({ getters, commit }, status) {
@@ -188,8 +181,7 @@ export const actions = {
         .ref(`/1_users/${uid}/isAdmin`)
         .set(getters.user.isAdmin)
     } catch (e) {
-      console.log('Error Changing admin status')
-      console.log(e)
+      console.log(`Error in store action 'changeAdminStatus': ${e}`)
     }
   }
 }

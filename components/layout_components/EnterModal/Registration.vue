@@ -99,7 +99,7 @@ export default {
         this.loading = false
         this.$dialog.message.success(`You successfully registrated in base.`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         this.$dialog.message.error(`${e.message}`, {

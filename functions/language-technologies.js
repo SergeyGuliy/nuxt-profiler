@@ -17,7 +17,7 @@ async function updateCategories(categories) {
       .ref(`/systemData/categories/`)
       .set(categories)
   } catch (e) {
-    throw e
+    console.log(e)
   }
 }
 

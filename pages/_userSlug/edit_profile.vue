@@ -7,7 +7,8 @@
           <v-btn
             v-if="!isAdmin"
             v-tooltip.bottom-start="'Become admin.'"
-            mx-1
+            class="headerButton"
+            outlined
             color="green"
             @click="submitBecomeAdmin"
           >
@@ -16,7 +17,8 @@
           <v-btn
             v-if="isAdmin"
             v-tooltip.bottom-start="'Become casual user.'"
-            mx-1
+            class="headerButton"
+            outlined
             color="green"
             @click="submitBecomeUser"
           >
@@ -24,8 +26,8 @@
           </v-btn>
           <v-btn
             v-tooltip.bottom-start="'Update your information.'"
-            :disabled="!formIsChanged"
-            class="mx-1"
+            class="headerButton"
+            outlined
             color="green"
             @click="submitUpdateInfo"
           >
@@ -456,12 +458,12 @@ export default {
           await this.$store.dispatch('changeAdminStatus', true)
           this.$dialog.message.success(`You had become Admin`, {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           })
         } else {
           this.$dialog.message.error(`You had refuse to become Admin`, {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           })
         }
       } catch (e) {
@@ -478,12 +480,12 @@ export default {
           await this.$store.dispatch('changeAdminStatus', false)
           this.$dialog.message.success(`You had become casual user`, {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           })
         } else {
           this.$dialog.message.error(`You had refuse becoming casual user`, {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           })
         }
       } catch (e) {
@@ -504,7 +506,7 @@ export default {
           } catch (e) {
             this.$dialog.message.error(
               `You had write wrong link to GiHub profile`,
-              { position: 'top-right', timeout: 3000 }
+              { position: 'top-right', timeout: 5000 }
             )
             this.contacts.gitApi = ''
             this.contacts.github = ''
@@ -520,7 +522,7 @@ export default {
         })
         this.$dialog.message.success(`You had update your info`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
         this.$router.push('/')
       } catch (e) {

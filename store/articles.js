@@ -9,16 +9,14 @@ export const actions = {
    * @param {string} id to 'add' or 'remove' from my list of ID's
    * @returns {Promise<void>}
    */
-  async updateArticlesList({ state, commit }, { type = 'notSelected', id }) {
+  async updateArticlesList({ state, commit }, { type, id }) {
     try {
       if (type === 'add') {
         commit('pushArticle', id)
       } else if (type === 'remove') {
         commit('deleteArticle', id)
-      } else if (type === 'notSelected') {
-        throw new Error(
-          "You need to select what you like to do with ID. 'add' or 'remove' from your list"
-        )
+      } else {
+        throw new Error('Need select what you like to do with ID. add/remove')
       }
       const uid = this.$cookies.get('access_token')
       await firebase
@@ -26,8 +24,7 @@ export const actions = {
         .ref(`/1_users/${uid}/lists/articles`)
         .set(state.articles)
     } catch (e) {
-      console.log('Error Updating User Articles List')
-      console.log(e)
+      console.log(`Error in store action 'updateArticlesList': ${e}`)
     }
   }
 }
@@ -47,6 +44,7 @@ export const mutations = {
     state.articles.splice(IdToDelete, 1)
   }
 }
+
 export const state = () => ({
   articles: []
 })

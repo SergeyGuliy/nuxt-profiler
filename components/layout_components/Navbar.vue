@@ -62,10 +62,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LogInModal from './LogInModal'
+import LogInModal from './EnterModal/EnterModal'
+import NavLink from '~/components/buttons_components/NavLink'
+
 export default {
   name: 'Navbar',
-  components: { LogInModal },
+  components: { LogInModal, NavLink },
   data() {
     return {
       dialog: false
@@ -78,6 +80,10 @@ export default {
     async logOut() {
       try {
         await this.$store.dispatch('logOut')
+        this.$dialog.message.success(`You logged out from base.`, {
+          position: 'top-right',
+          timeout: 5000
+        })
       } catch (e) {
         console.log(e)
       }
@@ -86,6 +92,10 @@ export default {
       try {
         await this.$store.dispatch('changeTheme')
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+        this.$dialog.message.success(`You changed theme.`, {
+          position: 'top-right',
+          timeout: 5000
+        })
       } catch (e) {
         console.log(e)
       }

@@ -23,11 +23,13 @@
 </template>
 
 <script>
+import PortfolioList from '../../../components/pages_components/PortfolioList'
 import { fetchUserByID } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 
 export default {
   name: 'Portfolio',
+  components: { PortfolioList },
   mixins: [paginationMixin],
   async asyncData({ route, error }) {
     try {

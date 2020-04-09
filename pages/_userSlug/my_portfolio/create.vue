@@ -100,7 +100,7 @@ export default {
         })
         this.$dialog.message.success(`Created portfolio work: ${this.name}`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
         this.$router.push(`/${this.$store.getters.profile}/my_portfolio`)
       } catch (e) {
@@ -109,7 +109,7 @@ export default {
           `Error while trying to connect to repository. Check link to repository.`,
           {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           }
         )
       }

@@ -35,6 +35,16 @@ async function createArticle(data) {
     console.log(e)
   }
 }
+async function updateArticle(data, id) {
+  try {
+    await firebase
+      .database()
+      .ref(`/2_articles/${id}`)
+      .set(data)
+  } catch (e) {
+    console.log(e)
+  }
+}
 async function fetchArticleByID(id) {
   try {
     return (
@@ -46,16 +56,6 @@ async function fetchArticleByID(id) {
   } catch (e) {
     throw Error
   }
-}
-async function fetchPublicArticlesIDS() {
-  return (
-    (
-      await firebase
-        .database()
-        .ref(`/systemData/public/articles`)
-        .once('value')
-    ).val() || []
-  )
 }
 async function fetchPrivateArticlesIDS(userID) {
   return (
@@ -70,7 +70,7 @@ async function fetchPrivateArticlesIDS(userID) {
 export {
   fetchAllArticles,
   createArticle,
+  updateArticle,
   fetchArticleByID,
-  fetchPublicArticlesIDS,
   fetchPrivateArticlesIDS
 }

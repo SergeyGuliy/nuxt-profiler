@@ -44,8 +44,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import SideLink from '~/components/buttons_components/SideLink'
+
 export default {
   name: 'Sidebar',
+  components: { SideLink },
   props: { sidebarStatus: Boolean },
   data: () => ({
     drawer: false

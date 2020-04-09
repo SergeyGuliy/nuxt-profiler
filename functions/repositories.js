@@ -35,6 +35,16 @@ async function createRepository(data) {
     console.log(e)
   }
 }
+async function updateRepository(data, id) {
+  try {
+    await firebase
+      .database()
+      .ref(`/3_repositories/${id}`)
+      .set(data)
+  } catch (e) {
+    console.log(e)
+  }
+}
 async function fetchRepositoryByID(id) {
   try {
     return (
@@ -46,16 +56,6 @@ async function fetchRepositoryByID(id) {
   } catch (e) {
     throw Error
   }
-}
-async function fetchPublicRepositoriesIDS() {
-  return (
-    (
-      await firebase
-        .database()
-        .ref(`/systemData/public/repositories`)
-        .once('value')
-    ).val() || []
-  )
 }
 async function fetchPrivateRepositoriesIDS(userID) {
   return (
@@ -70,7 +70,7 @@ async function fetchPrivateRepositoriesIDS(userID) {
 export {
   fetchAllRepositories,
   createRepository,
+  updateRepository,
   fetchRepositoryByID,
-  fetchPublicRepositoriesIDS,
   fetchPrivateRepositoriesIDS
 }

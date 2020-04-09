@@ -1,5 +1,11 @@
 <template>
-  <v-btn @click="print" color="blue">
+  <v-btn
+    v-tooltip.bottom-start="'Print page.'"
+    color="blue"
+    outlined
+    class="headerButton"
+    @click="print"
+  >
     <v-icon>mdi-printer</v-icon>
   </v-btn>
 </template>

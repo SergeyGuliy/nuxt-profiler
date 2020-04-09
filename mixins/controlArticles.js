@@ -8,7 +8,7 @@ export const controlArticles = {
         })
         this.$dialog.message.error(`You delete article`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         console.log(e)
@@ -22,7 +22,7 @@ export const controlArticles = {
         })
         this.$dialog.message.success(`You add article`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         console.log(e)

@@ -9,6 +9,16 @@
           </v-chip>
         </template>
         <template #actions>
+          <v-btn
+            v-if="$router"
+            v-tooltip.bottom-start="'Edit repository.'"
+            color="orange"
+            class="headerButton"
+            outlined
+            @click="$router.push(`/repositories/${$route.params.id}/edit`)"
+          >
+            <v-icon>mdi-pencil-outline</v-icon>
+          </v-btn>
           <BtnPrint />
           <BtnShare :link="`repositories/${$route.params.id}`" />
           <div v-if="data.isPublic && $store.getters.loggedIn">
@@ -18,6 +28,9 @@
                   $route.params.id
                 )
               "
+              v-tooltip.bottom-start="'Add to my repositories.'"
+              class="headerButton"
+              outlined
               color="green"
               @click="addTomMyList($route.params.id)"
             >
@@ -25,7 +38,10 @@
             </v-btn>
             <v-btn
               v-else
+              v-tooltip.bottom-start="'Remove from my repositories.'"
               color="red"
+              class="headerButton"
+              outlined
               @click="deleteFromMyList($route.params.id)"
             >
               <v-icon>mdi-vector-polyline-minus</v-icon>
@@ -131,11 +147,18 @@
 </template>
 
 <script>
-import { controlRepositories } from '../../mixins/controlRepositories'
+import BtnOpenBlank from '../../../components/buttons_components/BtnOpenBlank'
+import BtnShare from '../../../components/buttons_components/BtnShare'
+import BtnPrint from '../../../components/buttons_components/BtnPrint'
+import BtnRouter from '../../../components/buttons_components/BtnRouter'
+import BtnCopy from '../../../components/buttons_components/BtnCopy'
+
+import { controlRepositories } from '../../../mixins/controlRepositories'
 import { fetchRepositoryByID } from '~/functions/repositories'
 export default {
   name: 'Id',
   transition: 'bounce',
+  components: { BtnCopy, BtnRouter, BtnOpenBlank, BtnPrint, BtnShare },
   mixins: [controlRepositories],
   async asyncData({ route, $axios, error }) {
     try {

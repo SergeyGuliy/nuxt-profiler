@@ -8,7 +8,7 @@ export const controlFriends = {
         })
         this.$dialog.message.error(`You delete friend`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         console.log(e)
@@ -22,7 +22,7 @@ export const controlFriends = {
         })
         this.$dialog.message.success(`You add friend`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         console.log(e)

@@ -15,7 +15,7 @@ export default {
         await this.$copyText(copiedText)
         this.$dialog.message.success(`Coppied: ${copiedText}`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
         console.log(e)

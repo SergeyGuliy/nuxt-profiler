@@ -35,13 +35,18 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import UserEmptyData from '../components/layout_components/pages_wrappers/pages_components/UserEmptyData'
+
+import BtnShare from '../components/buttons_components/BtnShare'
+import BtnPrint from '../components/buttons_components/BtnPrint'
+import UserShowingData from '../components/pages_components/UserShowingData'
+import UserEmptyData from '../components/pages_components/UserEmptyData'
+
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchUserByID, fetchAllUsers } from '~/functions/users'
 export default {
   transition: 'bounce',
-  components: { UserEmptyData },
+  components: { UserEmptyData, UserShowingData, BtnPrint, BtnShare },
   async asyncData({ app, store, error }) {
     if (store.getters.loggedIn) {
       try {
@@ -72,8 +77,28 @@ export default {
       }
     }
   },
+  async updated() {
+    this.data = await fetchUserByID(this.$store.getters.id)
+    if (this.data.userInfo.contacts.gitApi) {
+      this.gitApiInfo = (
+        await this.$axios.get(this.data.userInfo.contacts.gitApi)
+      ).data
+    } else {
+      this.gitApiInfo = false
+    }
+  },
   computed: {
     ...mapGetters(['id', 'loggedIn']),
+    newData() {
+      const data = Object.assign({}, this.$store.getters.user)
+      data.lists = {
+        articles: this.$store.getters['articles/articles'].slice(),
+        friends: this.$store.getters['friends/friends'].slice(),
+        portfolio: this.$store.getters['portfolio/portfolio'].slice(),
+        repositories: this.$store.getters['repositories/repositories'].slice()
+      }
+      return data
+    },
     headerText() {
       return this.data.userInfo.info.first_name &&
         this.data.userInfo.info.last_name

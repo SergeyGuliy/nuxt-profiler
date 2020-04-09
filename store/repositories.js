@@ -9,19 +9,14 @@ export const actions = {
    * @param {string} id to 'add' or 'remove' from my list of ID's
    * @returns {Promise<void>}
    */
-  async updateRepositoriesList(
-    { state, commit },
-    { type = 'notSelected', id }
-  ) {
+  async updateReposList({ state, commit }, { type, id }) {
     try {
       if (type === 'add') {
         commit('pushRepository', id)
       } else if (type === 'remove') {
         commit('deleteRepository', id)
-      } else if (type === 'notSelected') {
-        throw new Error(
-          "You need to select what you like to do with ID. 'add' or 'remove' from your list"
-        )
+      } else {
+        throw new Error('Need select what you like to do with ID. add/remove')
       }
       const uid = this.$cookies.get('access_token')
       await firebase
@@ -29,11 +24,11 @@ export const actions = {
         .ref(`/1_users/${uid}/lists/repositories`)
         .set(state.repositories)
     } catch (e) {
-      console.log('Error Updating User Repositories List')
-      console.log(e)
+      console.log(`Error in store action 'updateRepositoriesList': ${e}`)
     }
   }
 }
+
 export const mutations = {
   setUserRepositories(state, list) {
     state.repositories = list
@@ -51,6 +46,7 @@ export const mutations = {
     state.repositories.splice(IdToDelete, 1)
   }
 }
+
 export const state = () => ({
   repositories: []
 })

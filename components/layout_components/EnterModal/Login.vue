@@ -82,16 +82,16 @@ export default {
         this.loading = false
         this.$dialog.message.success(`You successfully logged in base.`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       } catch (e) {
-        this.$dialog.message.error(`${e.message}`, {
-          position: 'top-right',
-          timeout: 3000
-        })
         this.email = ''
         this.password = ''
         this.loading = false
+        this.$dialog.message.error(`${e.message}`, {
+          position: 'top-right',
+          timeout: 5000
+        })
       }
     }
   }

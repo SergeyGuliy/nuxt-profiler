@@ -101,10 +101,7 @@
 import { filterMixin } from '../../mixins/filterMixin'
 import { controlRepositories } from '../../mixins/controlRepositories'
 import { paginationMixin } from '~/mixins/paginationMixin'
-import {
-  fetchAllRepositories,
-  fetchPublicRepositoriesIDS
-} from '~/functions/repositories'
+import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Index',
@@ -114,7 +111,6 @@ export default {
     try {
       return {
         allRepositories: await fetchAllRepositories(),
-        publicRepositoriesIDS: await fetchPublicRepositoriesIDS(),
         languages: await fetchCategories()
       }
     } catch (e) {
@@ -129,13 +125,11 @@ export default {
   computed: {
     checkedList() {
       const publicListList = []
-      for (const i of this.publicRepositoriesIDS) {
-        try {
+      for (const i in this.allRepositories) {
+        if (this.allRepositories[i].isPublic) {
           const rep = this.allRepositories[i]
           rep.id = i
           publicListList.push(rep)
-        } catch (e) {
-          continue
         }
       }
       return publicListList

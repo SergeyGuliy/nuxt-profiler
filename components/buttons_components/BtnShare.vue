@@ -1,9 +1,10 @@
 <template>
   <v-btn
-    @click="copyLink"
     v-tooltip.bottom-start="'Copy link to page.'"
     color="green"
-    class="mx-1"
+    class="headerButton"
+    outlined
+    @click="copyLink"
   >
     <v-icon>mdi-share-variant</v-icon>
   </v-btn>
@@ -21,7 +22,7 @@ export default {
           `Coppied: '${window.location.origin}/${this.link}'`,
           {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           }
         )
       } catch (e) {

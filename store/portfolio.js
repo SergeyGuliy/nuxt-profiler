@@ -1,16 +1,14 @@
 import firebase from 'firebase/app'
 
 export const actions = {
-  async updatePortfolio({ commit, state }, { type = 'notSelected', work }) {
+  async updatePortfolio({ commit, state }, { type, work }) {
     try {
       if (type === 'add') {
         commit('pushPortfolioWork', work)
       } else if (type === 'remove') {
         commit('deletePortfolioWork', work)
-      } else if (type === 'notSelected') {
-        throw new Error(
-          "You need to select what you like to do with ID. 'add' or 'remove' from your list"
-        )
+      } else {
+        throw new Error('Need select what you like to do with ID. add/remove')
       }
       const uid = this.$cookies.get('access_token')
       await firebase
@@ -18,11 +16,11 @@ export const actions = {
         .ref(`/1_users/${uid}/lists/portfolio`)
         .set(state.portfolio)
     } catch (e) {
-      console.log('Error Updating User Portfolio')
-      console.log(e)
+      console.log(`Error in store action 'updatePortfolio': ${e}`)
     }
   }
 }
+
 export const mutations = {
   setUserPortfolio(state, list) {
     state.repositories = list
@@ -44,6 +42,7 @@ export const mutations = {
     }
   }
 }
+
 export const state = () => ({
   portfolio: []
 })

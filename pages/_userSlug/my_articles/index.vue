@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import BtnCreate from '../../../components/buttons_components/BtnCreate'
 import { filterMixin } from '../../../mixins/filterMixin'
 import { controlArticles } from '../../../mixins/controlArticles'
 import { paginationMixin } from '~/mixins/paginationMixin'
@@ -91,7 +92,9 @@ import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllArticles } from '~/functions/articles'
 export default {
   name: 'MyArticles',
+  components: { BtnCreate },
   mixins: [controlArticles, filterMixin, paginationMixin],
+
   async asyncData({ error }) {
     try {
       return {

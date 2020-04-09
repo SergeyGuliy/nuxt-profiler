@@ -195,9 +195,9 @@
           </v-chip-group>
           <span v-else>Not indicated</span>
         </CardRow>
-        <div v-if="checkedList.length > 0" class="PortfolioLinks">
+        <div v-if="userPortfolio.length > 0" class="PortfolioLinks">
           <CardTitle>Portfolio links</CardTitle>
-          <CardRow v-for="item in checkedList" :key="item.id">
+          <CardRow v-for="item in userPortfolio" :key="item.id">
             <CardRowTitle>{{ item.name }}:</CardRowTitle>
             <span>{{ item.cite.split('//')[1] }}</span>
           </CardRow>
@@ -211,7 +211,7 @@
           :user-friends="userFriends"
           :user-articles="userArticles"
           :user-repositories="userRepositories"
-          :user-portfolio="checkedList"
+          :user-portfolio="userPortfolio"
           :user-id="data.id"
         />
       </Card>
@@ -220,10 +220,13 @@
 </template>
 
 <script>
+import BtnOpenBlank from '../buttons_components/BtnOpenBlank'
+import BtnCopy from '../buttons_components/BtnCopy'
 import ExpansionPanel from './ExpansionPanel'
+import GitInfo from './GitInfo'
 export default {
   name: 'UserShowingData',
-  components: { ExpansionPanel },
+  components: { ExpansionPanel, GitInfo, BtnCopy, BtnOpenBlank },
   props: {
     data: Object,
     allUsers: Object,
@@ -250,7 +253,7 @@ export default {
       })
       return workTechnologies
     },
-    checkedList() {
+    userPortfolio() {
       return this.data.lists.portfolio.filter((item) => {
         return item !== 'empty'
       })
@@ -299,8 +302,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.data.lists.portfolio)
-    console.log(this.checkedList)
     const aboutUser = document.querySelector('.about_user')
     let formatedString
     if (this.data.userInfo.info.about.length > 0) {

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Login from './pages_wrappers/pages_components/Login'
-import Registration from './pages_wrappers/pages_components/Registration'
+import Login from './Login'
+import Registration from './Registration'
 export default {
   name: 'LogInModal',
   components: { Login, Registration },

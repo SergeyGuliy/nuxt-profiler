@@ -2,7 +2,7 @@
   display: block !important;
   z-index: 10000;
   @media print {
-    display: none;
+    display: none !important;
   }
 
   .tooltip-inner {

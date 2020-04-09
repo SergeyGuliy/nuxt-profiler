@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="$router.push(link)" class="BtnCreate" color="green" fab small>
+  <v-btn class="BtnCreate" color="green" fab small @click="$router.push(link)">
     <v-icon>mdi-plus</v-icon>
   </v-btn>
 </template>

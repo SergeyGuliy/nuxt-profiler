@@ -30,10 +30,15 @@
 </template>
 
 <script>
+import BtnCreate from '../../../components/buttons_components/BtnCreate'
+import PortfolioList from '../../../components/pages_components/PortfolioList'
+
 import { paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'MyPortfolio',
+  components: { PortfolioList, BtnCreate },
   mixins: [paginationMixin],
+
   asyncData({ store, error }) {
     try {
       return {

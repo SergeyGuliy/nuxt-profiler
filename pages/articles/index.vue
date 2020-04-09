@@ -96,7 +96,7 @@
 import { controlArticles } from '../../mixins/controlArticles'
 import { filterMixin } from '~/mixins/filterMixin'
 import { paginationMixin } from '~/mixins/paginationMixin'
-import { fetchAllArticles, fetchPublicArticlesIDS } from '~/functions/articles'
+import { fetchAllArticles } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
   name: 'Index',
@@ -105,8 +105,7 @@ export default {
   async asyncData({ error }) {
     try {
       return {
-        basicList: await fetchAllArticles(),
-        publicArticlesIDS: await fetchPublicArticlesIDS(),
+        allArticles: await fetchAllArticles(),
         languages: await fetchCategories()
       }
     } catch (e) {
@@ -121,13 +120,11 @@ export default {
   computed: {
     checkedList() {
       const publicListArticles = []
-      for (const i of this.publicArticlesIDS) {
-        try {
-          const art = this.basicList[i]
+      for (const i in this.allArticles) {
+        if (this.allArticles[i].isPublic) {
+          const art = this.allArticles[i]
           art.id = i
           publicListArticles.push(art)
-        } catch (e) {
-          continue
         }
       }
       return publicListArticles

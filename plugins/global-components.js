@@ -1,49 +1,30 @@
 import Vue from 'vue'
-import Page from '../components/layout_components/pages_wrappers/Page'
-import PageHeader from '../components/layout_components/pages_wrappers/PageHeader'
-import PageBody from '../components/layout_components/pages_wrappers/PageBody'
-import NavLink from '~/components/misc/NavLink'
-import Table from '~/components/layout_components/pages_wrappers/TableItems/Table'
-import Card from '~/components/layout_components/pages_wrappers/CardItems/Card'
-import CardRow from '~/components/layout_components/pages_wrappers/CardItems/CardRow'
-import GitInfo from '~/components/layout_components/pages_wrappers/pages_components/GitInfo'
-import BtnCopy from '~/components/misc/BtnCopy'
-import BtnRouter from '~/components/misc/BtnRouter'
-import BtnOpenBlank from '~/components/misc/BtnOpenBlank'
-import CardTitle from '~/components/layout_components/pages_wrappers/CardItems/CardTitle'
-import CardRowTitle from '~/components/layout_components/pages_wrappers/CardItems/CardRowTitle'
-import TableLink from '~/components/layout_components/pages_wrappers/TableItems/TableLink'
-import TableText from '~/components/layout_components/pages_wrappers/TableItems/TableText'
-import TableIcon from '~/components/layout_components/pages_wrappers/TableItems/TableIcon'
-import BtnCreate from '~/components/misc/BtnCreate'
-import UserShowingData from '~/components/layout_components/pages_wrappers/pages_components/UserShowingData'
-import SideLink from '~/components/misc/SideLink'
-import PortfolioList from '~/components/layout_components/pages_wrappers/pages_components/PortfolioList'
-import BtnPrint from '~/components/misc/BtnPrint'
-import BtnShare from '~/components/misc/BtnShare'
+import Page from '../components/global_components/Page'
+import PageHeader from '../components/global_components/PageHeader'
+import PageBody from '../components/global_components/PageBody'
+import Table from '~/components/global_components/TableItems/Table'
+import Card from '~/components/global_components/CardItems/Card'
+import CardRow from '~/components/global_components/CardItems/CardRow'
+import CardTitle from '~/components/global_components/CardItems/CardTitle'
+import CardRowTitle from '~/components/global_components/CardItems/CardRowTitle'
+import TableLink from '~/components/global_components/TableItems/TableLink'
+import TableText from '~/components/global_components/TableItems/TableText'
+import TableIcon from '~/components/global_components/TableItems/TableIcon'
 const components = {
+  // This components is part of every page.
   Page,
   PageHeader,
   PageBody,
-  NavLink,
+  // This components is used in lists of friends, articles, repositories.
   Table,
-  Card,
-  CardRow,
-  GitInfo,
-  BtnCopy,
-  BtnRouter,
-  BtnOpenBlank,
-  CardTitle,
-  CardRowTitle,
   TableLink,
   TableText,
   TableIcon,
-  BtnCreate,
-  UserShowingData,
-  SideLink,
-  PortfolioList,
-  BtnPrint,
-  BtnShare
+  // This components are used in pages showing: users, articles, repositories
+  Card,
+  CardRow,
+  CardTitle,
+  CardRowTitle
 }
 
 Object.keys(components).forEach((key) => {

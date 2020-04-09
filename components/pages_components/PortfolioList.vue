@@ -50,13 +50,13 @@ export default {
           })
           this.$dialog.message.error(`You delete work from portfolio`, {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           })
         }
       } catch (e) {
         this.$dialog.message.error(`Unsuccessfully deleting`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       }
     }

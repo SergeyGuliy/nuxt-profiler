@@ -23,12 +23,22 @@
           >
             <v-btn
               v-if="!$store.getters['friends/friends'].includes(data.id)"
+              v-tooltip.bottom-start="'Add to my friends.'"
               color="green"
+              outlined
+              class="headerButton"
               @click="addTomMyList(data.id)"
             >
               <v-icon>mdi-account-plus</v-icon>
             </v-btn>
-            <v-btn v-else color="red" @click="deleteFromMyList(data.id)">
+            <v-btn
+              v-else
+              v-tooltip.bottom-start="'Remove from my friends.'"
+              color="red"
+              outlined
+              class="headerButton"
+              @click="deleteFromMyList(data.id)"
+            >
               <v-icon>mdi-account-minus</v-icon>
             </v-btn>
           </div>
@@ -48,7 +58,12 @@
 </template>
 
 <script>
+import BtnShare from '../../../components/buttons_components/BtnShare'
+import BtnPrint from '../../../components/buttons_components/BtnPrint'
+import UserShowingData from '../../../components/pages_components/UserShowingData'
+
 import { controlFriends } from '../../../mixins/controlFriends'
+
 import { fetchUserByID, fetchAllUsers } from '~/functions/users'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
@@ -56,6 +71,8 @@ import { fetchAllRepositories } from '~/functions/repositories'
 export default {
   name: 'Id',
   transition: 'bounce',
+  components: { UserShowingData, BtnPrint, BtnShare },
+
   mixins: [controlFriends],
   async asyncData({ route, app, error }) {
     try {

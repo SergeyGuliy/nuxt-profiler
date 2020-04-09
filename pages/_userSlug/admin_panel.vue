@@ -166,7 +166,7 @@ export default {
             `There is already ${this.newLanguage} in list of languages`,
             {
               position: 'top-right',
-              timeout: 3000
+              timeout: 5000
             }
           )
           return
@@ -179,7 +179,7 @@ export default {
           `Created new language ${this.newLanguage}`,
           {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           }
         )
         await this.save()
@@ -188,7 +188,7 @@ export default {
         console.log(e.message)
         this.$dialog.message.error(`${e.message}`, {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         })
       }
     },
@@ -199,7 +199,7 @@ export default {
       }
       this.$dialog.message.error(`Deleted language: ${language.name}`, {
         position: 'top-right',
-        timeout: 3000
+        timeout: 5000
       })
       this.$delete(this.languages, language.name)
       await this.save()
@@ -210,7 +210,7 @@ export default {
           `There is already ${this.newTechnology} in list of technologies`,
           {
             position: 'top-right',
-            timeout: 3000
+            timeout: 5000
           }
         )
         return
@@ -220,7 +220,7 @@ export default {
         `Created new technology ${this.newTechnology}`,
         {
           position: 'top-right',
-          timeout: 3000
+          timeout: 5000
         }
       )
       await this.save()
@@ -232,7 +232,7 @@ export default {
       })
       this.$dialog.message.error(`Deleted technology: ${technology}`, {
         position: 'top-right',
-        timeout: 3000
+        timeout: 5000
       })
       this.languageSelected.technologies.splice(id, 1)
       await this.save()

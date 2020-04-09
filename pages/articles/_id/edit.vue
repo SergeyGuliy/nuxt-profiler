@@ -1,17 +1,17 @@
 <template>
-  <Page id="createArticle">
+  <Page id="Edit">
     <template #head>
       <PageHeader>
         <template #title>Create Article</template>
         <template #actions>
           <v-switch
-            v-model="isPublic"
-            :label="isPublic ? 'Public article' : 'Private article'"
+            v-model="data.isPublic"
+            :label="data.isPublic ? 'Public article' : 'Private article'"
             class="switch"
             inset
           />
           <v-btn
-            v-tooltip.bottom-start="'Create article.'"
+            v-tooltip.bottom-start="'Update article.'"
             class="headerButton"
             outlined
             :disabled="!formIsValid"
@@ -28,14 +28,14 @@
         <template #c-1>
           <Card>
             <v-text-field
-              v-model="name"
+              v-model="data.name"
               :rules="rules.name"
               :counter="25"
               label="Article name"
               outlined
             />
             <v-text-field
-              v-model="cite"
+              v-model="data.cite"
               :rules="rules.cite"
               :counter="100"
               placeholder="https://....."
@@ -47,21 +47,21 @@
         <template #c-2>
           <Card>
             <v-select
-              v-model="language"
+              v-model="data.language"
               :items="Object.keys(languages)"
               label="Stack languages"
               outlined
             >
             </v-select>
             <v-select
-              v-model="technology"
+              v-model="data.technology"
               :items="technologies"
               label="Stack technologies"
               outlined
             >
             </v-select>
             <v-textarea
-              v-model="about"
+              v-model="data.about"
               :rules="rules.about"
               :counter="200"
               label="Description"
@@ -77,27 +77,24 @@
 </template>
 
 <script>
-import { createArticle } from '~/functions/articles'
+import { fetchArticleByID, updateArticle } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
 export default {
-  name: 'Create',
-  async asyncData({ error }) {
+  name: 'Edit',
+  async asyncData({ error, route }) {
+    const data = await fetchArticleByID(route.params.id)
     try {
       return {
+        data,
+        oldData: Object.assign({}, data),
         languages: await fetchCategories()
       }
     } catch (e) {
-      error({ message: "Can't fetch your data." })
+      error({ message: "Can't fetch article." })
     }
   },
   data() {
     return {
-      name: '',
-      about: '',
-      cite: '',
-      language: '',
-      technology: '',
-      isPublic: true,
       rules: {
         name: [
           (v) => !!v || 'Name is required',
@@ -106,7 +103,7 @@ export default {
         cite: [
           (v) => !!v || 'Link is required',
           (v) => /http.+/.test(v) || 'Link must starts with "http"',
-          (v) => v.length <= 200 || 'Link must be less than 100 characters'
+          (v) => v.length <= 200 || 'Link must be less than 200 characters'
         ],
         about: [
           (v) =>
@@ -118,16 +115,17 @@ export default {
   computed: {
     formIsValid() {
       return (
-        !!this.name &&
-        this.name.length <= 25 &&
-        /http.+/.test(this.cite) &&
-        this.cite.length <= 200
+        !!this.data.name &&
+        this.data.name.length <= 25 &&
+        /http.+/.test(this.data.cite) &&
+        this.data.cite.length <= 200 &&
+        JSON.stringify(this.data) !== JSON.stringify(this.oldData)
       )
     },
     technologies() {
       try {
         const technologies = []
-        this.languages[this.language].technologies.forEach((item) => {
+        this.languages[this.data.language].technologies.forEach((item) => {
           technologies.push(item)
         })
         return technologies
@@ -137,33 +135,29 @@ export default {
     }
   },
   watch: {
-    language() {
-      this.technology = ''
+    'data.language'() {
+      this.data.technology = ''
     }
   },
   methods: {
     async save() {
       try {
-        const data = {
-          name: this.name,
-          about: this.about,
-          cite: this.cite,
-          language: this.language,
-          technology: this.technology,
-          isPublic: this.isPublic,
-          creatorName: this.$store.getters.profile,
-          creatorId: this.$store.getters.id
+        const updatedData = {
+          name: this.data.name,
+          about: this.data.about,
+          cite: this.data.cite,
+          language: this.data.language,
+          technology: this.data.technology,
+          isPublic: this.data.isPublic,
+          creatorName: this.data.creatorName,
+          creatorId: this.data.creatorId
         }
-        const id = await createArticle(data)
-        await this.$store.dispatch('articles/updateArticlesList', {
-          type: 'add',
-          id
-        })
+        await updateArticle(updatedData, this.$route.params.id)
         this.$dialog.message.success(`Created Article: ${this.name}`, {
           position: 'top-right',
           timeout: 5000
         })
-        this.$router.push(`/${this.$store.getters.profile}/my_articles`)
+        this.$router.push(`/articles/${this.$route.params.id}`)
       } catch (e) {
         console.log(e)
       }
@@ -176,8 +170,12 @@ export default {
 </script>
 
 <style lang="sass">
-#createArticle
+#Edit
   .v-input.switch
-    margin: 3px
-    height: 36px
+    margin: 0 5px 0 0
+    height: 32px
+    .v-input__control
+      height: 32px
+      .v-input__slot
+        margin: 0
 </style>

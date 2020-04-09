@@ -8,16 +8,14 @@ export const actions = {
    * @param {string} id to 'add' or 'remove' from my list of ID's
    * @returns {Promise<void>}
    */
-  async updateFriendsList({ state, commit }, { type = 'notSelected', id }) {
+  async updateFriendsList({ state, commit }, { type, id }) {
     try {
       if (type === 'add') {
         commit('pushFriend', id)
       } else if (type === 'remove') {
         commit('deleteFriend', id)
-      } else if (type === 'notSelected') {
-        throw new Error(
-          "You need to select what you like to do with ID. 'add' or 'remove' from your list"
-        )
+      } else {
+        throw new Error('Need select what you like to do with ID. add/remove')
       }
       const uid = this.$cookies.get('access_token')
       await firebase
@@ -25,11 +23,11 @@ export const actions = {
         .ref(`/1_users/${uid}/lists/friends`)
         .set(state.friends)
     } catch (e) {
-      console.log('Error Updating User Friends List')
-      console.log(e)
+      console.log(`Error in store action 'updateFriendsList': ${e}`)
     }
   }
 }
+
 export const mutations = {
   setUserFriends(state, list) {
     state.friends = list
@@ -45,6 +43,7 @@ export const mutations = {
     state.friends.splice(IdToDelete, 1)
   }
 }
+
 export const state = () => ({
   friends: []
 })
