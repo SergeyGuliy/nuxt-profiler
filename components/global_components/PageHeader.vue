@@ -57,4 +57,9 @@ export default {
     @media screen and (max-width: 450px)
       font-size: 14px !important
       letter-spacing: 0.7px !important
+  .headerButton
+    margin-right: 2px
+    padding: 0 2px !important
+    min-width: 45px
+    height: 32px
 </style>

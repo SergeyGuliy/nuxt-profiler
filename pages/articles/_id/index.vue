@@ -102,6 +102,15 @@ import BtnOpenBlank from '../../../components/buttons_components/BtnOpenBlank'
 
 import { controlArticles } from '../../../mixins/controlArticles'
 import { fetchArticleByID } from '~/functions/articles'
+
+/**
+ * ---(articles/_id/index.vue)--- Basic view of article. If user logged in, he can add or remove article to his list
+ * @module pages/articles/_id/index
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchArticleByID']{@link external:functions_articles}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlArticles.js]{@link external:mixins_controlArticles}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlArticles.js]{@link external:mixins_controlArticles}
+ */
 export default {
   name: 'Id',
   transition: 'bounce',

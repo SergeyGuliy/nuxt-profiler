@@ -1,5 +1,5 @@
 <template>
-  <Page id="myFriends">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>
@@ -67,6 +67,19 @@
 import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
+
+/**
+ * ---(_userSlug/my_friends.vue)--- List of logged in user friends
+ * @module pages/_userSlug/my_friends
+ *
+ * @vue-data {string} searchKey               - Search field by name
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllUsers']{@link external:functions_users}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-computed {Array} myList               - Returns list of all user's friends
+ * @vue-computed {Array} listFiltered         - Returns list of all user's filtered 'myList'
+ * @vue-computed {Array} listPaginated        - Returns list of all user's 'listFiltered' chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'MyFriends',
   mixins: [controlFriends, paginationMixin],
@@ -118,3 +131,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

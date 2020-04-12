@@ -34,6 +34,5 @@ export default {
 </script>
 
 <style lang="sass">
-@import '~/assets/styles.sass'
 @import '~/assets/tooltip.scss'
 </style>

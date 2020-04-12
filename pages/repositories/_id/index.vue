@@ -155,6 +155,15 @@ import BtnCopy from '../../../components/buttons_components/BtnCopy'
 
 import { controlRepositories } from '../../../mixins/controlRepositories'
 import { fetchRepositoryByID } from '~/functions/repositories'
+
+/**
+ * ---(repositories/_id/index.vue)--- Basic view of repository. If user logged in, he can add or remove repository to his list
+ * @module pages/repositories/_id/index
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchRepositoryByID']{@link external:functions_repositories}, else fetch GitHub info.
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlRepositories.js]{@link external:mixins_controlRepositories}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlRepositories.js]{@link external:mixins_controlRepositories}
+ */
 export default {
   name: 'Id',
   transition: 'bounce',

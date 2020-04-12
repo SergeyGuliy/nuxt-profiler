@@ -85,7 +85,7 @@ export default {
           timeout: 5000
         })
       } catch (e) {
-        console.log(e)
+        console.log(`Error while trying to log out: ${e}`)
       }
     },
     async changeTheme() {
@@ -97,7 +97,7 @@ export default {
           timeout: 5000
         })
       } catch (e) {
-        console.log(e)
+        console.log(`Error while trying to change theme: ${e}`)
       }
     }
   }

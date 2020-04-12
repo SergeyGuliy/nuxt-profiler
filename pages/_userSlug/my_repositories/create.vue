@@ -1,5 +1,5 @@
 <template>
-  <Page id="createWork">
+  <Page id="Edit">
     <template #head>
       <PageHeader>
         <template #title>Create Repository</template>
@@ -87,6 +87,23 @@
 <script>
 import { createRepository } from '~/functions/repositories'
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(_userSlug/my_repositories/create.vue)--- Page witch can create new article.
+ * @module pages/_userSlug/my_repositories/create
+ *
+ * @vue-event {context(error)} asyncData    - return ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-data {string} name                  - Name of new repository
+ * @vue-data {string} about                 - About of new repository
+ * @vue-data {string} cite                  - Cite link of new repository
+ * @vue-data {string} gitHub                - gitHub link of new repository
+ * @vue-data {string} language              - Language of new repository
+ * @vue-data {string} technology            - Technology of new repository
+ * @vue-data {Boolean} isPublic             - Flag with will controls logic of is public will be repository
+ * @vue-data {Object} rules                 - rules for inputs
+ * @vue-computed {Boolean} formIsValid      - Controls ability to create new repository
+ * @vue-event {data} save                   - Create new repository, by ['createRepository']{@link external:functions_repositories}. And adds repository id to my list by action ['updateReposList']{@link external:store_repositories}
+ */
 export default {
   name: 'Create',
   async asyncData({ error }) {
@@ -206,8 +223,12 @@ export default {
 </script>
 
 <style lang="sass">
-#createRepository
+#Edit
   .v-input.switch
-    margin: 3px
-    height: 36px
+    margin: 0 5px 0 0
+    height: 32px
+    .v-input__control
+      height: 32px
+      .v-input__slot
+        margin: 0
 </style>

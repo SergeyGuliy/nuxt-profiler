@@ -1,5 +1,14 @@
+/**
+ * This mixin contains logic to add or remove friend id to logged in user's list
+ * @external mixins_controlFriends
+ */
 export const controlFriends = {
   methods: {
+    /**
+     * @memberOf external:mixins_controlFriends
+     * @param id {string} - id to delete from my list
+     * @returns {Promise<void>}
+     */
     async deleteFromMyList(id) {
       try {
         await this.$store.dispatch('friends/updateFriendsList', {
@@ -11,9 +20,14 @@ export const controlFriends = {
           timeout: 5000
         })
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to delete friend from my list: ${e}`)
       }
     },
+    /**
+     * @memberOf external:mixins_controlFriends
+     * @param id {string} - id to add from my list
+     * @returns {Promise<void>}
+     */
     async addTomMyList(id) {
       try {
         await this.$store.dispatch('friends/updateFriendsList', {
@@ -25,7 +39,7 @@ export const controlFriends = {
           timeout: 5000
         })
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to add friend to my list: ${e}`)
       }
     }
   }

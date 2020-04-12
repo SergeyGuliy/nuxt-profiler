@@ -1,9 +1,21 @@
+/**
+ * This mixin contains logic with control filtering in pages with lists of articles, repositories
+ * @external mixins_filterMixin
+ */
 export const filterMixin = {
   watch: {
+    /**
+     * If this.language will be changed, this.technology will be set null
+     * @memberOf external:mixins_filterMixin
+     */
     language() {
       this.technology = null
     }
   },
+  /**
+   * @memberOf external:mixins_filterMixin
+   * @returns {{language: string, technology: string, searchKey: string}}
+   */
   data() {
     return {
       language: '',
@@ -12,6 +24,10 @@ export const filterMixin = {
     }
   },
   computed: {
+    /**
+     * @memberOf external:mixins_filterMixin
+     * @returns {Array} - filtered array of articles or friends
+     */
     listFiltered() {
       // Cloning array witch i would like to filter to local visibility
       let filtredArray = this.checkedList.slice(0)
@@ -83,6 +99,11 @@ export const filterMixin = {
       //   return this.checkedList
       // }
     },
+
+    /**
+     * @memberOf external:mixins_filterMixin
+     * @returns {Array} - returns technologies of selected language, if selected
+     */
     technologies() {
       if (this.language) {
         return this.languages[this.language].technologies || []

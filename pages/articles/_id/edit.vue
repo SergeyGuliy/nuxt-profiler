@@ -79,6 +79,16 @@
 <script>
 import { fetchArticleByID, updateArticle } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(articles/_id/edit.vue)--- Page for editing article
+ * @module pages/articles/_id/edit
+ *
+ * @vue-event {Object(route, error)} asyncData   - Return ['fetchArticleByID']{@link external:functions_articles}, and ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-data {Object} rules                      - rules for inputs
+ * @vue-computed {Boolean} formIsValid           - Controls ability to update article
+ * @vue-event {data} save                        - Update article, by ['updateArticle']{@link external:functions_articles}.
+ */
 export default {
   name: 'Edit',
   async asyncData({ error, route }) {
@@ -159,7 +169,7 @@ export default {
         })
         this.$router.push(`/articles/${this.$route.params.id}`)
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to update article: ${e}`)
       }
     }
   },

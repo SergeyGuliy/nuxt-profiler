@@ -35,18 +35,27 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 import BtnShare from '../components/buttons_components/BtnShare'
 import BtnPrint from '../components/buttons_components/BtnPrint'
 import UserShowingData from '../components/pages_components/UserShowingData'
 import UserEmptyData from '../components/pages_components/UserEmptyData'
-
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchUserByID, fetchAllUsers } from '~/functions/users'
+
+/**
+ * ---(index.vue)--- Home page. If user logged in, will be showed user info, else show empty home page.
+ * @module pages/index
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchUserByID']{@link external:functions_users}, ['fetchAllUsers']{@link external:functions_users}, ['fetchAllRepositories']{@link external:functions_repositories}, ['fetchAllArticles']{@link external:functions_articles}, else if user have gitApi will be fetch GitHub info of user.
+ */
 export default {
   transition: 'bounce',
   components: { UserEmptyData, UserShowingData, BtnPrint, BtnShare },
+  /**
+   *
+   * @param context {Object}
+   */
   async asyncData({ app, store, error }) {
     if (store.getters.loggedIn) {
       try {
@@ -77,6 +86,7 @@ export default {
       }
     }
   },
+  /** @returns {Promise<void>} */
   async updated() {
     this.data = await fetchUserByID(this.$store.getters.id)
     if (this.data.userInfo.contacts.gitApi) {
@@ -89,16 +99,7 @@ export default {
   },
   computed: {
     ...mapGetters(['id', 'loggedIn']),
-    newData() {
-      const data = Object.assign({}, this.$store.getters.user)
-      data.lists = {
-        articles: this.$store.getters['articles/articles'].slice(),
-        friends: this.$store.getters['friends/friends'].slice(),
-        portfolio: this.$store.getters['portfolio/portfolio'].slice(),
-        repositories: this.$store.getters['repositories/repositories'].slice()
-      }
-      return data
-    },
+    /** @returns {string} */
     headerText() {
       return this.data.userInfo.info.first_name &&
         this.data.userInfo.info.last_name
@@ -108,3 +109,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/userHomePage.sass'
+</style>

@@ -1,16 +1,36 @@
+/**
+ * Store map:
+ * - [index.js]{@link external:store_index}                 - This store module contain logic with: logging in, registration, fetching data, and update data.
+ * - [repositories.js]{@link external:store_repositories}   - This store module contain logic to control logged in user list of repositories
+ * - [portfolio.js]{@link external:store_portfolio}         - This store module contain logic to control logged in user list of portfolio works
+ * - [articles.js]{@link external:store_articles}           - This store module contain logic to control logged in user fist of articles
+ * - [friends.js]{@link external:store_friends}             - This store module contain logic to control logged in user list of friends
+ * @namespace store
+ */
+
+/**
+ * This store module contain logic with: logging in, registration, fetching data, and update data.
+ * @external store_index
+ */
 import firebase from 'firebase/app'
 export const strict = false
 
 /**
- * @type Object
- * @property {Function} nuxtServerInit
- * @property {Function} fetchUserInfo
- * @property {Function} createNewUser
- * @property {Function} logIn
- * @property {Function} logOut
- *
+ * @memberOf external:store_index
+ * @property {Function} nuxtServerInit     - Call 'fetchUserInfo' [nuxtServerInit]{@link function#nuxtServerInit}on server side (if access token available), else call 'logOut'
+ * @property {Function} fetchUserInfo      - Fetch user info, spits it between modules: articles, friends, portfolio, repositories, index
+ * @property {Function} createNewUser      - Create new user in database, basic info, set cookies and call 'fetchUserInfo'
+ * @property {Function} logIn              - Log in in base, set cookies and call 'fetchUserInfo'
+ * @property {Function} logOut             - Log out from base, clean cookies, clean all states in all modules
+ * @property {Function} updateUserInfo     - Commit 'updateUserInfo' and update info to database
+ * @property {Function} changeTheme        - Commit 'toggleTheme' and update info to database
+ * @property {Function} changeAdminStatus  - Commit 'changeAdminStatus' and update info to database
  */
 export const actions = {
+  /**
+   * @param app {Object} - SSR context
+   * @returns {Promise<void>}
+   */
   async nuxtServerInit({ dispatch }, { app }) {
     try {
       // I am using cookies to be able fetch user info while server rendering.
@@ -23,6 +43,10 @@ export const actions = {
     }
   },
 
+  /**
+   * @param uid {string}
+   * @returns {Promise<void>}
+   */
   async fetchUserInfo({ commit, dispatch, getters }, uid) {
     try {
       const userInfo = (
@@ -41,6 +65,7 @@ export const actions = {
       commit('friends/setUserFriends', userInfo.lists.friends)
       commit('articles/setUserArticles', userInfo.lists.articles)
       commit('repositories/setUserRepositories', userInfo.lists.repositories)
+      commit('portfolio/setUserPortfolio', userInfo.lists.portfolio)
     } catch (e) {
       // If fetching user info will throw an error,
       // will be invoked logging out user from base
@@ -49,6 +74,10 @@ export const actions = {
     }
   },
 
+  /**
+   * @param data {Object}
+   * @returns {Promise<void>}
+   */
   async createNewUser({ commit, dispatch, getters }, data) {
     try {
       await firebase
@@ -107,13 +136,17 @@ export const actions = {
         })
       this.$cookies.set('access_token', uid)
       await dispatch('fetchUserInfo', uid)
-      this.$router.push(`/${getters.user.profile}/edit_profile`)
+      this.$router.push(`/${getters.profile}/edit_profile`)
     } catch (e) {
       console.log(`Error in store action 'createNewUser': ${e}`)
       throw e
     }
   },
 
+  /**
+   * @param data {Object}
+   * @returns {Promise<void>}
+   */
   async logIn({ commit, dispatch }, data) {
     try {
       await firebase
@@ -128,6 +161,9 @@ export const actions = {
     }
   },
 
+  /**
+   * @returns {Promise<void>}
+   */
   async logOut({ commit }) {
     try {
       await firebase.auth().signOut()
@@ -147,6 +183,10 @@ export const actions = {
     }
   },
 
+  /**
+   * @param newUserInfo {Object}
+   * @returns {Promise<void>}
+   */
   async updateUserInfo({ getters, commit }, newUserInfo) {
     try {
       commit('updateUserInfo', newUserInfo)
@@ -160,6 +200,9 @@ export const actions = {
     }
   },
 
+  /**
+   * @returns {Promise<void>}
+   */
   async changeTheme({ getters, commit }) {
     try {
       commit('toggleTheme')
@@ -172,6 +215,11 @@ export const actions = {
       console.log(`Error in store action 'changeTheme': ${e}`)
     }
   },
+
+  /**
+   * @param status {Boolean}
+   * @returns {Promise<void>}
+   */
   async changeAdminStatus({ getters, commit }, status) {
     try {
       commit('changeAdminStatus', status)
@@ -186,19 +234,34 @@ export const actions = {
   }
 }
 
+/**
+ * @memberOf external:store_index
+ * @property {Function} setUser             - Set's loaded user info into storage
+ * @property {Function} cleanUser           - Cleaning user info from storage
+ * @property {Function} toggleTheme         - Change user default theme
+ * @property {Function} changeAdminStatus   - Change user admin status
+ * @property {Function} updateUserInfo      - Update user info in state
+ *
+ */
 export const mutations = {
+  /** @param user {Object} */
   setUser(state, user) {
     state.user = user
   },
+
   cleanUser(state) {
     state.user = ''
   },
   toggleTheme(state) {
     state.user.themeDark = !state.user.themeDark
   },
+
+  /** @param status {Boolean} */
   changeAdminStatus(state, status) {
     state.user.isAdmin = status
   },
+
+  /** @param newUserInfo {Object} */
   updateUserInfo(state, newUserInfo) {
     state.user.userInfo = Object.assign({}, newUserInfo)
   }
@@ -208,12 +271,35 @@ export const state = () => ({
   user: ''
 })
 
+/**
+ * @memberOf external:store_index
+ * @property {Function} user        - Return user all info (isAdmin, themeDark, id, profile, ...)
+ * @property {Function} userInfo    - Return user info (work, info, contacts)
+ * @property {Function} loggedIn    - Return are user logged In (true/false)
+ * @property {Function} profile     - Return user profile id (used in routes)
+ * @property {Function} id          - Return user id
+ * @property {Function} isAdmin     - Return user admin status
+ * @property {Function} themeDark   - Return user theme status
+ */
 export const getters = {
+  /** @returns {string} */
   user: (state) => state.user,
-  loggedIn: (state) => Boolean(state.user),
-  profile: (state) => state.user.profile,
-  id: (state) => state.user.id,
-  isAdmin: (state) => state.user.isAdmin,
+
+  /** @returns {string} */
   userInfo: (state) => state.user.userInfo,
+
+  /** @returns {Boolean} */
+  loggedIn: (state) => Boolean(state.user),
+
+  /** @returns {string} */
+  profile: (state) => state.user.profile,
+
+  /** @returns {string} */
+  id: (state) => state.user.id,
+
+  /** @returns {Boolean} */
+  isAdmin: (state) => state.user.isAdmin,
+
+  /** @returns {Boolean} */
   themeDark: (state) => state.user.themeDark
 }

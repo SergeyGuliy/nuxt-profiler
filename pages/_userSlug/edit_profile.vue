@@ -251,14 +251,31 @@
 <script>
 import { mapGetters } from 'vuex'
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(_userSlug/edit_profile.vue)--- Page witch gives ability to edit user info
+ * @module pages/_userSlug/edit_profile
+ *
+ * @vue-event {context(store, error)} asyncData   - return ['fetchCategories']{@link external:functions_language_technologies}, and get ['getters.userInfo']{@link external:store_index} from store.
+ * @vue-data {Array} git_types                    - returns array of git types
+ * @vue-data {Array} work_status                  - returns array of work statuses
+ * @vue-data {Array} work_type                    - returns array of work types
+ * @vue-data {Array} work_position                - returns array of work positions
+ * @vue-data {Array} work_scope                   - returns array of work scopes
+ * @vue-data {Array} codes                        - returns array of phone codes
+ * @vue-data {Object} rules                       - rules for inputs
+ * @vue-event {isAdmin} submitBecomeAdmin         - Change admin status of user to true. Calls ['changeAdminStatus']{@link external:store_index}
+ * @vue-event {isAdmin} submitBecomeUser          - Change admin status of user to false. Calls ['changeAdminStatus']{@link external:store_index}
+ * @vue-event {userInfo} submitUpdateInfo         - Change user info. Calls ['updateUserInfo']{@link external:store_index}
+ */
 export default {
   name: 'EditProfile',
   async asyncData({ store, error }) {
     try {
       return {
-        contacts: Object.assign({}, store.getters.user.userInfo.contacts),
-        info: Object.assign({}, store.getters.user.userInfo.info),
-        work: Object.assign({}, store.getters.user.userInfo.work),
+        contacts: Object.assign({}, store.getters.userInfo.contacts),
+        info: Object.assign({}, store.getters.userInfo.info),
+        work: Object.assign({}, store.getters.userInfo.work),
         languages: await fetchCategories()
       }
     } catch (e) {
@@ -467,7 +484,7 @@ export default {
           })
         }
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to become admin: ${e}`)
       }
     },
     async submitBecomeUser() {
@@ -489,7 +506,7 @@ export default {
           })
         }
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to become casual user: ${e}`)
       }
     },
     async submitUpdateInfo() {
@@ -526,7 +543,7 @@ export default {
         })
         this.$router.push('/')
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to update user info: ${e}`)
       }
     },
     save(date) {
@@ -542,3 +559,17 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+#editProfile
+  .row
+    height: 86px
+    margin: 0 0 5px 0
+    .col
+      height: 86px
+      padding: 0
+      .v-input__append-inner
+        display: none
+  .v-input
+    margin-bottom: 5px
+</style>

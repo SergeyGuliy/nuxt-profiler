@@ -51,6 +51,17 @@
 </template>
 
 <script>
+/**
+ * ---(_userSlug/my_portfolio/create.vue)--- Page witch can create new portfolio work.
+ * @module pages/_userSlug/my_portfolio/create
+ *
+ * @vue-data {string} name                  - Name of new article
+ * @vue-data {string} cite                  - Cite link of new portfolio work
+ * @vue-data {string} gitHub                - GitHub link of new portfolio work
+ * @vue-data {Object} rules                 - rules for inputs
+ * @vue-computed {Boolean} formIsValid      - Controls ability to create new portfolio work
+ * @vue-event {data} save                   - Create new portfolio work, by ['updatePortfolio']{@link external:store_portfolio}
+ */
 export default {
   name: 'Create',
   data() {
@@ -104,7 +115,7 @@ export default {
         })
         this.$router.push(`/${this.$store.getters.profile}/my_portfolio`)
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to create portfolio work: ${e}`)
         this.$dialog.message.error(
           `Error while trying to connect to repository. Check link to repository.`,
           {

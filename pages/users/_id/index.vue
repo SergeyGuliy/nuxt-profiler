@@ -68,6 +68,14 @@ import { fetchUserByID, fetchAllUsers } from '~/functions/users'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
 
+/**
+ * ---(users/_id/index.vue)--- Basic view of user. If user logged in, he can add or remove friend to his list
+ * @module pages/users/_id/index
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchUserByID']{@link external:functions_users}, ['fetchAllUsers']{@link external:functions_users}, ['fetchAllRepositories']{@link external:functions_repositories}, ['fetchAllArticles']{@link external:functions_articles}, else if user have gitApi will be fetch GitHub info of user.
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ */
 export default {
   name: 'Id',
   transition: 'bounce',
@@ -105,3 +113,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/userHomePage.sass'
+</style>

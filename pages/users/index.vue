@@ -1,5 +1,5 @@
 <template>
-  <Page id="allUsers">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>
@@ -76,6 +76,20 @@ import { mapGetters } from 'vuex'
 import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
+
+/**
+ * ---(users/index.vue)--- List of all users. If user logged in, he can add or remove friends to his list
+ * @module pages/users/index
+ *
+ * @vue-data {string} searchKey               - Search field by name
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllUsers']{@link external:functions_users}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-computed {Array} list                 - Returns list of all user without logged in user
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'list'
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered'chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'Index',
   mixins: [controlFriends, paginationMixin],
@@ -89,6 +103,7 @@ export default {
       error({ message: 'Cannot fetch Users list' })
     }
   },
+  /** @returns {{pageSize: number, searchKey: null}} */
   data() {
     return {
       searchKey: null,
@@ -97,6 +112,7 @@ export default {
   },
   computed: {
     ...mapGetters(['id', 'loggedIn']),
+    /** @returns {Array} */
     list() {
       const list = []
       Object.keys(this.allUsers).forEach((i) => {
@@ -114,6 +130,7 @@ export default {
       })
       return list
     },
+    /** @returns {Array} */
     listFiltered() {
       if (this.searchKey) {
         return this.list.filter((value) => {
@@ -131,3 +148,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

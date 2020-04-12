@@ -1,5 +1,5 @@
 <template>
-  <Page id="myArticles">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>
@@ -90,6 +90,21 @@ import { controlArticles } from '../../../mixins/controlArticles'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllArticles } from '~/functions/articles'
+
+/**
+ * ---(_userSlug/my_articles/index.vue)--- List of all user's articles
+ * @module pages/_userSlug/my_articles/index
+ *
+ * @vue-data {string} searchKey               - Search field by name. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} language                - Search field by language. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} technology              - Search field by technology. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllArticles']{@link external:functions_articles} Return [fetchCategories']{@link external:functions_language_technologies}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlArticles.js]{@link external:mixins_controlArticles}
+ * @vue-computed {Array} checkedList          - Returns list of all user's articles.
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'checkedList'. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered' chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'MyArticles',
   components: { BtnCreate },
@@ -131,3 +146,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

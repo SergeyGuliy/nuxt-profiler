@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="copy(copyValue)" class="BtnCopy" color="blue" small outlined>
+  <v-btn class="BtnCopy" color="blue" small outlined @click="copy(copyValue)">
     Copy
     <v-icon dense class="mx-1">mdi-content-copy</v-icon>
   </v-btn>
@@ -11,15 +11,11 @@ export default {
   props: { copyValue: String },
   methods: {
     async copy(copiedText) {
-      try {
-        await this.$copyText(copiedText)
-        this.$dialog.message.success(`Coppied: ${copiedText}`, {
-          position: 'top-right',
-          timeout: 5000
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      await this.$copyText(copiedText)
+      this.$dialog.message.success(`Coppied: ${copiedText}`, {
+        position: 'top-right',
+        timeout: 5000
+      })
     }
   }
 }

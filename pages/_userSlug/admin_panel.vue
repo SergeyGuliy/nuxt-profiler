@@ -107,6 +107,23 @@ import {
   fetchCategories,
   updateCategories
 } from '~/functions/language-technologies'
+
+/**
+ * ---(_userSlug/admin_panel.vue)--- Page witch gives ability to manage languages and technologies
+ * @module pages/_userSlug/admin_panel
+ *
+ * @vue-event {context(error)} asyncData    - Call ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-data {string} newLanguage           - New language value
+ * @vue-data {string} newTechnology         - New technology value
+ * @vue-data {string} languageSelected      - Flag for selected language
+ * @vue-data {Object} rules                 - rules for inputs
+ * @vue-event {data} save                   - Push new languages, technologies to database by ['updateCategories']{@link external:functions_language_technologies}
+ * @vue-event {data} selectLanguage         - Change flag of 'languageSelected', to target of action
+ * @vue-event {data} addLanguage            - Create new language.
+ * @vue-event {data} deleteLanguage         - Delete target language.
+ * @vue-event {data} addTechnology          - Create new technology for 'languageSelected'.
+ * @vue-event {data} deleteTechnology       - Delete target technology.
+ */
 export default {
   name: 'MyAdminPanel',
   async asyncData({ error }) {
@@ -144,6 +161,12 @@ export default {
     }
   },
   methods: {
+    selectLanguage(item) {
+      if (item && !item.technologies) {
+        this.$set(item, 'technologies', [])
+      }
+      this.languageSelected = item
+    },
     async save() {
       this.loading = true
       try {
@@ -152,12 +175,6 @@ export default {
       } finally {
         this.loading = false
       }
-    },
-    selectLanguage(item) {
-      if (item && !item.technologies) {
-        this.$set(item, 'technologies', [])
-      }
-      this.languageSelected = item
     },
     async addLanguage() {
       try {
@@ -185,7 +202,6 @@ export default {
         await this.save()
         this.newLanguage = ''
       } catch (e) {
-        console.log(e.message)
         this.$dialog.message.error(`${e.message}`, {
           position: 'top-right',
           timeout: 5000
@@ -247,3 +263,15 @@ export default {
   middleware: 'isNotAdmin'
 }
 </script>
+
+<style lang="sass">
+#adminPanel
+  button.v-btn.v-btn--block
+    margin-bottom: 15px
+  .activeLang.theme--light
+    background-color: #e0e0e0
+    border-radius: 10px
+  .activeLang.theme--dark
+    background-color: #393939
+    border-radius: 10px
+</style>

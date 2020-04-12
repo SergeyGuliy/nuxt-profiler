@@ -1,5 +1,5 @@
 <template>
-  <Page id="userRepositories">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>{{ headerText }}</template>
@@ -98,6 +98,23 @@ import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchUserByID } from '~/functions/users'
+
+/**
+ * ---(users/_id/repositories.vue)--- Basic view of user's repositories. If user logged in, he can add or remove friend to his list
+ * @module pages/users/_id/repositories
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchUserByID']{@link external:functions_users}, ['fetchAllUsers']{@link external:functions_users}, ['fetchAllRepositories']{@link external:functions_repositories}, ['fetchAllArticles']{@link external:functions_articles}, else if user have gitApi will be fetch GitHub info of user.
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-data {string} searchKey               - Search field by name. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} language                - Search field by language. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} technology              - Search field by technology. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-computed {Array} checkedList          - Returns list of all fetched user repositories.
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'checkedList. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered', chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+
+ */
 export default {
   name: 'Repositories',
   mixins: [controlRepositories, filterMixin, paginationMixin],
@@ -149,3 +166,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

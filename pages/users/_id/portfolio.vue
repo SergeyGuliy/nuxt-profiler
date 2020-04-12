@@ -3,7 +3,7 @@
     <template #head>
       <PageHeader>
         <template #title>{{ headerText }}</template>
-        <template v-if="checkedList.length > 0" #actions>
+        <template v-if="listFiltered.length > 0" #actions>
           <v-select
             v-model="pageSize"
             :items="[3, 5, 7, 9]"
@@ -13,7 +13,7 @@
         </template>
       </PageHeader>
     </template>
-    <template v-if="checkedList.length > 0" #body>
+    <template v-if="listFiltered.length > 0" #body>
       <div class="flex-portfolio">
         <PortfolioList :checked-list="listPaginated[pageCurrent - 1]" />
         <v-pagination v-model="pageCurrent" :length="listPaginated.length" />
@@ -27,6 +27,12 @@ import PortfolioList from '../../../components/pages_components/PortfolioList'
 import { fetchUserByID } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 
+/**
+ * ---(users/_id/portfolio.vue)--- Basic view of user portfolio.
+ * @module pages/users/_id/portfolio
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchUserByID']{@link external:functions_users}, ['fetchAllUsers']{@link external:functions_users}, ['fetchAllRepositories']{@link external:functions_repositories}, ['fetchAllArticles']{@link external:functions_articles}, else if user have gitApi will be fetch GitHub info of user.
+ */
 export default {
   name: 'Portfolio',
   components: { PortfolioList },
@@ -46,13 +52,13 @@ export default {
     }
   },
   computed: {
-    checkedList() {
+    listFiltered() {
       return this.userData.lists.portfolio.filter((item) => {
         return item !== 'empty'
       })
     },
     headerText() {
-      return this.checkedList.length > 0
+      return this.listFiltered.length > 0
         ? `${this.userName} portfolio works`
         : `${this.userName} don't have portfolio works`
     },
@@ -68,3 +74,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/userPortfolio.sass'
+</style>

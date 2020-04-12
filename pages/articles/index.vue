@@ -1,5 +1,5 @@
 <template>
-  <Page id="allArticles">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>
@@ -98,6 +98,22 @@ import { filterMixin } from '~/mixins/filterMixin'
 import { paginationMixin } from '~/mixins/paginationMixin'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(articles/index.vue)--- List of all articles. If user logged in, he can add or remove articles to his list
+ * @module pages/articles/index
+ *
+ * @vue-data {string} searchKey               - Search field by name. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} language                - Search field by language. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} technology              - Search field by technology. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllArticles']{@link external:functions_articles}. Return ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlArticles.js]{@link external:mixins_controlArticles}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlArticles.js]{@link external:mixins_controlArticles}
+ * @vue-computed {Array} checkedList          - Returns list of all valid articles.
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'checkedList'. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered', chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'Index',
   mixins: [controlArticles, filterMixin, paginationMixin],
@@ -135,3 +151,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

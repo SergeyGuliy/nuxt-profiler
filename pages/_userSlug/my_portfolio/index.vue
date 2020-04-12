@@ -1,5 +1,5 @@
 <template>
-  <Page id="myPortfolio">
+  <Page id="userPortfolio">
     <template #head>
       <PageHeader>
         <template #title>
@@ -32,8 +32,18 @@
 <script>
 import BtnCreate from '../../../components/buttons_components/BtnCreate'
 import PortfolioList from '../../../components/pages_components/PortfolioList'
-
 import { paginationMixin } from '~/mixins/paginationMixin'
+
+/**
+ * ---(_userSlug/my_portfolio/index.vue)--- List of all user's portfolio works
+ * @module pages/_userSlug/my_portfolio/index
+ *
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Fetch list of portfolio works from store. [store.getters'portfolio/portfolio']{@link external:store_portfolio}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. Call action ['updatePortfolio']{@link external:store_portfolio}
+ * @vue-computed {Array} listFiltered         - Returns list of all valid user's portfolio works.
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered' chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'MyPortfolio',
   components: { PortfolioList, BtnCreate },
@@ -42,7 +52,7 @@ export default {
   asyncData({ store, error }) {
     try {
       return {
-        allWorks: store.getters.user.lists.portfolio
+        allWorks: store.getters['portfolio/portfolio']
       }
     } catch (e) {
       error({ message: "Can't fetch your portfolio." })
@@ -65,3 +75,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/userPortfolio.sass'
+</style>

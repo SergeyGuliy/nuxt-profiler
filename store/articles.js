@@ -1,9 +1,16 @@
+/**
+ * This store module contain logic to control logged in user fist of articles
+ * @external store_articles
+ */
 import firebase from 'firebase/app'
 
+/**
+ * @memberOf external:store_articles
+ * @property {Function} updateArticlesList    - This action will add or remove article ID from list of my articles ID's. After that will be called pushing user articles ID's in to server
+ */
 export const actions = {
   /**
-   * This action will add or remove article ID from list of my articles ID's
-   * After that will be called pushing user articles ID's in to server
+   * @async
    * @param {string} type 'add' will call commit 'pushArticle'
    * @param {string} type 'remove' will call commit 'deleteArticle'
    * @param {string} id to 'add' or 'remove' from my list of ID's
@@ -29,16 +36,29 @@ export const actions = {
   }
 }
 
+/**
+ * @memberOf external:store_articles
+ * @property {Function} setUserArticles     - Commit filling local state. Called in action: 'fetchUserInfo'
+ * @property {Function} cleanUserArticles   - Clean local state. Called in action: 'logOut'
+ * @property {Function} pushArticle         - Add article to my list
+ * @property {Function} deleteArticle       - Remove article from my list
+ */
 export const mutations = {
+  /** @param list {Array} */
   setUserArticles(state, list) {
     state.articles = list
   },
+
   cleanUserArticles(state) {
     state.articles = []
   },
+
+  /** @param id {String} */
   pushArticle(state, id) {
     state.articles.push(id)
   },
+
+  /** @param id {String} */
   deleteArticle(state, id) {
     const IdToDelete = state.articles.findIndex((idSearch) => idSearch === id)
     state.articles.splice(IdToDelete, 1)
@@ -49,6 +69,11 @@ export const state = () => ({
   articles: []
 })
 
+/**
+ * @memberOf external:store_articles
+ * @property {Function} articles      - Return user list of articles
+ */
 export const getters = {
+  /** @returns {Array} */
   articles: (state) => state.articles
 }

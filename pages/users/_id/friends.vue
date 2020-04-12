@@ -1,5 +1,5 @@
 <template>
-  <Page id="userFriends">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
         <template #title>{{ headerText }}</template>
@@ -76,6 +76,20 @@ import { controlFriends } from '../../../mixins/controlFriends'
 import { fetchAllUsers, fetchUserByID } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 
+/**
+ * ---(users/_id/friends.vue)--- Basic view of user's friends. If user logged in, he can add or remove friend to his list
+ * @module pages/users/_id/friends
+ *
+ * @vue-event {Object(app, store, error)} asyncData - Return ['fetchUserByID']{@link external:functions_users}, ['fetchAllUsers']{@link external:functions_users}, ['fetchAllRepositories']{@link external:functions_repositories}, ['fetchAllArticles']{@link external:functions_articles}, else if user have gitApi will be fetch GitHub info of user.
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-data {string} searchKey               - Search field by name
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-computed {Array} checkedList          - Returns list of all fetched user friends.
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'checkedList'
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered', chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+
+ */
 export default {
   name: 'Friends',
   mixins: [controlFriends, paginationMixin],
@@ -139,3 +153,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+@import '~/assets/pages_styles/listTables.sass'
+</style>

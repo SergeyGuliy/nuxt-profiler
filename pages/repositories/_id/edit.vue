@@ -85,9 +85,22 @@
 </template>
 
 <script>
+/**
+ * ---(repositories/_id/edit.vue)--- Basic view of repository. If user logged in, he can add or remove repository to his list
+ */
 import { fetchRepositoryByID, updateRepository } from '~/functions/repositories'
 
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(repositories/_id/edit.vue)--- Page for editing article
+ * @module pages/repositories/_id/edit
+ *
+ * @vue-event {Object(route, error)} asyncData - Return ['fetchRepositoryByID']{@link external:functions_repositories}, and ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-data {Object} rules                    - rules for inputs
+ * @vue-computed {Boolean} formIsValid         - Controls ability to update repository
+ * @vue-event {data} save                      - Update repository, by ['updateRepository']{@link external:functions_repositories}.
+ */
 export default {
   name: 'Edit',
   async asyncData({ error, route }) {
@@ -203,6 +216,10 @@ export default {
 <style lang="sass">
 #Edit
   .v-input.switch
-    margin: 3px
-    height: 36px
+    margin: 0 5px 0 0
+    height: 32px
+    .v-input__control
+      height: 32px
+      .v-input__slot
+        margin: 0
 </style>
