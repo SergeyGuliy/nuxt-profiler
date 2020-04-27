@@ -2,17 +2,11 @@
   <Page id="userHomePage">
     <template #head>
       <PageHeader>
-        <template
-          v-if="data.userInfo.info.first_name && data.userInfo.info.last_name"
-          #title
-          >{{ data.userInfo.info.first_name }}
-          {{ data.userInfo.info.last_name }}
+        <template #title>
+          {{ userName }}
           <v-chip v-if="data.isAdmin" small class="title-chip">Admin</v-chip>
         </template>
-        <template v-else #title>
-          {{ data.profile }}
-          <v-chip v-if="data.isAdmin" small>Admin</v-chip>
-        </template>
+
         <template #actions>
           <BtnPrint />
           <BtnShare :link="`users/${$route.params.id}`" />
@@ -26,7 +20,7 @@
               v-tooltip.bottom-start="'Add to my friends.'"
               color="green"
               outlined
-              class="headerButton"
+              class="headerButton btn_add"
               @click="addTomMyList(data.id)"
             >
               <v-icon>mdi-account-plus</v-icon>
@@ -36,7 +30,7 @@
               v-tooltip.bottom-start="'Remove from my friends.'"
               color="red"
               outlined
-              class="headerButton"
+              class="headerButton btn_rm"
               @click="deleteFromMyList(data.id)"
             >
               <v-icon>mdi-account-minus</v-icon>
@@ -106,6 +100,14 @@ export default {
       }
     } catch (e) {
       error({ message: 'User not found.' })
+    }
+  },
+  computed: {
+    userName() {
+      return this.data.userInfo.info.first_name &&
+        this.data.userInfo.info.last_name
+        ? `${this.data.userInfo.info.first_name} ${this.data.userInfo.info.last_name}`
+        : `${this.data.profile}`
     }
   },
   head: {

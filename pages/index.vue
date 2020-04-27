@@ -3,7 +3,7 @@
     <template #head>
       <PageHeader v-if="loggedIn">
         <template #title>
-          {{ headerText }}
+          {{ userName }}
           <v-chip v-if="data.isAdmin" small>Admin</v-chip>
         </template>
 
@@ -39,6 +39,7 @@ import BtnShare from '../components/buttons_components/BtnShare'
 import BtnPrint from '../components/buttons_components/BtnPrint'
 import UserShowingData from '../components/pages_components/UserShowingData'
 import UserEmptyData from '../components/pages_components/UserEmptyData'
+import Page from '../components/global_components/Page'
 import { fetchAllArticles } from '~/functions/articles'
 import { fetchAllRepositories } from '~/functions/repositories'
 import { fetchUserByID, fetchAllUsers } from '~/functions/users'
@@ -51,11 +52,9 @@ import { fetchUserByID, fetchAllUsers } from '~/functions/users'
  */
 export default {
   transition: 'bounce',
-  components: { UserEmptyData, UserShowingData, BtnPrint, BtnShare },
-  /**
-   *
-   * @param context {Object}
-   */
+  name: 'Index',
+  components: { Page, UserEmptyData, UserShowingData, BtnPrint, BtnShare },
+  /** @param context {Object} */
   async asyncData({ app, store, error }) {
     if (store.getters.loggedIn) {
       try {
@@ -100,7 +99,7 @@ export default {
   computed: {
     ...mapGetters(['id', 'loggedIn']),
     /** @returns {string} */
-    headerText() {
+    userName() {
       return this.data.userInfo.info.first_name &&
         this.data.userInfo.info.last_name
         ? `${this.data.userInfo.info.first_name} ${this.data.userInfo.info.last_name}`

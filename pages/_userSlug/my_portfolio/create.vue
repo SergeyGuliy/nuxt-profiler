@@ -7,8 +7,9 @@
           <v-btn
             v-tooltip.bottom-start="'Create portfolio work.'"
             :disabled="!formIsValid"
-            class="mx-1"
+            class="mx-1 headerButton"
             color="green"
+            outlined
             @click="save"
           >
             <v-icon>mdi-content-save</v-icon>
@@ -91,7 +92,12 @@ export default {
   },
   computed: {
     formIsValid() {
-      return !!this.name && this.name.length <= 25
+      return (
+        !!this.name &&
+        this.name.length <= 25 &&
+        /http.+/.test(this.cite) &&
+        this.cite.length <= 200
+      )
     }
   },
   methods: {

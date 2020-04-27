@@ -1,7 +1,7 @@
 <template>
-  <client-only>
-    <v-navigation-drawer v-model="drawer" app clipped>
-      <v-list dense>
+  <v-navigation-drawer v-model="drawer" app clipped>
+    <v-list dense>
+      <div class="basic">
         <v-subheader class="mt-4 grey--text text--darken-1">
           Lists:
         </v-subheader>
@@ -14,32 +14,32 @@
         <SideLink link="/articles">
           All articles
         </SideLink>
-        <div v-if="loggedIn">
-          <v-subheader class="mt-4 grey--text text--darken-1">
-            User Panel
-          </v-subheader>
-          <SideLink :link="`/${profile}/edit_profile`">
-            Edit profile
-          </SideLink>
-          <SideLink v-if="isAdmin" :link="`/${profile}/admin_panel`">
-            Admin panel
-          </SideLink>
-          <SideLink :link="`/${profile}/my_friends`">
-            My friends
-          </SideLink>
-          <SideLink :link="`/${profile}/my_repositories`">
-            My repositories
-          </SideLink>
-          <SideLink :link="`/${profile}/my_articles`">
-            My articles
-          </SideLink>
-          <SideLink :link="`/${profile}/my_portfolio`">
-            My portfolio
-          </SideLink>
-        </div>
-      </v-list>
-    </v-navigation-drawer>
-  </client-only>
+      </div>
+      <div v-if="loggedIn" class="loggedIn">
+        <v-subheader class="mt-4 grey--text text--darken-1">
+          User Panel
+        </v-subheader>
+        <SideLink :link="`/${profile}/edit_profile`">
+          Edit profile
+        </SideLink>
+        <SideLink v-if="isAdmin" :link="`/${profile}/admin_panel`">
+          Admin panel
+        </SideLink>
+        <SideLink :link="`/${profile}/my_friends`">
+          My friends
+        </SideLink>
+        <SideLink :link="`/${profile}/my_repositories`">
+          My repositories
+        </SideLink>
+        <SideLink :link="`/${profile}/my_articles`">
+          My articles
+        </SideLink>
+        <SideLink :link="`/${profile}/my_portfolio`">
+          My portfolio
+        </SideLink>
+      </div>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>

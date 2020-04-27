@@ -1,5 +1,5 @@
 <template>
-  <v-list-item :to="link" link>
+  <v-list-item :to="link" link class="SideLink">
     <v-list-item-content>
       <v-list-item-title>
         <slot />

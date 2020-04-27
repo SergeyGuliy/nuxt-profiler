@@ -10,11 +10,11 @@
         </template>
         <template #actions>
           <v-btn
-            v-if="$router"
             v-tooltip.bottom-start="'Edit article.'"
             color="orange"
             class="headerButton"
             outlined
+            :disabled="!$store.getters.id === data.creatorId"
             @click="$router.push(`/articles/${$route.params.id}/edit`)"
           >
             <v-icon>mdi-pencil-outline</v-icon>
@@ -28,7 +28,7 @@
               "
               v-tooltip.bottom-start="'Add to my articles.'"
               color="green"
-              class="headerButton"
+              class="headerButton btn_add"
               outlined
               @click="addTomMyList($route.params.id)"
             >
@@ -38,7 +38,7 @@
               v-else
               v-tooltip.bottom-start="'Remove from my articles.'"
               color="red"
-              class="headerButton"
+              class="headerButton btn_rm"
               outlined
               @click="deleteFromMyList($route.params.id)"
             >
@@ -118,15 +118,27 @@ export default {
   mixins: [controlArticles],
   async asyncData({ route, error }) {
     try {
-      const data = await fetchArticleByID(route.params.id)
-      if (data === null) {
-        error({ message: 'Article not found' })
-      }
       return {
-        data
+        data: await fetchArticleByID(route.params.id)
       }
     } catch (e) {
       error({ message: 'Article not found' })
+    }
+  },
+  data() {
+    return {
+      // ---------------------------Created for testing--------------------------------------------
+      data: {
+        name: '',
+        creatorId: '',
+        creatorName: '',
+        language: '',
+        technology: '',
+        isPublic: true,
+        cite: '',
+        about: ''
+      }
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   head: {

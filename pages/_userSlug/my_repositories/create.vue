@@ -117,6 +117,9 @@ export default {
   },
   data() {
     return {
+      // ---------------------------Created for testing--------------------------------------------
+      languages: {},
+      // ---------------------------Created for testing--------------------------------------------
       name: '',
       about: '',
       cite: '',
@@ -213,6 +216,7 @@ export default {
             }
           )
         }
+        console.log(`Error in creation new article: ${e}`)
       }
     }
   },

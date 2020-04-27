@@ -1,5 +1,5 @@
 <template>
-  <v-card :dark="$vuetify.theme.dark" class="Card">
+  <v-card class="Card">
     <slot />
   </v-card>
 </template>

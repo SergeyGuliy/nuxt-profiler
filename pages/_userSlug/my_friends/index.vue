@@ -45,6 +45,7 @@
                     :action="deleteFromMyList"
                     color="red"
                     icon="mdi-minus-circle"
+                    class="btn_rm"
                   />
                 </td>
               </tr>
@@ -64,12 +65,12 @@
 </template>
 
 <script>
-import { controlFriends } from '../../mixins/controlFriends'
+import { controlFriends } from '../../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
 import { paginationMixin } from '~/mixins/paginationMixin'
 
 /**
- * ---(_userSlug/my_friends.vue)--- List of logged in user friends
+ * ---(_userSlug/index.vue)--- List of logged in user friends
  * @module pages/_userSlug/my_friends
  *
  * @vue-data {string} searchKey               - Search field by name
@@ -95,7 +96,10 @@ export default {
   data() {
     return {
       searchKey: null,
-      pageSize: 10
+      pageSize: 10,
+      // ---------------------------Created for testing--------------------------------------------
+      allUsers: []
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   computed: {

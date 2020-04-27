@@ -1,10 +1,13 @@
 <template>
   <v-app id="inspire">
-    <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
-    <Sidebar
-      v-if="$vuetify.breakpoint.xsOnly"
-      :sidebar-status="sidebarStatus"
-    />
+    <client-only>
+      <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
+      <Sidebar
+        v-if="$vuetify.breakpoint.xsOnly"
+        :sidebar-status="sidebarStatus"
+      />
+    </client-only>
+
     <Body>
       <nuxt />
     </Body>
@@ -16,6 +19,7 @@ import Navbar from '../components/layout_components/Navbar'
 import Sidebar from '../components/layout_components/Sidebar'
 import Body from '../components/layout_components/Body'
 export default {
+  name: 'Default',
   components: { Navbar, Sidebar, Body },
   data() {
     return {

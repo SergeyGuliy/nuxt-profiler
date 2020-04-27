@@ -18,20 +18,20 @@
         All repositories
       </NavLink>
       <NavLink link="/articles">
-        all articles
+        All articles
       </NavLink>
     </v-toolbar-title>
     <v-spacer />
     <!--    <v-btn icon><v-icon>mdi-translate</v-icon></v-btn>-->
-    <v-btn icon class="active" @click="changeTheme">
+    <v-btn icon class="active toggleTheme" @click="changeTheme">
       <v-icon>mdi-invert-colors</v-icon>
     </v-btn>
-    <v-btn v-if="loggedIn" icon class="mr-1" @click="logOut">
+    <v-btn v-if="loggedIn" icon class="mr-1 loggOut" @click="logOut">
       <v-icon>mdi-logout</v-icon>
     </v-btn>
     <v-dialog v-else v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
-        <v-btn icon class="mr-1" v-on="on">
+        <v-btn icon class="mr-1 loggIn" v-on="on">
           <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>
@@ -39,22 +39,22 @@
     </v-dialog>
     <template v-if="loggedIn && !$vuetify.breakpoint.xsOnly" v-slot:extension>
       <NavLink :link="`/${profile}/edit_profile`">
-        edit profile
+        Edit profile
       </NavLink>
       <NavLink v-if="isAdmin" :link="`/${profile}/admin_panel`">
-        admin panel
+        Admin panel
       </NavLink>
       <NavLink :link="`/${profile}/my_friends`">
         My friends
       </NavLink>
       <NavLink :link="`/${profile}/my_repositories`">
-        my repositories
+        My repositories
       </NavLink>
       <NavLink :link="`/${profile}/my_articles`">
-        my articles
+        My articles
       </NavLink>
       <NavLink :link="`/${profile}/my_portfolio`">
-        my portfolio
+        My portfolio
       </NavLink>
     </template>
   </v-app-bar>
@@ -90,8 +90,8 @@ export default {
     },
     async changeTheme() {
       try {
-        await this.$store.dispatch('changeTheme')
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+        await this.$store.dispatch('changeTheme')
         this.$dialog.message.success(`You changed theme.`, {
           position: 'top-right',
           timeout: 5000

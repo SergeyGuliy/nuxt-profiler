@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'BodyCard'
+  name: 'Page'
 }
 </script>
 

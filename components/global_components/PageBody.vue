@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'BodyCardMain3',
+  name: 'PageBody',
   props: { col: String },
   computed: {
     columnClass() {

@@ -60,13 +60,22 @@
                 </td>
                 <td v-if="$store.getters.loggedIn">
                   <TableIcon
+                    v-if="$store.getters.id === item.creatorId"
+                    :item="item.id"
+                    :action="routerPush"
+                    color="orange"
+                    icon="mdi-pencil-circle"
+                  />
+                  <TableIcon
                     v-if="
-                      !$store.getters['articles/articles'].includes(item.id)
+                      !$store.getters['articles/articles'].includes(item.id) &&
+                        item.isPublic
                     "
                     :item="item.id"
                     :action="addTomMyList"
                     color="green"
                     icon="mdi-plus-circle"
+                    class="btn_add"
                   />
                   <TableIcon
                     v-else
@@ -74,6 +83,7 @@
                     :action="deleteFromMyList"
                     color="red"
                     icon="mdi-minus-circle"
+                    class="btn_rm"
                   />
                 </td>
               </tr>
@@ -130,7 +140,11 @@ export default {
   },
   data() {
     return {
-      pageSize: 10
+      pageSize: 10,
+      // ---------------------------Created for testing--------------------------------------------
+      allArticles: {},
+      languages: {}
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   computed: {
@@ -144,6 +158,11 @@ export default {
         }
       }
       return publicListArticles
+    }
+  },
+  methods: {
+    routerPush(id) {
+      this.$router.push(`/articles/${id}/edit`)
     }
   },
   head: {

@@ -182,7 +182,11 @@
                 />
               </v-col>
             </v-row>
-            <v-row>
+            <v-row
+              v-tooltip.bottom-start="
+                'Fetching Git info works only with GitHub profiles.'
+              "
+            >
               <v-col cols="3">
                 <v-select
                   v-model="contacts.git_type"

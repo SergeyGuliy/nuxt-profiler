@@ -30,20 +30,6 @@ async function createRepository(data) {
       .database()
       .ref(`/3_repositories/`)
       .push(data)
-    if (data.isPublic) {
-      const item =
-        (
-          await firebase
-            .database()
-            .ref(`/systemData/public/repositories/`)
-            .once('value')
-        ).val() || []
-      item.push(push.key)
-      await firebase
-        .database()
-        .ref(`/systemData/public/repositories`)
-        .set(item)
-    }
     return push.key
   } catch (e) {
     console.log(`Error in creation new repository: ${e}`)

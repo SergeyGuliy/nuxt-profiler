@@ -118,6 +118,26 @@ export default {
 
   data() {
     return {
+      // ---------------------------Created for testing--------------------------------------------
+      data: {
+        name: '',
+        about: '',
+        cite: '',
+        gitHub: '',
+        language: '',
+        technology: '',
+        isPublic: true
+      },
+      oldData: {
+        name: '',
+        about: '',
+        cite: '',
+        gitHub: '',
+        language: '',
+        technology: '',
+        isPublic: true
+      },
+      languages: {},
       rules: {
         name: [
           (v) => !!v || 'Name is required',
@@ -140,6 +160,7 @@ export default {
             v.length <= 200 || 'Description must be less than 200 characters'
         ]
       }
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   computed: {

@@ -224,6 +224,7 @@ import BtnOpenBlank from '../buttons_components/BtnOpenBlank'
 import BtnCopy from '../buttons_components/BtnCopy'
 import ExpansionPanel from './ExpansionPanel'
 import GitInfo from './GitInfo'
+
 export default {
   name: 'UserShowingData',
   components: { ExpansionPanel, GitInfo, BtnCopy, BtnOpenBlank },
@@ -238,7 +239,7 @@ export default {
     workLanguages() {
       const workLanguages = []
       this.data.userInfo.work.work_languages.forEach((item) => {
-        if (item !== 'empty') {
+        if (item !== 'empty' && item !== 'Basic Knowledges') {
           workLanguages.push(item)
         }
       })
@@ -302,14 +303,22 @@ export default {
     }
   },
   mounted() {
-    const aboutUser = document.querySelector('.about_user')
-    let formatedString
-    if (this.data.userInfo.info.about.length > 0) {
-      formatedString = this.data.userInfo.info.about.split('///').join('<br />')
-    } else {
-      formatedString = 'Not indicated'
+    this.formatAboutUser()
+  },
+  methods: {
+    formatAboutUser() {
+      const aboutUser = document.querySelector('.about_user')
+      let formatedString
+      if (this.data.userInfo.info.about.length > 0) {
+        formatedString = this.data.userInfo.info.about
+          .split('///')
+          .join('<br />')
+      } else {
+        formatedString = 'Not indicated'
+      }
+      console.log(formatedString)
+      aboutUser.innerHTML = formatedString
     }
-    aboutUser.innerHTML = formatedString
   }
 }
 </script>

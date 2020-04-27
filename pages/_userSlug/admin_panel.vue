@@ -260,6 +260,9 @@ export default {
   validate({ store }) {
     return store.getters.isAdmin
   },
+  mounted() {
+    console.log(this.allArticles)
+  },
   middleware: 'isNotAdmin'
 }
 </script>

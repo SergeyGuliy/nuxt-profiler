@@ -66,6 +66,7 @@
                     :action="addTomMyList"
                     color="green"
                     icon="mdi-plus-circle"
+                    class="btn_add"
                   />
                   <TableIcon
                     v-else
@@ -73,6 +74,7 @@
                     :action="deleteFromMyList"
                     color="red"
                     icon="mdi-minus-circle"
+                    class="btn_rm"
                   />
                 </td>
               </tr>

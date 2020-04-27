@@ -61,10 +61,18 @@
                 </td>
                 <td>
                   <TableIcon
+                    v-if="$store.getters.id === item.creatorId"
+                    :item="item.id"
+                    :action="routerPush"
+                    color="orange"
+                    icon="mdi-pencil-circle"
+                  />
+                  <TableIcon
                     :item="item.id"
                     :action="deleteFromMyList"
                     color="red"
                     icon="mdi-minus-circle"
+                    class="btn_rm"
                   />
                 </td>
               </tr>
@@ -122,7 +130,11 @@ export default {
   },
   data() {
     return {
-      pageSize: 10
+      pageSize: 10,
+      // ---------------------------Created for testing--------------------------------------------
+      basicList: {},
+      languages: {}
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   computed: {
@@ -139,6 +151,11 @@ export default {
         }
       }
       return myList
+    }
+  },
+  methods: {
+    routerPush(id) {
+      this.$router.push(`/articles/${id}/edit`)
     }
   },
   head: {

@@ -15,38 +15,38 @@
           :rules="rules.password"
           :counter="16"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="showPassword = !showPassword"
           :type="showPassword ? 'text' : 'password'"
           label="Input password"
           required
           outlined
+          @click:append="showPassword = !showPassword"
         />
         <v-text-field
           v-model="passwordRepeat"
           :rules="rules.passwordRepeat"
           :counter="16"
           :append-icon="showPasswordRepeat ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="showPasswordRepeat = !showPasswordRepeat"
           :type="showPasswordRepeat ? 'text' : 'password'"
           label="Repeat password"
           required
           outlined
+          @click:append="showPasswordRepeat = !showPasswordRepeat"
         />
         <v-row>
           <v-col cols="6">
             <v-btn
               :disabled="!valid"
-              @click="submitRegistration"
               :loading="loading"
               color="success"
               class="mr-4"
               block
+              @click="submitRegistration"
             >
               Registration
             </v-btn>
           </v-col>
           <v-col cols="6">
-            <v-btn @click="$emit('closeModal')" color="red" block>
+            <v-btn color="red" block @click="$emit('closeModal')">
               close
             </v-btn>
           </v-col>

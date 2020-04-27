@@ -48,22 +48,15 @@ export default {
   name: 'MyPortfolio',
   components: { PortfolioList, BtnCreate },
   mixins: [paginationMixin],
-
-  asyncData({ store, error }) {
-    try {
-      return {
-        allWorks: store.getters['portfolio/portfolio']
-      }
-    } catch (e) {
-      error({ message: "Can't fetch your portfolio." })
-    }
-  },
   data() {
     return {
       pageSize: 3
     }
   },
   computed: {
+    allWorks() {
+      return this.$store.getters['portfolio/portfolio']
+    },
     listFiltered() {
       return this.allWorks.filter((item) => {
         return item !== 'empty'

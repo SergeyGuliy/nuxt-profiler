@@ -7,6 +7,7 @@
           v-if="loggedIn && item.creatorId === id"
           color="red"
           icon
+          class="btn_rm"
           @click="deleteFromMyList(item.key)"
         >
           <v-icon>mdi-delete</v-icon>

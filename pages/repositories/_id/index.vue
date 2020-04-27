@@ -15,6 +15,7 @@
             color="orange"
             class="headerButton"
             outlined
+            :disabled="!$store.getters.id === data.creatorId"
             @click="$router.push(`/repositories/${$route.params.id}/edit`)"
           >
             <v-icon>mdi-pencil-outline</v-icon>
@@ -29,7 +30,7 @@
                 )
               "
               v-tooltip.bottom-start="'Add to my repositories.'"
-              class="headerButton"
+              class="headerButton btn_add"
               outlined
               color="green"
               @click="addTomMyList($route.params.id)"
@@ -40,7 +41,7 @@
               v-else
               v-tooltip.bottom-start="'Remove from my repositories.'"
               color="red"
-              class="headerButton"
+              class="headerButton btn_rm"
               outlined
               @click="deleteFromMyList($route.params.id)"
             >
@@ -179,6 +180,35 @@ export default {
       }
     } catch (e) {
       error({ message: 'Repository not found' })
+    }
+  },
+  data() {
+    return {
+      // ---------------------------Created for testing--------------------------------------------
+      data: {
+        name: '',
+        creatorId: '',
+        creatorName: '',
+        language: '',
+        technology: '',
+        isPublic: true,
+        cite: '',
+        gitHub: '',
+        about: ''
+      },
+      gitApiInfo: {
+        watchers_count: 0,
+        subscribers_count: 0,
+        forks: 0,
+        language: '',
+        description: '',
+        owner: {
+          html_url: '',
+          login: ''
+        },
+        html_url: ''
+      }
+      // ---------------------------Created for testing--------------------------------------------
     }
   },
   head: {

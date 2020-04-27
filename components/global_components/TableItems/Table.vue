@@ -1,6 +1,6 @@
 <template>
   <div id="Table">
-    <v-simple-table :dark="$vuetify.theme.dark">
+    <v-simple-table>
       <template v-slot:default>
         <thead>
           <tr>
