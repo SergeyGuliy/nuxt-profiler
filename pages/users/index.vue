@@ -1,59 +1,72 @@
 <template>
-  <Page id="allUsers">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
-        <template #title>Edit Profile</template>
-        <template #actions>
-          <v-btn class="mx-1">Save</v-btn>
+        <template #title>
+          {{
+            list.length > 0 ? 'List of all Users' : 'There is no users in base'
+          }}
+        </template>
+        <template v-if="list.length > 0" #actions>
+          <v-select
+            v-model="pageSize"
+            :items="[5, 10, 15]"
+            label="Page size"
+            style="max-width: 43px;"
+          />
+          <v-text-field v-model="searchKey" label="Search" clearable />
         </template>
       </PageHeader>
     </template>
-    <template #body>
+    <template v-if="list.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table>
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Repositories</th>
-                <th>Articles</th>
-                <th>Friends</th>
-                <th>Actions</th>
-              </tr>
-            </template>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Repositories', 'Articles', 'Friends']"
+          >
             <template #table-body>
-              <tr v-for="item in list" :key="item.id">
-                <td>{{ item.profile }}</td>
-                <td>{{ item.lists.repositories.length }}</td>
-                <td>{{ item.lists.articles.length }}</td>
-                <td>{{ item.lists.friends.length }}</td>
+              <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
                 <td>
-                  <v-btn
-                    @click="$router.push(`/users/${item.id}`)"
-                    icon
+                  <TableLink :link="`/users/${item.id}`" :text="item.profile" />
+                </td>
+                <td>
+                  <TableText :text="`${item.lists.repositories.length - 1}`" />
+                </td>
+                <td>
+                  <TableText :text="`${item.lists.articles.length - 1}`" />
+                </td>
+                <td>
+                  <TableText :text="`${item.lists.friends.length - 1}`" />
+                </td>
+                <td v-if="loggedIn">
+                  <TableIcon
+                    v-if="!$store.getters['friends/friends'].includes(item.id)"
+                    :item="item.id"
+                    :action="addTomMyList"
                     color="green"
-                    ><v-icon>mdi-face-profile</v-icon></v-btn
-                  >
-                  <v-btn
-                    v-if="!$store.getters.user.lists.friends.includes(item.id)"
-                    @click="addTomMyList(item.id)"
-                    icon
-                    color="info"
-                    ><v-icon>mdi-account-multiple-plus</v-icon></v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      $store.getters.user.lists.friends.includes(item.id)
-                    "
-                    @click="deleteFromMyList(item.id)"
-                    icon
-                    color="warning"
-                    ><v-icon>mdi-account-multiple-remove</v-icon></v-btn
-                  >
+                    icon="mdi-plus-circle"
+                    class="btn_add"
+                  />
+                  <TableIcon
+                    v-else
+                    :item="item.id"
+                    :action="deleteFromMyList"
+                    color="red"
+                    icon="mdi-minus-circle"
+                    class="btn_rm"
+                  />
                 </td>
               </tr>
             </template>
+            <template #table-pagination>
+              <v-pagination
+                v-model="pageCurrent"
+                :length="listPaginated.length"
+              />
+            </template>
           </Table>
+          <Card v-else>Поиск не дал результата</Card>
         </template>
       </PageBody>
     </template>
@@ -61,59 +74,86 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { controlFriends } from '../../mixins/controlFriends'
 import { fetchAllUsers } from '~/functions/users'
+import { paginationMixin } from '~/mixins/paginationMixin'
+
+/**
+ * ---(users/index.vue)--- List of all users. If user logged in, he can add or remove friends to his list
+ * @module pages/users/index
+ *
+ * @vue-data {string} searchKey               - Search field by name
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllUsers']{@link external:functions_users}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-event {id(string)} addTomMyList       - add to my list. From mixin: [controlFriends.js]{@link external:mixins_controlFriends}
+ * @vue-computed {Array} list                 - Returns list of all user without logged in user
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'list'
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered'chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'Index',
-  computed: {
-    list() {
-      const list = []
-      for (const i in this.allUsers) {
-        try {
-          const usr = this.allUsers[i]
-          if (usr.id === this.$store.getters.user.id) {
-            continue
-          }
-          usr.id = i
-          list.push(usr)
-        } catch (e) {
-          continue
-        }
+  mixins: [controlFriends, paginationMixin],
+  transition: 'bounce',
+  async asyncData({ error }) {
+    try {
+      return {
+        allUsers: await fetchAllUsers()
       }
-      return list
+    } catch (e) {
+      error({ message: 'Cannot fetch Users list' })
     }
   },
-  async asyncData() {
+  /** @returns {{pageSize: number, searchKey: null}} */
+  data() {
     return {
-      allUsers: await fetchAllUsers()
+      searchKey: null,
+      pageSize: 10,
+      // ---------------------------Created for testing--------------------------------------------
+      allUsers: {}
+      // ---------------------------Created for testing--------------------------------------------
+    }
+  },
+  computed: {
+    ...mapGetters(['id', 'loggedIn']),
+    /** @returns {Array} */
+    list() {
+      const list = []
+      Object.keys(this.allUsers).forEach((i) => {
+        try {
+          const usr = this.allUsers[i]
+          if (this.loggedIn && usr.id === this.id) {
+            return
+          }
+          list.push(usr)
+        } catch (e) {
+          // it's ok. i muted catching.
+          // i decide to do this because i am creating filtered array based on allUsers.
+          // and if user id will not be exists in allUsers it will not be added to filtered list.
+        }
+      })
+      return list
+    },
+    /** @returns {Array} */
+    listFiltered() {
+      if (this.searchKey) {
+        return this.list.filter((value) => {
+          return value.profile
+            .toLowerCase()
+            .includes(this.searchKey.toLowerCase())
+        })
+      } else {
+        return this.list
+      }
     }
   },
   head: {
     title: `Profiler - All Users`
-  },
-  methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteFriend', id)
-        this.$store.dispatch('updateUserInfo')
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    addTomMyList(id) {
-      try {
-        console.log(id)
-        this.$store.commit('pushFriend', id)
-        this.$store.dispatch('updateUserInfo')
-      } catch (e) {
-        console.log(e)
-      }
-    }
   }
 }
 </script>
 
 <style lang="sass">
-#allUsers
-  td, th
-    text-align: center
+@import '~/assets/pages_styles/listTables.sass'
 </style>

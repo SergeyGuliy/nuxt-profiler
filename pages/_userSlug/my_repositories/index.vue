@@ -1,59 +1,95 @@
 <template>
-  <Page id="myRepositories">
+  <Page id="listTables">
     <template #head>
       <PageHeader>
-        <template #title>List of my Repositories</template>
-        <template #actions>
-          <v-btn
-            @click="
-              $router.push(
-                `/${$store.getters.user.profile}/my_repositories/create`
-              )
-            "
-            class="mx-1"
-            >Create</v-btn
+        <template #title>
+          {{
+            checkedList.length > 0
+              ? 'List of my repositories'
+              : "You don't have repositories"
+          }}
+          <BtnCreate
+            :link="`/${$store.getters.profile}/my_repositories/create`"
+          />
+        </template>
+        <template v-if="checkedList.length > 0" #actions>
+          <v-select
+            v-model="pageSize"
+            :items="[5, 10, 15]"
+            label="Page size"
+            style="max-width: 56px;"
+          />
+          <v-select
+            v-model="language"
+            :items="Object.keys(languages)"
+            label="Language"
+            clearable
           >
+          </v-select>
+          <v-select
+            v-model="technology"
+            :items="technologies"
+            label="Technology"
+            clearable
+          >
+          </v-select>
+          <v-text-field v-model="searchKey" label="Search" clearable />
         </template>
       </PageHeader>
     </template>
-    <template #body>
+    <template v-if="checkedList.length > 0" #body>
       <PageBody col="1">
         <template #c-1>
-          <Table>
-            <template #table-head>
-              <tr>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Language</th>
-                <th>Technology</th>
-                <th>Actions</th>
+          <Table
+            v-if="listFiltered.length > 0"
+            :headers="['Name', 'Creator', 'Language', 'Technology']"
+          >
+            <template #table-body>
+              <tr v-for="item in listPaginated[pageCurrent - 1]" :key="item.id">
+                <td>
+                  <TableLink
+                    :link="`/repositories/${item.id}`"
+                    :text="item.name"
+                  />
+                </td>
+                <td>
+                  <TableLink
+                    :link="`/users/${item.creatorId}`"
+                    :text="item.creatorName"
+                  />
+                </td>
+                <td>
+                  <TableText :text="item.language" />
+                </td>
+                <td>
+                  <TableText :text="item.technology" />
+                </td>
+                <td>
+                  <TableIcon
+                    v-if="$store.getters.id === item.creatorId"
+                    :item="item.id"
+                    :action="routerPush"
+                    color="orange"
+                    icon="mdi-pencil-circle"
+                  />
+                  <TableIcon
+                    :item="item.id"
+                    :action="deleteFromMyList"
+                    color="red"
+                    icon="mdi-minus-circle"
+                    class="btn_rm"
+                  />
+                </td>
               </tr>
             </template>
-            <template #table-body>
-              <tr v-for="item in myList" :key="item.id">
-                <td>{{ item.name }}</td>
-                <td>
-                  <v-btn @click="$router.push(`/users/${item.id}`)"
-                    >{{ item.creatorName }}
-                    <v-icon color="green">mdi-face-profile</v-icon></v-btn
-                  >
-                </td>
-                <td>{{ item.language }}</td>
-                <td>{{ item.technology }}</td>
-                <td>
-                  <v-btn
-                    @click="$router.push(`/articles/${item.id}`)"
-                    icon
-                    color="green"
-                    ><v-icon>mdi-book</v-icon></v-btn
-                  >
-                  <v-btn @click="deleteFromMyList(item.id)" icon color="warning"
-                    ><v-icon>mdi-minus-circle</v-icon></v-btn
-                  >
-                </td>
-              </tr>
+            <template #table-pagination>
+              <v-pagination
+                v-model="pageCurrent"
+                :length="listPaginated.length"
+              />
             </template>
           </Table>
+          <Card v-else>Поиск не дал результата</Card>
         </template>
       </PageBody>
     </template>
@@ -61,12 +97,53 @@
 </template>
 
 <script>
+import BtnCreate from '../../../components/buttons_components/BtnCreate'
+import { filterMixin } from '../../../mixins/filterMixin'
+import { controlRepositories } from '../../../mixins/controlRepositories'
+import { paginationMixin } from '~/mixins/paginationMixin'
+import { fetchCategories } from '~/functions/language-technologies'
 import { fetchAllRepositories } from '~/functions/repositories'
+
+/**
+ * ---(_userSlug/my_repositories/index.vue)--- List of all user's repositories
+ * @module pages/_userSlug/my_repositories/index
+ *
+ * @vue-data {string} searchKey               - Search field by name. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} language                - Search field by language. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {string} technology              - Search field by technology. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-data {Number} pageSize                - Count of items on page
+ * @vue-event {context(error)} asyncData      - Return ['fetchAllRepositories']{@link external:functions_repositories}. Return ['fetchCategories']{@link external:functions_language_technologies}
+ * @vue-event {id(string)} deleteFromMyList   - delete from my list. From mixin: [controlRepositories.js]{@link external:mixins_controlRepositories}
+ * @vue-computed {Array} checkedList          - Returns list of all user's repositories.
+ * @vue-computed {Array} listFiltered         - Returns list of all filtered 'checkedList'. From: [filterMixin.js]{@link external:mixins_filterMixin}
+ * @vue-computed {Array} listPaginated        - Returns list of all 'listFiltered' chunked on pages. From: [paginationMixin.js]{@link external:mixins_paginationMixin}
+ */
 export default {
   name: 'MyRepositories',
+  components: { BtnCreate },
+  mixins: [controlRepositories, filterMixin, paginationMixin],
+  async asyncData({ error }) {
+    try {
+      return {
+        allRepositories: await fetchAllRepositories(),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: "Can't fetch your data." })
+    }
+  },
+  data() {
+    return {
+      pageSize: 10,
+      // ---------------------------Created for testing--------------------------------------------
+      allRepositories: {},
+      languages: {}
+      // ---------------------------Created for testing--------------------------------------------
+    }
+  },
   computed: {
-    myList() {
-      const myListIDS = this.$store.getters.user.lists.repositories
+    checkedList() {
+      const myListIDS = this.$store.getters['repositories/repositories']
       const myList = []
       for (const i of myListIDS) {
         try {
@@ -80,29 +157,17 @@ export default {
       return myList
     }
   },
-  head: {
-    title: `Profiler - User Repositories`
-  },
-  async asyncData() {
-    return {
-      allRepositories: await fetchAllRepositories()
-    }
-  },
   methods: {
-    deleteFromMyList(id) {
-      try {
-        this.$store.commit('deleteRepository', id)
-        this.$store.dispatch('updateUserInfo')
-      } catch (e) {
-        console.log(e)
-      }
+    routerPush(id) {
+      this.$router.push(`/repositories/${id}/edit`)
     }
+  },
+  head: {
+    title: `Profiler - My Repositories`
   }
 }
 </script>
 
 <style lang="sass">
-#myRepositories
-  td, th
-    text-align: center
+@import '~/assets/pages_styles/listTables.sass'
 </style>

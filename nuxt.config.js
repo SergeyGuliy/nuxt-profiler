@@ -1,5 +1,3 @@
-import colors from 'vuetify/lib/util/colors'
-
 export default {
   mode: 'universal',
   /*
@@ -21,28 +19,25 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: 'red' },
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/transition.sass'],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~/plugins/tooltip',
+    '~plugins/global-components',
     '~/plugins/firebase',
-    '~/plugins/global-components',
     '~/plugins/mask'
   ],
   /*
 
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
-  ],
+  buildModules: ['@nuxtjs/eslint-module'],
   vuetify: {
     font: {
       family: 'Roboto'
@@ -51,18 +46,20 @@ export default {
       iconfont: 'mdi'
     },
     theme: {
-      dark: false
+      dark: true
     }
   },
   /*
    ** Nuxt.js modules
    */
   modules: [
+    'nuxt-clipboard2',
     '@nuxtjs/proxy',
     '@nuxtjs/vuetify',
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
-    'vuetify-dialog/nuxt'
+    'vuetify-dialog/nuxt',
+    'nuxt-lazy-load'
   ],
 
   /*

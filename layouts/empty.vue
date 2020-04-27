@@ -10,8 +10,9 @@
 
 <script>
 export default {
-  name: 'Empty'
+  name: 'Empty',
+  mounted() {
+    this.$cookies.remove('access_token')
+  }
 }
 </script>
-
-<style scoped></style>

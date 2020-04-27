@@ -1,7 +1,13 @@
 <template>
   <v-app id="inspire">
-    <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
-    <!--    <Sidebar :status="sidebarStatus" />-->
+    <client-only>
+      <Navbar @sidebar-toogle="sidebarStatus = !sidebarStatus" />
+      <Sidebar
+        v-if="$vuetify.breakpoint.xsOnly"
+        :sidebar-status="sidebarStatus"
+      />
+    </client-only>
+
     <Body>
       <nuxt />
     </Body>
@@ -9,29 +15,28 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 import Navbar from '../components/layout_components/Navbar'
-// import Sidebar from '../components/layout_components/Sidebar'
+import Sidebar from '../components/layout_components/Sidebar'
 import Body from '../components/layout_components/Body'
 export default {
-  components: { Navbar, Body },
-  // components: { Navbar, Sidebar, Body },
+  name: 'Default',
+  components: { Navbar, Sidebar, Body },
   data() {
     return {
       sidebarStatus: false
     }
   },
-  async mounted() {
-    await firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        const token = await (await firebase.auth().currentUser).uid
-        this.$cookies.set('access_token', token)
-      } else {
-        this.$cookies.remove('access_token')
-      }
-    })
+  transition: 'bounce',
+  created() {
+    if (this.$store.getters.loggedIn) {
+      this.$vuetify.theme.dark = this.$store.getters.themeDark
+    } else {
+      this.$vuetify.theme.dark = true
+    }
   }
 }
 </script>
 
-<style scoped lang="sass"></style>
+<style lang="sass">
+@import '~/assets/tooltip.scss'
+</style>

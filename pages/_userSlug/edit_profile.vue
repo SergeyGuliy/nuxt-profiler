@@ -2,39 +2,37 @@
   <Page id="editProfile">
     <template #head>
       <PageHeader>
-        <template #title>Edite profile</template>
+        <template #title>Edit profile</template>
         <template #actions>
-          <v-dialog v-model="dialog" persistent max-width="290">
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" v-if="!$store.getters.user.isAdmin" mx-1
-                >Become admin</v-btn
-              >
-            </template>
-            <v-card>
-              <v-card-title class="headline"
-                >Use Google's location service?</v-card-title
-              >
-              <v-card-text
-                >Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.</v-card-text
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="dialog = false">Disagree</v-btn>
-                <v-btn
-                  @click="submitBecomeAdmin"
-                  :loading="loading"
-                  :disabled="loading"
-                  color="primary"
-                  >Agree</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-btn @click="submitUpdateInfo" :loading="loadingSave" class="mx-1"
-            >Save</v-btn
+          <v-btn
+            v-if="!isAdmin"
+            v-tooltip.bottom-start="'Become admin.'"
+            class="headerButton"
+            outlined
+            color="green"
+            @click="submitBecomeAdmin"
           >
+            <v-icon>mdi-account-key</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="isAdmin"
+            v-tooltip.bottom-start="'Become casual user.'"
+            class="headerButton"
+            outlined
+            color="green"
+            @click="submitBecomeUser"
+          >
+            <v-icon>mdi-account-arrow-left</v-icon>
+          </v-btn>
+          <v-btn
+            v-tooltip.bottom-start="'Update your information.'"
+            class="headerButton"
+            outlined
+            color="green"
+            @click="submitUpdateInfo"
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
         </template>
       </PageHeader>
     </template>
@@ -74,25 +72,32 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="info.date_of_birth"
-                  v-on="on"
                   label="Birthday date"
                   readonly
                   outlined
+                  v-on="on"
                 />
               </template>
               <v-date-picker
                 ref="picker"
                 v-model="info.date_of_birth"
                 :max="new Date().toISOString().substr(0, 10)"
-                @change="save"
                 min="1950-01-01"
+                @change="save"
               />
             </v-menu>
+            <v-text-field
+              v-model="info.education"
+              :rules="rules.education"
+              :counter="40"
+              label="Your higher education"
+              outlined
+            />
             <v-textarea
               v-model="info.about"
               :rules="rules.about"
               :counter="200"
-              label="Tell about yourself"
+              label="Tell about yourself. (Use /// to break line.)"
               outlined
               auto-grow
               rows="1"
@@ -113,6 +118,13 @@
               v-model="work.work_type"
               :items="work_type"
               label="Working type"
+              outlined
+              height="56px"
+            />
+            <v-select
+              v-model="work.work_scope"
+              :items="work_scope"
+              label="Work scope"
               outlined
               height="56px"
             />
@@ -157,9 +169,9 @@
               </v-col>
               <v-col cols="9">
                 <v-text-field
-                  :disabled="!contacts.phone_code"
                   v-model="contacts.phone"
                   v-mask="'##-###-##-##'"
+                  :disabled="!contacts.phone_code"
                   :counter="12"
                   :rules="rules.phone"
                   :label="phone_label"
@@ -170,7 +182,11 @@
                 />
               </v-col>
             </v-row>
-            <v-row>
+            <v-row
+              v-tooltip.bottom-start="
+                'Fetching Git info works only with GitHub profiles.'
+              "
+            >
               <v-col cols="3">
                 <v-select
                   v-model="contacts.git_type"
@@ -193,6 +209,15 @@
                 />
               </v-col>
             </v-row>
+            <v-text-field
+              v-model="contacts.skype"
+              :rules="rules.skype"
+              :counter="20"
+              label="Your Skype link"
+              outlined
+              type="url"
+              placeholder="live:SKYPE_USER_PROFILE"
+            />
             <v-text-field
               v-model="contacts.site"
               :rules="rules.cite"
@@ -228,22 +253,49 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { fetchCategories } from '~/functions/language-technologies'
+
+/**
+ * ---(_userSlug/edit_profile.vue)--- Page witch gives ability to edit user info
+ * @module pages/_userSlug/edit_profile
+ *
+ * @vue-event {context(store, error)} asyncData   - return ['fetchCategories']{@link external:functions_language_technologies}, and get ['getters.userInfo']{@link external:store_index} from store.
+ * @vue-data {Array} git_types                    - returns array of git types
+ * @vue-data {Array} work_status                  - returns array of work statuses
+ * @vue-data {Array} work_type                    - returns array of work types
+ * @vue-data {Array} work_position                - returns array of work positions
+ * @vue-data {Array} work_scope                   - returns array of work scopes
+ * @vue-data {Array} codes                        - returns array of phone codes
+ * @vue-data {Object} rules                       - rules for inputs
+ * @vue-event {isAdmin} submitBecomeAdmin         - Change admin status of user to true. Calls ['changeAdminStatus']{@link external:store_index}
+ * @vue-event {isAdmin} submitBecomeUser          - Change admin status of user to false. Calls ['changeAdminStatus']{@link external:store_index}
+ * @vue-event {userInfo} submitUpdateInfo         - Change user info. Calls ['updateUserInfo']{@link external:store_index}
+ */
 export default {
   name: 'EditProfile',
-  head: {
-    title: `Profiler - Edit Profile`
+  async asyncData({ store, error }) {
+    try {
+      return {
+        contacts: Object.assign({}, store.getters.userInfo.contacts),
+        info: Object.assign({}, store.getters.userInfo.info),
+        work: Object.assign({}, store.getters.userInfo.work),
+        languages: await fetchCategories()
+      }
+    } catch (e) {
+      error({ message: 'Error while trying to load page.' })
+    }
   },
   data() {
     return {
-      dialog: false,
-      loading: false,
-      loadingSave: false,
       menu: false,
-      phone_code: null,
-      git_type: null,
       git_types: ['GitHub', 'GitLab'],
-      work_status: ['Unemployed', 'Full employment', 'Part-time employment'],
+      work_status: [
+        'Unemployed (searching)',
+        'Unemployed (not searching)',
+        'Full employment',
+        'Part-time employment'
+      ],
       work_type: ['Office worker', 'Freelancer'],
       work_position: [
         'Developer',
@@ -251,6 +303,11 @@ export default {
         'Business Analytic',
         'Human resources',
         'Quality assurance'
+      ],
+      work_scope: [
+        'Web development',
+        'Game development',
+        'Artificial Intelligence'
       ],
       codes: [
         '+380',
@@ -271,13 +328,16 @@ export default {
         name: [
           (v) => v.length <= 15 || 'Input must be less than 15 characters'
         ],
+        education: [
+          (v) => v.length <= 40 || 'Input must be less than 40 characters'
+        ],
         about: [
           (v) =>
             v.length <= 200 || 'Description must be less than 200 characters'
         ],
         phone: [(v) => v.length === 12 || 'Phone length must be 12'],
         cite: [
-          (v) => /https:\/\/.+/.test(v) || 'Link must starts with "https://"',
+          (v) => /http.+/.test(v) || 'Link must starts with "http"',
           (v) => v.length <= 100 || 'Link must be less than 100 characters'
         ],
         linkedIn: [
@@ -291,6 +351,10 @@ export default {
             /https:\/\/www.facebook.com\/.+/.test(v) ||
             'Link must starts with "https://www.facebook.com/"',
           (v) => v.length <= 100 || 'Link must be less than 100 characters'
+        ],
+        skype: [
+          (v) => /live:.+/.test(v) || 'Link must starts with "live:"',
+          (v) => v.length <= 20 || 'Link must be less than 20 characters'
         ],
         git: [
           (v) => {
@@ -312,15 +376,31 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userInfo', 'isAdmin']),
+    user() {
+      return this.userInfo
+    },
+    formIsChanged() {
+      return (
+        JSON.stringify(this.userInfo) !==
+        JSON.stringify({
+          contacts: this.contacts,
+          info: this.info,
+          work: this.work
+        })
+      )
+    },
     technologies() {
       const technolies = []
-      for (const i of this.work.work_languages) {
+      this.work.work_languages.forEach((lang) => {
         try {
-          this.languages[i].technologies.forEach((item) => {
+          this.languages[lang].technologies.forEach((item) => {
             technolies.push(item)
           })
-        } catch (e) {}
-      }
+        } catch (e) {
+          // it's ok. i muted catching.
+        }
+      })
       return technolies
     },
     git_type_placeholder() {
@@ -367,44 +447,108 @@ export default {
     },
     'contacts.git_type'() {
       this.contacts.github = ''
-    }
-  },
-  async asyncData(context) {
-    return {
-      contacts: Object.assign({}, context.store.getters.user.userInfo.contacts),
-      info: Object.assign({}, context.store.getters.user.userInfo.info),
-      work: Object.assign({}, context.store.getters.user.userInfo.work),
-      languages: await fetchCategories()
+    },
+    'work.work_languages'(val) {
+      const technologies = []
+      val.forEach((item) => {
+        try {
+          this.languages[item].technologies.forEach((value) => {
+            technologies.push(value)
+          })
+        } catch (e) {
+          // it's ok. i muted catching.
+        }
+      })
+      this.work.work_technologies = this.work.work_technologies.filter(
+        (value) => technologies.includes(value)
+      )
+      if (this.work.work_technologies.length === 0) {
+        this.work.work_technologies.push('empty')
+      }
     }
   },
   methods: {
     async submitBecomeAdmin() {
       try {
-        this.loading = true
-        this.$store.commit('becomeAdmin')
-        await this.$store.dispatch('updateUserInfo')
-        this.dialog = false
+        const res = await this.$dialog.confirm({
+          text:
+            "It will give you opportunity to access Admin Panel Page. Where you cant change Languages and technologies items. (Please don't delete existing categories! But you can create new.)",
+          title: 'You want to become Admin? '
+        })
+        if (res) {
+          await this.$store.dispatch('changeAdminStatus', true)
+          this.$dialog.message.success(`You had become Admin`, {
+            position: 'top-right',
+            timeout: 5000
+          })
+        } else {
+          this.$dialog.message.error(`You had refuse to become Admin`, {
+            position: 'top-right',
+            timeout: 5000
+          })
+        }
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to become admin: ${e}`)
+      }
+    },
+    async submitBecomeUser() {
+      try {
+        const res = await this.$dialog.confirm({
+          text: 'You will lose access to admin page',
+          title: 'You want to become casual User?'
+        })
+        if (res) {
+          await this.$store.dispatch('changeAdminStatus', false)
+          this.$dialog.message.success(`You had become casual user`, {
+            position: 'top-right',
+            timeout: 5000
+          })
+        } else {
+          this.$dialog.message.error(`You had refuse becoming casual user`, {
+            position: 'top-right',
+            timeout: 5000
+          })
+        }
+      } catch (e) {
+        console.log(`Error in trying to become casual user: ${e}`)
       }
     },
     async submitUpdateInfo() {
       try {
-        this.$store.commit('updateUserInfo', {
+        if (this.contacts.git_type === 'GitHub') {
+          try {
+            const gitApiKey = `https://api.github.com/users/${
+              this.contacts.github.split('https://github.com/')[1]
+            }`
+            const checkingGitApi = (await this.$axios.get(gitApiKey)).data
+            if (checkingGitApi.login) {
+              this.contacts.gitApi = gitApiKey
+            }
+          } catch (e) {
+            this.$dialog.message.error(
+              `You had write wrong link to GiHub profile`,
+              { position: 'top-right', timeout: 5000 }
+            )
+            this.contacts.gitApi = ''
+            this.contacts.github = ''
+            return
+          }
+        } else {
+          this.contacts.gitApi = ''
+        }
+        await this.$store.dispatch('updateUserInfo', {
           contacts: this.contacts,
           info: this.info,
           work: this.work
         })
-        console.log({
-          contacts: this.contacts,
-          info: this.info,
-          work: this.work
+        this.$dialog.message.success(`You had update your info`, {
+          position: 'top-right',
+          timeout: 5000
         })
-        await this.$store.dispatch('updateUserInfo')
+        this.$router.push('/')
       } catch (e) {
-        console.log(e)
+        console.log(`Error in trying to update user info: ${e}`)
       }
-      // this.$router.push('/')
     },
     save(date) {
       this.$refs.menu.save(date)
@@ -413,6 +557,9 @@ export default {
       const index = this.friends.indexOf(item.name)
       if (index >= 0) this.friends.splice(index, 1)
     }
+  },
+  head: {
+    title: `Profiler - Edit Profile`
   }
 }
 </script>
