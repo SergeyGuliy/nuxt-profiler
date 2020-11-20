@@ -334,5 +334,5 @@ p
     display: block
 .v-chip--no-color
   padding: 0 5px
-  margin: 0 3px 0 0 !important
+  margin: 1px !important
 </style>
