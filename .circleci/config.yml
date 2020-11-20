@@ -21,3 +21,6 @@ jobs:
       - run:
           name: build-project
           command: npm run build
+      - run:
+          name: start-project
+          command: npm run start
