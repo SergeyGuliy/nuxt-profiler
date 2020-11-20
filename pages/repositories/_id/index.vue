@@ -10,7 +10,7 @@
         </template>
         <template #actions>
           <v-btn
-            v-if="$router"
+            v-if="$store.getters.loggedIn"
             v-tooltip.bottom-start="'Edit repository.'"
             color="orange"
             class="headerButton"

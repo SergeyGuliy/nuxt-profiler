@@ -10,6 +10,7 @@
         </template>
         <template #actions>
           <v-btn
+            v-if="$store.getters.loggedIn"
             v-tooltip.bottom-start="'Edit article.'"
             color="orange"
             class="headerButton"
