@@ -28,7 +28,7 @@
         :all-articles="allArticles"
         :git-api-info="gitApiInfo"
       />
-      <UserEmptyData v-else />
+<!--      <UserEmptyData v-else />-->
     </template>
   </Page>
 </template>
