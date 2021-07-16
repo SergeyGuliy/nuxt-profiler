@@ -16,4 +16,8 @@ export default {
   min-height: 100%
   @media print
     padding: 0 5px
+    border-color: transparent
+    background: transparent
+    box-shadow: unset
+    outline: none !important
 </style>

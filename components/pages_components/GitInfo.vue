@@ -63,7 +63,7 @@ export default {
       @media print
         margin: 10px auto 0 auto
         width: 70%
-        height: 250px
+        height: auto
         border: 2px solid #999999
         border-radius: 5px
     .git__actions
@@ -101,4 +101,11 @@ export default {
       .box:hover
         zoom: 1.02
         background-color: #cccccc
+
+  @media print
+    padding: 0 5px
+    border-color: transparent
+    background: transparent
+    box-shadow: unset
+    outline: none !important
 </style>
