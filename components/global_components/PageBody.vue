@@ -62,7 +62,7 @@ export default {
   @media print
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
     grid-template-rows: auto
-    grid-template-areas: 'col-1 col-1 col-1 col-2 col-2 col-2'
+    grid-template-areas: 'col-1 col-1 col-1 col-1 col-1 col-1' 'col-2 col-2 col-2 col-2 col-2 col-2'
     grid-column-gap: 3px
     .c-3
       display: none

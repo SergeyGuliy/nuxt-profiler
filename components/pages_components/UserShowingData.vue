@@ -144,6 +144,15 @@
           <span v-else>Not indicated</span>
         </CardRow>
 
+        <CardRow :class="{ 'd-print-none': !data.userInfo.contacts.cvLink }">
+          <CardRowTitle>CV link:</CardRowTitle>
+          <div v-if="data.userInfo.contacts.cvLink">
+            <BtnOpenBlank :link="data.userInfo.contacts.cvLink" />
+            <BtnCopy :copy-value="data.userInfo.contacts.cvLink" />
+          </div>
+          <span v-else>Not indicated</span>
+        </CardRow>
+
         <CardTitle>Working Info</CardTitle>
         <CardRow :class="{ 'd-print-none': !data.userInfo.work.work_status }">
           <CardRowTitle>Work Status:</CardRowTitle>
